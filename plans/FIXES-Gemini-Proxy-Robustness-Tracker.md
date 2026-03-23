@@ -125,7 +125,7 @@ This file is the **single source of truth** for tracking the application of all 
       continue
   ```
 - **Verification:** Lock clipboard with another app, confirm proxy prints warning and continues polling instead of crashing.
-- **Applied:** [x] Date: 2026-03-23 | Commit: 47a4f25
+- **Applied:** [x] Date: 2026-03-23 | Commit: 10a4c81
 
 ---
 
@@ -280,7 +280,7 @@ This file is the **single source of truth** for tracking the application of all 
 | 2026-03-23 | Session 1 | FIX-001 — Console multi-ligne NOUVELLE conversation | fceb6fd |
 | 2026-03-23 | Session 2 | FIX-002 — SP-007 v1.1.0 replace_in_file + list_files | 62ea897 |
 | 2026-03-23 | Session 3 | FIX-003 — Boomerang Tasks limitation documentée (DOC1+DOC2+DOC5) | 51bf71a |
-| 2026-03-23 | Session 4 | FIX-004 — try/except pyperclip.paste() dans _wait_clipboard() | 47a4f25 |
+| 2026-03-23 | Session 4 | FIX-004 — try/except pyperclip.paste() dans _wait_clipboard() | 10a4c81 |
 
 ---
 
