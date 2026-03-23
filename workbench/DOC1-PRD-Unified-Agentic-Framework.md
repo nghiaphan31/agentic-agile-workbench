@@ -299,6 +299,7 @@ Le système doit fournir un mécanisme automatique de détection des désynchron
 | [DOC2] | Document interne | `workbench/DOC2-Architecture-Solution-Stack.md` | Architecture, Solution et Stack Technique v2.0 |
 | [DOC3] | Document interne | `workbench/DOC3-Plan-Implementation-COMPLETE.md` | Plan d'Implémentation Séquentiel Complet v3.0 (Phases 0–12) |
 | [DOC4] | Document interne | `workbench/DOC4-Guide-Deploiement-Atelier.md` | Guide de Déploiement de l'Atelier sur projets nouveaux et existants |
+| [DOC5] | Document interne | `workbench/DOC5-Manuel-Processus-Agile-Applicatif.md` | Manuel du Processus Agile Applicatif v1.0 — processus, nomenclature artifacts, anti-risques agentiques, protocoles de session |
 | [SP-001] | System Prompt | `template/prompts/SP-001-ollama-modelfile-system.md` | System prompt du Modelfile Ollama (bloc SYSTEM) |
 | [SP-002] | System Prompt | `template/prompts/SP-002-clinerules-global.md` | Contenu canonique du fichier `.clinerules` (6 règles impératives) |
 | [SP-003] | System Prompt | `template/prompts/SP-003-persona-product-owner.md` | `roleDefinition` du persona Product Owner dans `.roomodes` |

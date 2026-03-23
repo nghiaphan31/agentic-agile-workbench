@@ -399,40 +399,57 @@ Vous pourriez penser à utiliser des sous-modules Git ou des liens symboliques p
 
 ## 7. Cycle de Vie d'un Projet avec l'Atelier
 
+> **Référence :** Le processus complet (phases, artifacts, nomenclature, anti-risques agentiques) est décrit dans **[DOC5] `workbench/DOC5-Manuel-Processus-Agile-Applicatif.md`**. Ce document (DOC4) couvre uniquement le déploiement de l'atelier. DOC5 couvre comment travailler avec l'atelier une fois déployé.
+
 ```
-PHASE SETUP (une seule fois par projet)
+PHASE 0 - AMONT OUVERT (avant de coder)
 │
-├── Copier les fichiers de l'atelier
+├── Collecter les entrées narratives brutes (emails, notes, idées)
+├── Mode Product Owner → BRIEF-001 (vision narrative brute)
+├── Mode Developer → BRIEF-002 (synthèse structurée)
+└── Mode Product Owner → BRIEF-003 (décision GO/NO-GO)
+    → Voir DOC5 Section 2
+
+PHASE SETUP / CADRAGE (une seule fois par projet)
+│
+├── Copier les fichiers de l'atelier (ce document — DOC4)
 ├── Initialiser la Memory Bank
-├── [Si existant] Audit du code
+├── [Si existant] Audit du code par le Developer
+├── Mode Product Owner → PRJ-001 (projectBrief.md)
+├── Mode Developer → PRJ-002 (architecture initiale)
+├── Mode Product Owner → PRJ-003 (backlog initial MoSCoW)
 └── Premier commit
+    → Voir DOC5 Section 3
 
 PHASE DÉVELOPPEMENT (itérative — un sprint = 1-2 semaines)
 │
-├── Mode Product Owner
-│   └── Définir / affiner les User Stories du sprint
+├── Mode Product Owner → SPR-NNN-001 (Sprint Backlog + Sprint Goal)
 │
 ├── Mode Developer (répété pour chaque User Story)
 │   ├── Lire Memory Bank (VÉRIFIER→CRÉER→LIRE→AGIR)
 │   ├── Implémenter la User Story
 │   ├── Mettre à jour Memory Bank
-│   └── Commiter
+│   └── Commiter (feat(US-XXX): ...)
 │
-├── Mode QA Engineer
+├── Mode QA Engineer → SPR-NNN-004 (Rapport de Tests)
 │   ├── Tester les implémentations
-│   ├── Rédiger les rapports dans docs/qa/
-│   └── Commiter les rapports
+│   └── Documenter les bugs
 │
-└── Mode Scrum Master
-    ├── Lire docs/qa/ pour l'état des tests
+├── Mode Product Owner → SPR-NNN-005 (Sprint Review)
+│   └── Valider les US livrées, ajuster le backlog
+│
+└── Mode Scrum Master → SPR-NNN-006 (Rétrospective)
     ├── Mettre à jour memory-bank/progress.md
     └── Identifier les impediments
+    → Voir DOC5 Section 4
 
 PHASE MAINTENANCE (continue)
 │
 ├── Bugs → Mode QA Engineer (rapport) + Mode Developer (fix)
 ├── Nouvelles features → Mode Product Owner (US) + Mode Developer (impl)
+├── Release → Mode Developer → REL-VER-001/002/003
 └── Améliorations atelier → Mettre à jour agentic-agile-workbench/
+    → Voir DOC5 Section 5
 ```
 
 ---
@@ -505,6 +522,7 @@ PHASE MAINTENANCE (continue)
 | [DOC2] | Document interne | `workbench/DOC2-Architecture-Solution-Stack.md` | Architecture, Solution et Stack Technique v2.0 — justifie les choix techniques |
 | [DOC3] | Document interne | `workbench/DOC3-Plan-Implementation-COMPLETE.md` | Plan d'Implémentation Séquentiel Complet v3.0 — guide d'installation de l'atelier (Phases 0–12) |
 | [DOC4] | Document interne | `workbench/DOC4-Guide-Deploiement-Atelier.md` | Ce document — Guide de Déploiement de l'Atelier sur projets nouveaux et existants |
+| [DOC5] | Document interne | `workbench/DOC5-Manuel-Processus-Agile-Applicatif.md` | Manuel du Processus Agile Applicatif v1.0 — à lire après déploiement pour savoir comment développer un projet avec l'atelier |
 | [SP-001] | System Prompt | `template/prompts/SP-001-ollama-modelfile-system.md` | System prompt du Modelfile Ollama — copié dans le projet lors du déploiement |
 | [SP-002] | System Prompt | `template/prompts/SP-002-clinerules-global.md` | Contenu canonique du fichier `.clinerules` — copié à la racine du projet |
 | [SP-003] | System Prompt | `template/prompts/SP-003-persona-product-owner.md` | `roleDefinition` Product Owner — intégré dans `.roomodes` du projet |
