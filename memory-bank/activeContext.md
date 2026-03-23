@@ -30,4 +30,4 @@ FIX-023 appliqué : proxy.py v2.4.0
 Aucun blocage actif.
 
 ## Dernier commit Git
-[à mettre à jour après commit]
+d7c556b — fix(proxy): v2.4.0 FIX-023 — suppression blocs environment_details/SYSTEM/task/feedback injectes par Roo Code
