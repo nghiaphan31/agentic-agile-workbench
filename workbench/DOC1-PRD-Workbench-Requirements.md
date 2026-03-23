@@ -24,10 +24,10 @@ L'objectif est de définir un système **unifié et enrichi** qui combine la sou
 
 > **REQ-000 — Exigence Racine du Système Unifié**
 >
-> Le système global doit fournir un environnement de développement agentique opérationnel sur un laptop Windows avec VS Code, capable de :
+> Le système global doit fournir un environnement de développement agentique opérationnel sur un laptop Windows (`pc`) avec VS Code, s'appuyant sur un serveur Linux headless dédié (`calypso`) pour l'inférence LLM locale, les deux machines étant reliées via Tailscale. Le système doit être capable de :
 > - Orchestrer des agents IA spécialisés selon les rôles Agile (Product Owner, Scrum Master, QA Engineer, Developer)
 > - Maintenir une continuité de contexte absolue entre les sessions via une mémoire persistante en fichiers Markdown auditables
-> - Exécuter des tâches de développement complexe en s'appuyant sur un backend LLM **commutable** : soit un modèle local (Ollama/Qwen3) pour la souveraineté totale, soit Gemini Chrome via un proxy API local pour la puissance gratuite du cloud, soit Claude Sonnet via API Anthropic directe pour l'automatisation complète
+> - Exécuter des tâches de développement complexe en s'appuyant sur un backend LLM **commutable** : soit un modèle local (Ollama sur `calypso` via Tailscale) pour la souveraineté totale, soit Gemini Chrome via un proxy API local pour la puissance gratuite du cloud, soit Claude Sonnet via API Anthropic directe pour l'automatisation complète
 > - Garantir que Roo Code reste le moteur d'exécution agentique central dans les trois modes de fonctionnement, sans modification de son comportement natif
 
 ---
@@ -37,7 +37,7 @@ L'objectif est de définir un système **unifié et enrichi** qui combine la sou
 ### 3.1 Domaine 1 — Moteur Agentique & Modèles de Fondation (REQ-1.x)
 
 #### REQ-1.0 — Capacité d'Inférence LLM Locale
-Le système doit être capable d'exécuter des inférences LLM entièrement en local, sans dépendance réseau externe, via Ollama.
+Le système doit être capable d'exécuter des inférences LLM sur le réseau local privé (Tailscale), via Ollama installé sur le serveur Linux `calypso` (RTX 5060 Ti 16 Go). L'API Ollama est accessible depuis le laptop `pc` à l'adresse `http://calypso:11434` via le réseau Tailscale.
 
 | ID | Exigence | Description Détaillée | Critère d'Acceptation |
 | :--- | :--- | :--- | :--- |
@@ -262,7 +262,7 @@ Le système doit fournir un mécanisme automatique de détection des désynchron
 
 ### 5.1 Contraintes
 
-- Le système doit fonctionner sur un laptop Windows 10/11 avec VS Code sans serveur dédié ni infrastructure cloud payante (sauf Mode Cloud qui implique des coûts API Anthropic à l'usage).
+- Le système repose sur deux machines : le laptop Windows `pc` (VS Code, Roo Code, Chrome, proxy.py) et le serveur Linux headless `calypso` (Ollama, modèles LLM, RTX 5060 Ti 16 Go), reliés via Tailscale. Aucune infrastructure cloud payante n'est requise (sauf Mode Cloud qui implique des coûts API Anthropic à l'usage).
 - Le proxy Gemini Chrome repose sur une intervention humaine minimale (copier-coller) : ce n'est pas un système entièrement automatisé.
 - La qualité des réponses en mode Gemini Chrome dépend de la disponibilité et du comportement de l'interface web Gemini (hors contrôle du système).
 - Le Mode Cloud (Claude API) implique des coûts à l'usage selon la tarification Anthropic en vigueur.
@@ -285,7 +285,7 @@ Le système doit fournir un mécanisme automatique de détection des désynchron
 | **Qualité du raisonnement** | Haute (32B local) | Très haute (Gemini Pro) | Très haute (Claude Sonnet) |
 | **Vitesse** | Dépend du hardware | Dépend de l'humain | Rapide (API directe) |
 | **Souveraineté des données** | Totale (100% local) | Partielle (données envoyées à Google) | Partielle (données envoyées à Anthropic) |
-| **Disponibilité** | Toujours (hors ligne) | Nécessite Chrome + compte Google | Nécessite Internet + clé API |
+| **Disponibilité** | Toujours (Tailscale actif) | Nécessite Chrome + compte Google | Nécessite Internet + clé API |
 | **Streaming** | Natif Ollama | SSE en un seul chunk (proxy) | Natif Anthropic |
 | **Configuration Roo Code** | Provider: Ollama | Provider: OpenAI Compatible | Provider: Anthropic |
 | **Exigences PRD** | REQ-1.x | REQ-2.x, REQ-5.x | REQ-6.x |

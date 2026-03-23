@@ -4,22 +4,31 @@
 **Nom du Projet :** Agentic Agile Workbench
 **Version :** 3.0 — Document unique fusionné (phases 0-12 en continu)
 **Date :** 2026-03-23
-**Plateforme cible :** Windows 10/11 + Visual Studio Code
+**Plateforme cible :** Windows 10/11 (laptop `pc`) + Visual Studio Code + Serveur Linux `calypso` (Tailscale)
 **Références :** DOC1-PRD-Workbench-Requirements.md v2.0, DOC2-ARCH-Workbench-Technical-Design.md v2.0
 
 ---
 
 ## Prérequis Système
 
-Avant de commencer, vérifiez que votre machine dispose de :
+Avant de commencer, vérifiez que les deux machines sont prêtes :
+
+### Laptop Windows `pc`
 - Windows 10/11 (64-bit)
 - Google Chrome installé avec un compte Google actif
-- Au moins 16 Go de RAM (32 Go recommandés pour le modèle 32B)
-- Au moins 30 Go d'espace disque libre (modèles + projet)
-- Carte graphique NVIDIA avec 8+ Go de VRAM (recommandé) OU CPU suffisant
-- Connexion Internet pour les téléchargements initiaux
 - Git installé (`git --version` doit répondre dans PowerShell)
 - Python 3.10+ installé (`python --version` doit répondre dans PowerShell)
+- Tailscale installé et connecté (`tailscale status` affiche `calypso` comme pair actif)
+- Connexion Internet pour les téléchargements initiaux
+
+### Serveur Linux `calypso`
+- Linux (Ubuntu 22.04+ ou Debian 12+ recommandé), headless
+- Carte graphique NVIDIA RTX 5060 Ti avec 16 Go de VRAM
+- Au moins 32 Go de RAM (recommandé pour le modèle 32B)
+- Au moins 30 Go d'espace disque libre (modèles + projet)
+- Tailscale installé et connecté (`tailscale status` affiche `pc` comme pair actif)
+- Drivers NVIDIA installés (`nvidia-smi` doit répondre)
+- Connexion Internet pour les téléchargements initiaux (modèles Ollama)
 
 ---
 
@@ -189,54 +198,102 @@ Chaque commande doit retourner un numéro de version. Si l'une échoue :
 
 ---
 
-## PHASE 1 : Infrastructure Système — Installation d'Ollama et des Modèles
+## PHASE 1 : Infrastructure Système — Installation d'Ollama sur `calypso`
 
-**Objectif :** Installer le moteur d'inférence local et télécharger les modèles LLM.
+**Objectif :** Installer le moteur d'inférence sur le serveur Linux `calypso` et télécharger les modèles LLM. Toutes les commandes de cette phase s'exécutent **sur `calypso`** via SSH depuis le laptop `pc`.
 **Exigences adressées :** REQ-1.0, REQ-1.1, REQ-1.2
 
-### Étape 1.1 — Installer Ollama pour Windows
+> **Prérequis :** Tailscale doit être actif sur les deux machines. Vérifiez depuis `pc` :
+> ```powershell
+> tailscale status
+> # calypso doit apparaître comme pair actif avec une adresse IP Tailscale
+> ```
 
-1. Allez sur **https://ollama.com/download**
-2. Cliquez sur **"Download for Windows"** et téléchargez l'installateur `.exe`
-3. Exécutez l'installateur (installation standard)
-4. Après installation, Ollama démarre automatiquement en tâche de fond
-5. Vérifiez que l'icône Ollama apparaît dans la zone de notification Windows (coin bas-droit)
+### Étape 1.1 — Se Connecter à `calypso` via SSH
+
+Depuis le laptop `pc` (PowerShell) :
+
+```powershell
+ssh calypso
+```
+
+> **Note :** Tailscale résout automatiquement le nom `calypso` en adresse IP privée. Si SSH n'est pas configuré, utilisez l'adresse IP Tailscale : `ssh user@100.x.x.x`.
+
+### Étape 1.2 — Installer Ollama sur `calypso` (Linux)
+
+Sur `calypso` (terminal SSH) :
+
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+```
 
 **Critère de validation :**
-```powershell
+```bash
 ollama --version
 ```
 Résultat attendu : `ollama version 0.x.x`
 
-### Étape 1.2 — Télécharger le Modèle Principal (Qwen3 32B optimisé Roo Code)
+### Étape 1.3 — Configurer Ollama pour Écouter sur le Réseau Tailscale
 
-```powershell
+Par défaut, Ollama n'écoute que sur `localhost`. Pour le rendre accessible depuis `pc` via Tailscale, configurez la variable d'environnement `OLLAMA_HOST` :
+
+```bash
+# Éditer le service systemd Ollama
+sudo systemctl edit ollama
+```
+
+Ajoutez dans le fichier :
+```ini
+[Service]
+Environment="OLLAMA_HOST=0.0.0.0:11434"
+```
+
+Puis rechargez et redémarrez :
+```bash
+sudo systemctl daemon-reload
+sudo systemctl restart ollama
+```
+
+> **Sécurité :** Ollama écoute sur `0.0.0.0:11434` mais Tailscale filtre les connexions au réseau privé uniquement. L'API n'est pas exposée sur Internet.
+
+### Étape 1.4 — Télécharger le Modèle Principal (Qwen3 32B optimisé Roo Code)
+
+Sur `calypso` :
+
+```bash
 ollama pull mychen76/qwen3_cline_roocode:32b
 ```
 
 > **Note :** Ce téléchargement peut prendre 15 à 45 minutes. Le modèle pèse environ 20 Go.
 
 **Critère de validation :**
-```powershell
+```bash
 ollama list
 ```
 Vous devez voir `mychen76/qwen3_cline_roocode:32b` dans la liste.
 
-### Étape 1.3 — Télécharger le Modèle Secondaire (Qwen3 7B pour Boomerang Tasks)
+### Étape 1.5 — Télécharger le Modèle Secondaire (Qwen3 7B pour Boomerang Tasks)
 
-```powershell
+Sur `calypso` :
+
+```bash
 ollama pull qwen3:7b
 ```
 
 **Critère de validation :** `ollama list` affiche `qwen3:7b`.
 
-### Étape 1.4 — Vérifier que l'API Ollama est Accessible
+### Étape 1.6 — Vérifier que l'API Ollama est Accessible depuis `pc`
+
+Depuis le laptop `pc` (PowerShell) :
 
 ```powershell
-Invoke-WebRequest -Uri "http://localhost:11434/api/tags" -Method GET | Select-Object -ExpandProperty Content
+Invoke-WebRequest -Uri "http://calypso:11434/api/tags" -Method GET | Select-Object -ExpandProperty Content
 ```
 
-Vous devez voir une réponse JSON listant vos modèles. Si erreur de connexion, relancez Ollama depuis le menu Démarrer.
+Vous devez voir une réponse JSON listant vos modèles. Si erreur de connexion :
+1. Vérifiez que Tailscale est actif sur les deux machines (`tailscale status`)
+2. Vérifiez que `OLLAMA_HOST=0.0.0.0:11434` est bien configuré sur `calypso` (`sudo systemctl show ollama | grep Environment`)
+3. Redémarrez Ollama sur `calypso` : `sudo systemctl restart ollama`
 
 ---
 
@@ -384,7 +441,9 @@ Sauvegardez (`Ctrl+S`).
 
 ### Étape 3.2 — Compiler le Modèle Personnalisé
 
-```powershell
+Sur `calypso` (via SSH depuis `pc`) :
+
+```bash
 ollama create uadf-agent -f Modelfile
 ```
 
@@ -807,11 +866,11 @@ pytest tests/
 
 ## Configuration des Backends LLM (Commutateur le workbench)
 
-### Mode 1 : Local Ollama (Souverain et Gratuit)
+### Mode 1 : Local Ollama (Souverain et Gratuit — via Tailscale)
 - API Provider : Ollama
-- Base URL : http://localhost:11434
+- Base URL : http://calypso:11434
 - Model : uadf-agent
-- Prérequis : Ollama en cours d'exécution (icône zone de notification)
+- Prérequis : Tailscale actif sur `pc` et `calypso`, Ollama en cours d'exécution sur `calypso`
 
 ### Mode 2 : Proxy Gemini Chrome (Cloud Gratuit + Copier-Coller)
 - API Provider : OpenAI Compatible
@@ -1388,7 +1447,7 @@ Pour utiliser le proxy efficacement :
 1. Dans VS Code, cliquez sur l'icône **Roo Code** dans la barre latérale
 2. Cliquez sur l'icône **⚙️ Paramètres** (engrenage) en haut du panneau Roo Code
 3. Dans la section **"API Provider"**, sélectionnez **"Ollama"**
-4. Dans **"Base URL"**, entrez : `http://localhost:11434`
+4. Dans **"Base URL"**, entrez : `http://calypso:11434`
 5. Dans **"Model"**, entrez : `uadf-agent`
 6. Sauvegardez
 
@@ -2041,7 +2100,7 @@ git commit -m "feat(prompts): check-prompts-sync.ps1 + hook pre-commit — véri
 
 | Mode | Provider Roo Code | URL / Modèle | Coût | Automatique | Prérequis |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **1 — Local** | Ollama | `http://localhost:11434` / `uadf-agent` | Gratuit | ✅ Oui | Ollama en cours |
+| **1 — Local** | Ollama | `http://calypso:11434` / `uadf-agent` | Gratuit | ✅ Oui | Tailscale actif + Ollama sur `calypso` |
 | **2 — Proxy** | OpenAI Compatible | `http://localhost:8000/v1` / `gemini-manual` | Gratuit | ❌ Copier-coller | proxy.py + Chrome |
 | **3 — Cloud** | Anthropic | `api.anthropic.com` / `claude-sonnet-4-6` | Payant | ✅ Oui | Clé API + Internet |
 
@@ -2139,9 +2198,9 @@ git commit -m "feat(prompts): check-prompts-sync.ps1 + hook pre-commit — véri
 | **Gem Gemini** | Profil Gemini Web avec system prompt permanent (SP-007). Créé manuellement en Phase 7 — non versionné dans Git. |
 | **Hook pre-commit** | Script Git exécuté avant chaque commit. Créé en Phase 12 — appelle `check-prompts-sync.ps1` et bloque si désynchronisation. |
 | **Memory Bank** | 7 fichiers Markdown dans `memory-bank/` persistant le contexte entre sessions. Créés en Phase 5, utilisés dès Phase 9. |
-| **Modelfile** | Fichier de configuration Ollama. Créé en Phase 3, compilé avec `ollama create uadf-agent -f Modelfile`. |
+| **Modelfile** | Fichier de configuration Ollama. Créé en Phase 3, compilé sur `calypso` avec `ollama create uadf-agent -f Modelfile`. |
 | **Mode Cloud** | Roo Code → API Anthropic directe (`claude-sonnet-4-6`). Configuré en Phase 10. |
-| **Mode Local** | Roo Code → Ollama `localhost:11434` → Qwen3-32B. Configuré en Phase 8. |
+| **Mode Local** | Roo Code (`pc`) → Ollama `calypso:11434` (Tailscale) → Qwen3-32B. Configuré en Phase 8. |
 | **Mode Proxy** | Roo Code → proxy FastAPI `localhost:8000` → presse-papiers → Gemini Web. Configuré en Phase 8. |
 | **Persona Agile** | Mode Roo Code simulant un rôle Scrum. Défini dans `.roomodes` en Phase 4. |
 | **Polling** | Vérification périodique du presse-papiers toutes les secondes dans `template/proxy.py` (Phase 6). |

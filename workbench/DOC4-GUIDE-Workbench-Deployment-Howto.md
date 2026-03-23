@@ -581,7 +581,7 @@ PHASE MAINTENANCE (continue)
 | **Memory Bank** | 7 fichiers Markdown dans `memory-bank/` du projet persistant le contexte entre sessions. Créés lors du déploiement, remplis progressivement par les personas Agile. |
 | **Mise à jour de l'atelier** | Processus de propagation d'une nouvelle version du workbench vers les projets existants. Déclenché par `deploy-to-project.ps1 -Update` ou manuellement. Décrit dans `CHANGELOG.md`. |
 | **Mode Cloud** | Roo Code → API Anthropic directe (`claude-sonnet-4-6`). Entièrement automatisé, payant à l'usage. |
-| **Mode Local** | Roo Code → Ollama `localhost:11434` → Qwen3-32B. Gratuit, souverain, fonctionne hors ligne. |
+| **Mode Local** | Roo Code (`pc`) → Ollama `calypso:11434` (Tailscale) → Qwen3-32B. Gratuit, souverain, réseau privé. |
 | **Mode Proxy** | Roo Code → proxy FastAPI `localhost:8000` → presse-papiers → Gemini Web. Gratuit, nécessite copier-coller humain. |
 | **Persona Agile** | Mode Roo Code simulant un rôle Scrum : Product Owner, Scrum Master, Developer, QA Engineer. Chaque persona a des permissions RBAC précises. |
 | **Projet applicatif** | Dépôt Git contenant le code métier d'une application. Distinct de l'atelier. Reçoit les fichiers de l'atelier lors du déploiement. |

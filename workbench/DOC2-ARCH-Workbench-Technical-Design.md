@@ -23,7 +23,7 @@ Ce principe garantit que :
 
 ```
 +-----------------------------------------------------------------------------------+
-|                           LAPTOP WINDOWS (VS Code)                                |
+|              LAPTOP WINDOWS "pc" (VS Code + Roo Code + Chrome)                    |
 |                                                                                   |
 |  +--------------------------------------------------------------------------+    |
 |  |                      ROO CODE (Extension VS Code)                        |    |
@@ -47,18 +47,18 @@ Ce principe garantit que :
 |  +----+----------+   +------------+----------+   +-----------+-----------+       |
 |  | MODE 1        |   | MODE 2                |   | MODE 3                |       |
 |  | LOCAL         |   | PROXY GEMINI          |   | CLOUD DIRECT          |       |
-|  |               |   |                       |   |                       |       |
-|  | Ollama        |   | proxy.py              |   | API Anthropic         |       |
-|  | localhost:    |   | localhost:8000        |   | api.anthropic.com     |       |
-|  | 11434         |   | (FastAPI + SSE)       |   | (HTTPS natif)         |       |
-|  |               |   |         |             |   |                       |       |
+|  | (Tailscale)   |   |                       |   |                       |       |
+|  |               |   | proxy.py              |   | API Anthropic         |       |
+|  | calypso:11434 |   | localhost:8000        |   | api.anthropic.com     |       |
+|  | (via Tailscale|   | (FastAPI + SSE)       |   | (HTTPS natif)         |       |
+|  |  reseau prive)|   |         |             |   |                       |       |
 |  | uadf-agent    |   | Presse- |             |   | claude-sonnet-4-6     |       |
 |  | (Qwen3-32B    |   | papiers |             |   | (Provider Anthropic   |       |
 |  |  T=0.15)      |   | Windows |             |   |  integre Roo Code)    |       |
 |  |               |   |         |             |   |                       |       |
 |  | Gratuit       |   | Gratuit |             |   | Payant a l'usage      |       |
-|  | 100% local    |   | Copier- |             |   | Entierement auto      |       |
-|  | Hors ligne    |   | coller  |             |   | Connexion requise     |       |
+|  | Reseau prive  |   | Copier- |             |   | Entierement auto      |       |
+|  | Tailscale     |   | coller  |             |   | Connexion requise     |       |
 |  +---------------+   +----+----+             +-----------------------+---+       |
 |                           |                                                       |
 |                  +--------+---------+                                             |
@@ -68,12 +68,18 @@ Ce principe garantit que :
 |                  +--------+---------+                                             |
 |                           |                                                       |
 +---------------------------+-------------------+------+----------------------------+
-                            |                   |      |
-               +------------+------+    +-------+------+--------+
-               |   GEMINI CHROME   |    |  ANTHROPIC CLOUD      |
-               |   (Gem dedie      |    |  api.anthropic.com    |
-               |    Roo Code)      |    |  claude-sonnet-4-6    |
-               +-------------------+    +-----------------------+
+         |  Tailscale VPN    |                   |      |
+         v  (reseau prive)   |                   |      |
++--------+------------------+    +--------------+------+--------+
+|  SERVEUR LINUX "calypso"  |    |  GEMINI CHROME (Chrome/pc)  |
+|  RTX 5060 Ti 16 Go        |    |  (Gem dedie Roo Code)       |
+|  Ollama + uadf-agent      |    +-----------------------------+
+|  + qwen3:7b               |
+|  API: calypso:11434       |    +-----------------------+
++---------------------------+    |  ANTHROPIC CLOUD      |
+                                 |  api.anthropic.com    |
+                                 |  claude-sonnet-4-6    |
+                                 +-----------------------+
 
 +-----------------------------------------------------------------------------------+
 |                       MEMORY BANK (Systeme de Fichiers)                           |
@@ -118,15 +124,17 @@ Ce principe garantit que :
 | **Personas Agile** | JSON (`.roomodes`) | — | Définition des 4 personas et de leurs permissions RBAC |
 | **Directives Session** | Markdown (`.clinerules`) | — | 6 règles impératives injectées dans chaque session |
 
-### 3.2 Couche Moteur LLM Local (Mode Souverain)
+### 3.2 Couche Moteur LLM Local (Mode Souverain — Serveur `calypso`)
 
 | Composant | Technologie | Version | Rôle |
 | :--- | :--- | :--- | :--- |
-| **Moteur d'Inférence** | Ollama | Dernière stable | Gestion VRAM, chargement des poids, API REST locale |
+| **Serveur d'Inférence** | Linux headless `calypso` | Ubuntu/Debian | Hôte Ollama — RTX 5060 Ti 16 Go VRAM |
+| **Réseau Privé** | Tailscale | Dernière stable | VPN mesh reliant `pc` (Windows) et `calypso` (Linux) |
+| **Moteur d'Inférence** | Ollama | Dernière stable | Gestion VRAM, chargement des poids, API REST |
 | **Modèle Principal** | `mychen76/qwen3_cline_roocode:32b` | 32B quantifié | Cerveau principal, fine-tuné Tool Calling Roo Code |
 | **Modèle Secondaire** | `qwen3:7b` | 7B | Agent délégué pour tâches légères (Boomerang Tasks) |
 | **Configuration Modèle** | `Modelfile` Ollama | — | Verrouillage T=0.15, Min_P=0.03, num_ctx=131072 |
-| **Port d'Écoute** | `localhost:11434` | — | API REST compatible OpenAI exposée par Ollama |
+| **Adresse d'Écoute** | `calypso:11434` | — | API REST compatible OpenAI, accessible via Tailscale depuis `pc` |
 
 ### 3.3 Couche Proxy Gemini Chrome (Mode Hybride)
 
@@ -145,7 +153,7 @@ Ce principe garantit que :
 
 | Composant | Technologie | Rôle |
 | :--- | :--- | :--- |
-| **Système de Fichiers** | NTFS Windows | Stockage physique des fichiers `.md` |
+| **Système de Fichiers** | NTFS Windows (laptop `pc`) | Stockage physique des fichiers `.md` |
 | **Format de Données** | Markdown (`.md`) | Lisibilité humaine, compatibilité Git |
 | **Versionnement** | Git | Traçabilité des modifications de la Memory Bank |
 | **Répertoire** | `memory-bank/` (racine projet) | Conteneur de toute la mémoire contextuelle |
@@ -196,13 +204,13 @@ Ce principe garantit que :
 **Exigences adressées :** REQ-4.4
 
 ### DA-004 — Modelfile avec paramètres de déterminisme verrouillés
-**Décision :** Le modèle `mychen76/qwen3_cline_roocode:32b` est compilé avec un `Modelfile` personnalise verrouillant : `temperature 0.15`, `min_p 0.03`, `top_p 0.95`, `repeat_penalty 1.1`, `num_ctx 131072`, `num_gpu 99`, `num_thread 8`. Ces valeurs sont non-modifiables à l'exécution.
-**Justification :** Le déterminisme maximal élimine les hallucinations lors de la génération de code. La fenêtre de 128K tokens permet de charger simultanément le projet et la Memory Bank.
+**Décision :** Le modèle `mychen76/qwen3_cline_roocode:32b` est compilé avec un `Modelfile` personnalisé verrouillant : `temperature 0.15`, `min_p 0.03`, `top_p 0.95`, `repeat_penalty 1.1`, `num_ctx 131072`, `num_gpu 99`, `num_thread 8`. Ces valeurs sont non-modifiables à l'exécution. Le Modelfile est compilé sur `calypso` via `ollama create uadf-agent -f Modelfile`.
+**Justification :** Le déterminisme maximal élimine les hallucinations lors de la génération de code. La fenêtre de 128K tokens permet de charger simultanément le projet et la Memory Bank. `num_gpu 99` exploite les 16 Go de VRAM de la RTX 5060 Ti de `calypso`.
 **Exigences adressées :** REQ-1.2, REQ-1.3
 
 ### DA-005 — Boomerang Tasks pour délégation aux modèles légers
-**Décision :** Le workflow "Boomerang Tasks" de Roo Code est utilisé pour déléguer les tâches répétitives ou volumineuses (analyse de logs, génération de tests unitaires) au modèle secondaire `qwen3:7b`.
-**Justification :** Optimisation VRAM et accélération des cycles répétitifs. Le modèle 32B reste disponible pour les décisions complexes.
+**Décision :** Le workflow "Boomerang Tasks" de Roo Code est utilisé pour déléguer les tâches répétitives ou volumineuses (analyse de logs, génération de tests unitaires) au modèle secondaire `qwen3:7b`, également hébergé sur `calypso`.
+**Justification :** Optimisation VRAM et accélération des cycles répétitifs. Le modèle 32B reste disponible pour les décisions complexes. Les deux modèles partagent la même instance Ollama sur `calypso`.
 **Exigences adressées :** REQ-1.4
 
 > ⚠️ **LIMITATION MODE PROXY :** Les Boomerang Tasks ne sont pas supportées en Mode Proxy Gemini.
@@ -572,7 +580,7 @@ RAPPEL : Aucun texte avant la premiere balise XML. Aucun texte apres la derniere
 | **Persona `scrum-master`** | Orchestration | Facilitation Agile, Memory Bank, Git uniquement, pas de tests | DA-001 | REQ-3.1, REQ-3.2, REQ-3.4 |
 | **Persona `developer`** | Orchestration | Implémentation complète, code + terminal + Git | DA-001 | REQ-3.1, REQ-3.2 |
 | **Persona `qa-engineer`** | Orchestration | Tests + rapports QA, pas de modification code source | DA-001 | REQ-3.1, REQ-3.2 |
-| **Ollama (daemon Windows)** | Moteur LLM Local | Inférence locale, API REST OpenAI sur localhost:11434 | — | REQ-1.0, REQ-000 |
+| **Ollama (daemon Linux `calypso`)** | Moteur LLM Local | Inférence réseau privé, API REST OpenAI sur calypso:11434 (Tailscale) | — | REQ-1.0, REQ-000 |
 | **`mychen76/qwen3_cline_roocode:32b`** | Moteur LLM Local | Modèle principal fine-tuné Tool Calling Roo Code | DA-004 | REQ-1.1 |
 | **`Modelfile` (T=0.15, num_ctx=131072)** | Moteur LLM Local | Déterminisme + fenêtre contexte 128K tokens | DA-004 | REQ-1.2, REQ-1.3 |
 | **`qwen3:7b` + Boomerang Tasks** | Moteur LLM Local | Délégation tâches légères au modèle secondaire | DA-005 | REQ-1.4 |
@@ -691,7 +699,7 @@ RAPPEL : Aucun texte avant la premiere balise XML. Aucun texte apres la derniere
 | **Memory Bank** | 7 fichiers Markdown dans `memory-bank/` persistant le contexte entre sessions. Segmentés par thème pour optimiser l'attention du LLM (DA-003, REQ-4.4). |
 | **Modelfile** | Fichier de configuration Ollama. Définit le modèle de base, les paramètres d'inférence et le system prompt. Compilé avec `ollama create uadf-agent -f Modelfile` (DA-004). |
 | **Mode Cloud** | Roo Code → API Anthropic directe (`claude-sonnet-4-6`). Automatisé, payant, nécessite clé API dans VS Code SecretStorage (DA-011, REQ-6.x). |
-| **Mode Local** | Roo Code → Ollama `localhost:11434` → Qwen3-32B. Gratuit, souverain, hors ligne (REQ-1.x). |
+| **Mode Local** | Roo Code (`pc`) → Ollama `calypso:11434` (Tailscale) → Qwen3-32B. Gratuit, souverain, réseau privé Tailscale (REQ-1.x). |
 | **Mode Proxy** | Roo Code → proxy FastAPI `localhost:8000` → presse-papiers → Gemini Web. Gratuit, nécessite copier-coller humain (DA-006 à DA-014, REQ-2.x). |
 | **Persona Agile** | Mode Roo Code simulant un rôle Scrum. Défini dans `.roomodes` avec `roleDefinition` (comportement) et `groups` (permissions RBAC). |
 | **Polling** | Vérification périodique d'un état. Le proxy vérifie le presse-papiers toutes les secondes via `asyncio.sleep(1.0)` (DA-006, REQ-2.3.1). |
