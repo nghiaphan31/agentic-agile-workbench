@@ -11,6 +11,7 @@ Changelog:
   v2.0.4 - 2026-03-23 : FIX-006 — Verification longueur minimale du contenu colle (GAP-005)
   v2.0.5 - 2026-03-23 : FIX-008 — Troncature automatique de l'historique via MAX_HISTORY_CHARS (GAP-001)
   v2.0.6 - 2026-03-23 : FIX-014 — Verification longueur minimale BLOQUANTE (seuil 100 chars) pour eviter injection de contenu parasite (REG-001)
+  v2.0.7 - 2026-03-23 : FIX-015 — Garde runtime <new_task> dans _wait_clipboard() pour eviter deadlock (GAP R1-003)
 """
 import asyncio, hashlib, json, os, time, uuid
 from datetime import datetime
@@ -48,7 +49,7 @@ class ChatRequest(BaseModel):
     max_tokens: Optional[int] = None
     stream: Optional[bool] = False
 
-app = FastAPI(title="le workbench Proxy", version="2.0.6")
+app = FastAPI(title="le workbench Proxy", version="2.0.7")
 
 def _hash(text: str) -> str:
     return hashlib.md5(text.encode("utf-8")).hexdigest()
@@ -147,6 +148,15 @@ async def _wait_clipboard(initial_hash: str, ts: str) -> str:
                 print(f"[{ts}]    Verifiez que vous avez copie la reponse Gemini COMPLETE (Ctrl+A puis Ctrl+C)")
                 initial_hash = _hash(current)
                 continue
+            # FIX-015: Garde runtime <new_task> — bloque l'injection si Gemini ignore la Regle 9 de SP-007 (GAP R1-003)
+            # <new_task> en mode proxy cause un deadlock (deux instances Roo Code partagent le meme presse-papiers).
+            if "<new_task>" in current:
+                print(f"[{ts}] 🚫 ERREUR CRITIQUE : La reponse Gemini contient <new_task> !")
+                print(f"[{ts}]    Les Boomerang Tasks ne sont PAS supportees en Mode Proxy (deadlock presse-papiers).")
+                print(f"[{ts}]    ACTION REQUISE : Demandez a Gemini de reformuler sans <new_task>.")
+                print(f"[{ts}]    Copiez la reponse corrigee (sans <new_task>) pour continuer.")
+                initial_hash = _hash(current)
+                continue
             if not _validate_response(current):
                 print(f"[{ts}] AVERTISSEMENT : Aucune balise XML Roo Code detectee.")
             return current
@@ -187,8 +197,8 @@ async def list_models():
 
 @app.get("/health")
 async def health_check():
-    return {"status": "ok", "proxy": "le workbench", "version": "2.0.6", "gem_mode": USE_GEM_MODE}
+    return {"status": "ok", "proxy": "le workbench", "version": "2.0.7", "gem_mode": USE_GEM_MODE}
 
 if __name__ == "__main__":
-    print(f"{'='*60}\n  le workbench PROXY v2.0.6 | http://localhost:{PORT}/v1\n  Mode: {'GEM' if USE_GEM_MODE else 'COMPLET'} | Timeout: {TIMEOUT_SECONDS}s\n{'='*60}")
+    print(f"{'='*60}\n  le workbench PROXY v2.0.7 | http://localhost:{PORT}/v1\n  Mode: {'GEM' if USE_GEM_MODE else 'COMPLET'} | Timeout: {TIMEOUT_SECONDS}s\n{'='*60}")
     uvicorn.run(app, host="0.0.0.0", port=PORT, log_level="warning")

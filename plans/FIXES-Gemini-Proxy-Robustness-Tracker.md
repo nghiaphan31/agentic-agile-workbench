@@ -334,12 +334,12 @@ This file is the **single source of truth** for tracking the application of all 
 ## P1 — High Priority (Review 2)
 
 ### FIX-015 — Proxy: add `<new_task>` runtime guard in `_wait_clipboard()`
-- **Status:** [ ] PENDING
+- **Status:** [x] DONE
 - **File to change:** `template/proxy.py`
 - **Gap addressed:** GAP R1-003 (`<new_task>` not blocked at runtime — causes deadlock if Gemini ignores SP-007 Rule 9)
 - **What to do:** In [`_wait_clipboard()`](template/proxy.py), after the length check and before `_validate_response()`, add a check: if `"<new_task>" in current`, print a critical error message, reset `initial_hash = _hash(current)`, and `continue` polling. This forces the human to copy a corrected response without `<new_task>`.
 - **Verification:** Manually copy a string containing `<new_task>` while proxy is polling — proxy should print the error and continue polling (NOT inject into Roo Code).
-- **Applied:** [ ] Date: — | Commit: —
+- **Applied:** [x] Date: 2026-03-23 | Commit: ea0e921
 
 ---
 
@@ -393,9 +393,9 @@ This file is the **single source of truth** for tracking the application of all 
 | **Review 1 — P1 High** | 5 | 5 | 0 |
 | **Review 1 — P2 Medium** | 4 | 4 | 0 |
 | **Review 2 - P0 Blocking** | 2 | 2 | **0** |
-| **Review 2 - P1 High** | 2 | 0 | **2** |
+| **Review 2 - P1 High** | 2 | 1 | **1** |
 | **Review 2 - P2 Medium** | 3 | 0 | **3** |
-| **TOTAL** | **19** | **14** | **5** |
+| **TOTAL** | **19** | **15** | **4** |
 
 ---
 
@@ -406,6 +406,7 @@ This file is the **single source of truth** for tracking the application of all 
 | 2026-03-23 | Review 2 | REVIEW2 written - 3 regressions + 6 new gaps identified (FIX-013 to FIX-019 added) | -- |
 | 2026-03-23 | Session 13 | FIX-013 — SP-007 v1.4.0 format exact diff SEARCH/REPLACE pour replace_in_file + Regle 10 — DEPLOIEMENT MANUEL REQUIS | 9cd8707 |
 | 2026-03-23 | Session 14 | FIX-014 — Verification longueur minimale BLOQUANTE (seuil 100 chars) dans _wait_clipboard() — proxy v2.0.6 (REG-001) | 411bce3 |
+| 2026-03-23 | Session 15 | FIX-015 — Garde runtime <new_task> bloquant dans _wait_clipboard() — proxy v2.0.7 (GAP R1-003) | ea0e921 |
 
 ---
 
