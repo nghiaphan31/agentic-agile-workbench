@@ -5,7 +5,7 @@
 **Version :** 3.0 — Document unique fusionné (phases 0-12 en continu)
 **Date :** 2026-03-23
 **Plateforme cible :** Windows 10/11 + Visual Studio Code
-**Références :** DOC1-PRD-Unified-Agentic-Framework.md v2.0, DOC2-Architecture-Solution-Stack.md v2.0
+**Références :** DOC1-PRD-Workbench-Requirements.md v2.0, DOC2-ARCH-Workbench-Technical-Design.md v2.0
 
 ---
 
@@ -1996,9 +1996,9 @@ git commit -m "feat(prompts): check-prompts-sync.ps1 + hook pre-commit — véri
 │   ├── systemPatterns.md    # Architecture, conventions, patterns
 │   └── techContext.md       # Stack, commandes, config backends LLM
 ├── workbench/                   # Documents de planification (DOC1, DOC2, DOC3)
-│   ├── DOC1-PRD-Unified-Agentic-Framework.md
-│   ├── DOC2-Architecture-Solution-Stack.md
-│   └── DOC3-Plan-Implementation-COMPLETE.md
+│   ├── DOC1-PRD-Workbench-Requirements.md
+│   ├── DOC2-ARCH-Workbench-Technical-Design.md
+│   └── DOC3-BUILD-Workbench-Assembly-Phases.md
 ├── prompts/                 # Registre SP canoniques (SP-001 à SP-007)
 │   ├── README.md
 │   ├── SP-001-ollama-modelfile-system.md
@@ -2050,10 +2050,10 @@ git commit -m "feat(prompts): check-prompts-sync.ps1 + hook pre-commit — véri
 
 | Réf. | Type | Titre / Identifiant | Description |
 | :--- | :--- | :--- | :--- |
-| [DOC1] | Document interne | `workbench/DOC1-PRD-Unified-Agentic-Framework.md` | Product Requirements Document v2.0 — source de toutes les exigences REQ-xxx implémentées dans ce plan |
-| [DOC2] | Document interne | `workbench/DOC2-Architecture-Solution-Stack.md` | Architecture, Solution et Stack Technique v2.0 — justifie les choix techniques de chaque phase |
-| [DOC3] | Document interne | `workbench/DOC3-Plan-Implementation-COMPLETE.md` | Ce document — Plan d'Implémentation Séquentiel Complet v3.0 (Phases 0–12) |
-| [DOC4] | Document interne | `workbench/DOC4-Guide-Deploiement-Atelier.md` | Guide de Déploiement de l'Atelier sur projets nouveaux et existants |
+| [DOC1] | Document interne | `workbench/DOC1-PRD-Workbench-Requirements.md` | Product Requirements Document v2.0 — source de toutes les exigences REQ-xxx implémentées dans ce plan |
+| [DOC2] | Document interne | `workbench/DOC2-ARCH-Workbench-Technical-Design.md` | Architecture, Solution et Stack Technique v2.0 — justifie les choix techniques de chaque phase |
+| [DOC3] | Document interne | `workbench/DOC3-BUILD-Workbench-Assembly-Phases.md` | Ce document — Plan d'Implémentation Séquentiel Complet v3.0 (Phases 0–12) |
+| [DOC4] | Document interne | `workbench/DOC4-GUIDE-Workbench-Deployment-Howto.md` | Guide de Déploiement de l'Atelier sur projets nouveaux et existants |
 | [SP-001] | System Prompt | `template/prompts/SP-001-ollama-modelfile-system.md` | System prompt du Modelfile Ollama — déployé en Phase 3 |
 | [SP-002] | System Prompt | `template/prompts/SP-002-clinerules-global.md` | Contenu canonique du fichier `.clinerules` — déployé en Phase 5 |
 | [SP-003] | System Prompt | `template/prompts/SP-003-persona-product-owner.md` | `roleDefinition` Product Owner — déployé en Phase 4 |

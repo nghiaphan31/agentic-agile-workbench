@@ -4,7 +4,7 @@
 **Nom du Projet :** Agentic Agile Workbench
 **Version :** 2.0 — Refactorisé (arbitrages intégrés, streaming SSE, RBAC précis)
 **Date :** 2026-03-23
-**Référence PRD :** DOC1-PRD-Unified-Agentic-Framework.md v2.0
+**Référence PRD :** DOC1-PRD-Workbench-Requirements.md v2.0
 
 ---
 
@@ -614,10 +614,10 @@ RAPPEL : Aucun texte avant la premiere balise XML. Aucun texte apres la derniere
 
 | Réf. | Type | Titre / Identifiant | Description |
 | :--- | :--- | :--- | :--- |
-| [DOC1] | Document interne | `workbench/DOC1-PRD-Unified-Agentic-Framework.md` | Product Requirements Document v2.0 — source de toutes les exigences REQ-xxx référencées dans ce document |
-| [DOC2] | Document interne | `workbench/DOC2-Architecture-Solution-Stack.md` | Ce document — Architecture, Solution et Stack Technique v2.0 |
-| [DOC3] | Document interne | `workbench/DOC3-Plan-Implementation-COMPLETE.md` | Plan d'Implémentation Séquentiel Complet v3.0 (Phases 0–12) |
-| [DOC4] | Document interne | `workbench/DOC4-Guide-Deploiement-Atelier.md` | Guide de Déploiement de l'Atelier sur projets nouveaux et existants |
+| [DOC1] | Document interne | `workbench/DOC1-PRD-Workbench-Requirements.md` | Product Requirements Document v2.0 — source de toutes les exigences REQ-xxx référencées dans ce document |
+| [DOC2] | Document interne | `workbench/DOC2-ARCH-Workbench-Technical-Design.md` | Ce document — Architecture, Solution et Stack Technique v2.0 |
+| [DOC3] | Document interne | `workbench/DOC3-BUILD-Workbench-Assembly-Phases.md` | Plan d'Implémentation Séquentiel Complet v3.0 (Phases 0–12) |
+| [DOC4] | Document interne | `workbench/DOC4-GUIDE-Workbench-Deployment-Howto.md` | Guide de Déploiement de l'Atelier sur projets nouveaux et existants |
 | [SP-001] | System Prompt | `template/prompts/SP-001-ollama-modelfile-system.md` | System prompt du Modelfile Ollama — contenu du bloc `SYSTEM """..."""` |
 | [SP-002] | System Prompt | `template/prompts/SP-002-clinerules-global.md` | Contenu canonique du fichier `.clinerules` (6 règles impératives) |
 | [SP-003] | System Prompt | `template/prompts/SP-003-persona-product-owner.md` | `roleDefinition` du persona Product Owner dans `.roomodes` |

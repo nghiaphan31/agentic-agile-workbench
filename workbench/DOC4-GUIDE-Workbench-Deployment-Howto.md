@@ -4,7 +4,7 @@
 **Nom du Projet :** Agentic Agile Workbench
 **Version :** 1.0
 **Date :** 2026-03-23
-**Références :** DOC1-PRD-Unified-Agentic-Framework.md v2.0, DOC2-Architecture-Solution-Stack.md v2.0, DOC3-Plan-Implementation-COMPLETE.md v3.0
+**Références :** DOC1-PRD-Workbench-Requirements.md v2.0, DOC2-ARCH-Workbench-Technical-Design.md v2.0, DOC3-BUILD-Workbench-Assembly-Phases.md v3.0
 
 ---
 
@@ -399,7 +399,7 @@ Vous pourriez penser à utiliser des sous-modules Git ou des liens symboliques p
 
 ## 7. Cycle de Vie d'un Projet avec l'Atelier
 
-> **Référence :** Le processus complet (phases, artifacts, nomenclature, anti-risques agentiques) est décrit dans **[DOC5] `workbench/DOC5-Manuel-Processus-Agile-Applicatif.md`**. Ce document (DOC4) couvre uniquement le déploiement de l'atelier. DOC5 couvre comment travailler avec l'atelier une fois déployé.
+> **Référence :** Le processus complet (phases, artifacts, nomenclature, anti-risques agentiques) est décrit dans **[DOC5] `workbench/DOC5-GUIDE-Project-Development-Process.md`**. Ce document (DOC4) couvre uniquement le déploiement de l'atelier. DOC5 couvre comment travailler avec l'atelier une fois déployé.
 
 ```
 PHASE 0 - AMONT OUVERT (avant de coder)
@@ -518,11 +518,11 @@ PHASE MAINTENANCE (continue)
 
 | Réf. | Type | Titre / Identifiant | Description |
 | :--- | :--- | :--- | :--- |
-| [DOC1] | Document interne | `workbench/DOC1-PRD-Unified-Agentic-Framework.md` | Product Requirements Document v2.0 — définit les exigences REQ-xxx du système le workbench |
-| [DOC2] | Document interne | `workbench/DOC2-Architecture-Solution-Stack.md` | Architecture, Solution et Stack Technique v2.0 — justifie les choix techniques |
-| [DOC3] | Document interne | `workbench/DOC3-Plan-Implementation-COMPLETE.md` | Plan d'Implémentation Séquentiel Complet v3.0 — guide d'installation de l'atelier (Phases 0–12) |
-| [DOC4] | Document interne | `workbench/DOC4-Guide-Deploiement-Atelier.md` | Ce document — Guide de Déploiement de l'Atelier sur projets nouveaux et existants |
-| [DOC5] | Document interne | `workbench/DOC5-Manuel-Processus-Agile-Applicatif.md` | Manuel du Processus Agile Applicatif v1.0 — à lire après déploiement pour savoir comment développer un projet avec l'atelier |
+| [DOC1] | Document interne | `workbench/DOC1-PRD-Workbench-Requirements.md` | Product Requirements Document v2.0 — définit les exigences REQ-xxx du système le workbench |
+| [DOC2] | Document interne | `workbench/DOC2-ARCH-Workbench-Technical-Design.md` | Architecture, Solution et Stack Technique v2.0 — justifie les choix techniques |
+| [DOC3] | Document interne | `workbench/DOC3-BUILD-Workbench-Assembly-Phases.md` | Plan d'Implémentation Séquentiel Complet v3.0 — guide d'installation de l'atelier (Phases 0–12) |
+| [DOC4] | Document interne | `workbench/DOC4-GUIDE-Workbench-Deployment-Howto.md` | Ce document — Guide de Déploiement de l'Atelier sur projets nouveaux et existants |
+| [DOC5] | Document interne | `workbench/DOC5-GUIDE-Project-Development-Process.md` | Manuel du Processus Agile Applicatif v1.0 — à lire après déploiement pour savoir comment développer un projet avec l'atelier |
 | [SP-001] | System Prompt | `template/prompts/SP-001-ollama-modelfile-system.md` | System prompt du Modelfile Ollama — copié dans le projet lors du déploiement |
 | [SP-002] | System Prompt | `template/prompts/SP-002-clinerules-global.md` | Contenu canonique du fichier `.clinerules` — copié à la racine du projet |
 | [SP-003] | System Prompt | `template/prompts/SP-003-persona-product-owner.md` | `roleDefinition` Product Owner — intégré dans `.roomodes` du projet |

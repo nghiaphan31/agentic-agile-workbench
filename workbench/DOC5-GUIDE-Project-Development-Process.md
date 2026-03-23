@@ -1678,11 +1678,11 @@ git log --oneline -3 -- memory-bank/activeContext.md
 
 | Ref. | Type | Titre / Identifiant | Description |
 | :--- | :--- | :--- | :--- |
-| [DOC1] | Document interne | `workbench/DOC1-PRD-Unified-Agentic-Framework.md` | Exigences de l'atelier - REQ-xxx references dans ce document |
-| [DOC2] | Document interne | `workbench/DOC2-Architecture-Solution-Stack.md` | Architecture technique de l'atelier - DA-xxx references |
-| [DOC3] | Document interne | `workbench/DOC3-Plan-Implementation-COMPLETE.md` | Plan d'installation de l'atelier (Phases 0-12) |
-| [DOC4] | Document interne | `workbench/DOC4-Guide-Deploiement-Atelier.md` | Guide de deploiement de l'atelier sur projets |
-| [DOC5] | Document interne | `workbench/DOC5-Manuel-Processus-Agile-Applicatif.md` | Ce document - Manuel du processus Agile applicatif |
+| [DOC1] | Document interne | `workbench/DOC1-PRD-Workbench-Requirements.md` | Exigences de l'atelier - REQ-xxx references dans ce document |
+| [DOC2] | Document interne | `workbench/DOC2-ARCH-Workbench-Technical-Design.md` | Architecture technique de l'atelier - DA-xxx references |
+| [DOC3] | Document interne | `workbench/DOC3-BUILD-Workbench-Assembly-Phases.md` | Plan d'installation de l'atelier (Phases 0-12) |
+| [DOC4] | Document interne | `workbench/DOC4-GUIDE-Workbench-Deployment-Howto.md` | Guide de deploiement de l'atelier sur projets |
+| [DOC5] | Document interne | `workbench/DOC5-GUIDE-Project-Development-Process.md` | Ce document - Manuel du processus Agile applicatif |
 | [SCRUM] | Standard | Scrum Guide (scrumguides.org) | Guide officiel Scrum - reference pour les ceremonies et roles |
 | [MOSCOW] | Methode | MoSCoW Prioritization | Methode de priorisation Must/Should/Could/Won't |
 | [ADR] | Pattern | Architecture Decision Records (adr.github.io) | Format standard pour documenter les decisions d'architecture |
