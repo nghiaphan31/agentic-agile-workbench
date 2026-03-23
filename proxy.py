@@ -230,7 +230,7 @@ async def list_models():
 
 @app.get("/health")
 async def health_check():
-    return {"status": "ok", "proxy": "le workbench", "version": "2.0.9", "gem_mode": USE_GEM_MODE}
+    return {"status": "ok", "proxy": "le workbench", "version": "2.1.1", "gem_mode": USE_GEM_MODE}
 
 if __name__ == "__main__":
     print(f"{'='*60}\n  le workbench PROXY v2.0.9 | http://localhost:{PORT}/v1\n  Mode: {'GEM' if USE_GEM_MODE else 'COMPLET'} | Timeout: {TIMEOUT_SECONDS}s\n{'='*60}")
