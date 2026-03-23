@@ -29,4 +29,4 @@ FIX-022 appliqué : proxy.py v2.3.0
 Aucun blocage actif.
 
 ## Dernier commit Git
-[à mettre à jour après commit]
+17a6561 — fix(proxy): v2.3.0 FIX-022 — GEM MODE envoie uniquement le dernier message USER pour eviter contamination de contexte
