@@ -15,10 +15,10 @@
 La distinction la plus importante à comprendre avant tout déploiement :
 
 ```
-PRE-agentic-agile-dev-framework/   ← VOUS ÊTES ICI
+agentic-agile-workbench/   ← VOUS ÊTES ICI
 │                                     C'est l'ATELIER
 │
-│  plans/          ← Les plans de l'atelier (DOC1, DOC2, DOC3, DOC4)
+│  workbench/          ← Les plans de l'atelier (DOC1, DOC2, DOC3, DOC4)
 │  prompts/        ← Les outils de l'atelier (system prompts SP-001 à SP-007)
 │  proxy.py        ← Une machine de l'atelier (pont Roo Code <-> Gemini Chrome)
 │  .roomodes       ← Les rôles des ouvriers de l'atelier (4 personas Agile)
@@ -36,14 +36,14 @@ PRE-agentic-agile-dev-framework/   ← VOUS ÊTES ICI
 
 | Fichier / Dossier | Rôle dans l'Atelier | Analogie |
 | :--- | :--- | :--- |
-| `plans/DOC1-PRD-*.md` | Exigences de l'atelier lui-même | Manuel de l'atelier |
-| `plans/DOC2-Architecture-*.md` | Architecture technique de l'atelier | Plans des machines |
-| `plans/DOC3-Plan-Implementation-*.md` | Guide d'installation de l'atelier | Notice de montage |
-| `plans/DOC4-Guide-Deploiement-*.md` | Ce document — comment utiliser l'atelier | Mode d'emploi |
-| `prompts/SP-001 à SP-007` | System prompts canoniques | Fiches de poste des ouvriers |
+| `workbench/DOC1-PRD-*.md` | Exigences de l'atelier lui-même | Manuel de l'atelier |
+| `workbench/DOC2-Architecture-*.md` | Architecture technique de l'atelier | Plans des machines |
+| `workbench/DOC3-Plan-Implementation-*.md` | Guide d'installation de l'atelier | Notice de montage |
+| `workbench/DOC4-Guide-Deploiement-*.md` | Ce document — comment utiliser l'atelier | Mode d'emploi |
+| `template/prompts/SP-001 à SP-007` | System prompts canoniques | Fiches de poste des ouvriers |
 | `.roomodes` | Définition des 4 personas Agile | Organigramme de l'atelier |
 | `.clinerules` | 6 règles impératives pour tous les modes | Règlement intérieur |
-| `proxy.py` | Pont Roo Code ↔ Gemini Chrome | Machine de relais |
+| `template/proxy.py` | Pont Roo Code ↔ Gemini Chrome | Machine de relais |
 | `scripts/` | Scripts utilitaires | Outils automatisés |
 
 ### 1.3 Ce que ce Dépôt NE Contient PAS
@@ -58,7 +58,7 @@ PRE-agentic-agile-dev-framework/   ← VOUS ÊTES ICI
 Ce dépôt évoluera au fil du temps. Vous le mettrez à jour quand :
 - Une règle `.clinerules` s'avère insuffisante ou ambiguë → vous la corrigez ici
 - Vous ajoutez un nouveau persona (ex: DevOps Engineer, Architect) → vous l'ajoutez dans `.roomodes` et `prompts/`
-- Vous améliorez `proxy.py` (nouveau timeout, meilleure gestion des erreurs) → vous le mettez à jour ici
+- Vous améliorez `template/proxy.py` (nouveau timeout, meilleure gestion des erreurs) → vous le mettez à jour ici
 - Vous découvrez un pattern de Memory Bank plus efficace → vous mettez à jour les templates dans `.clinerules`
 
 **Chaque amélioration de l'atelier bénéficie à tous les futurs projets.** C'est l'intérêt de séparer l'atelier des projets.
@@ -71,7 +71,7 @@ Ce dépôt évoluera au fil du temps. Vous le mettrez à jour quand :
 ┌─────────────────────────────────────────────────────────────────┐
 │                    ATELIER le workbench (ce dépôt)                      │
 │                                                                  │
-│  .roomodes  .clinerules  prompts/  proxy.py  scripts/  plans/   │
+│  .roomodes  .clinerules  prompts/  proxy.py  scripts/  workbench/   │
 │                                                                  │
 │  Versionné, enrichi, partagé entre tous les projets             │
 └──────────────────────────┬──────────────────────────────────────┘
@@ -115,13 +115,13 @@ git init
 git branch -M main
 ```
 
-> **Important :** Le nouveau projet est un dépôt Git **séparé** de l'atelier. Ne créez pas le projet à l'intérieur du dossier `PRE-agentic-agile-dev-framework/`.
+> **Important :** Le nouveau projet est un dépôt Git **séparé** de l'atelier. Ne créez pas le projet à l'intérieur du dossier `agentic-agile-workbench/`.
 
 ### 3.3 Étape 2 — Copier les Fichiers de l'Atelier
 
 ```powershell
 # Définir le chemin de l'atelier (adaptez selon votre installation)
-$Atelier = "C:\Users\[VOTRE_NOM]\AGENTIC_DEVELOPMENT_PROJECTS\projects\PRE-agentic-agile-dev-framework"
+$Atelier = "C:\Users\[VOTRE_NOM]\AGENTIC_DEVELOPMENT_PROJECTS\projects\agentic-agile-workbench"
 $Projet = "C:\Projets\mon-nouveau-projet"
 
 # Copier les fichiers de configuration
@@ -257,7 +257,7 @@ git commit -m "chore(init): état initial du code avant refactoring le workbench
 Identique au cas "Nouveau Projet" (section 3.3) :
 
 ```powershell
-$Atelier = "C:\Users\[VOTRE_NOM]\AGENTIC_DEVELOPMENT_PROJECTS\projects\PRE-agentic-agile-dev-framework"
+$Atelier = "C:\Users\[VOTRE_NOM]\AGENTIC_DEVELOPMENT_PROJECTS\projects\agentic-agile-workbench"
 $Projet = "C:\Projets\mon-projet-legacy"
 
 Copy-Item "$Atelier\.roomodes" "$Projet\"
@@ -359,15 +359,15 @@ Cette table est la référence pour savoir où chaque fichier doit vivre :
 
 | Fichier / Dossier | Reste dans l'Atelier | Va dans chaque Projet | Notes |
 | :--- | :---: | :---: | :--- |
-| `plans/DOC1/DOC2/DOC3/DOC4` | ✅ | ❌ | Documentation de l'atelier — pas du projet |
+| `workbench/DOC1/DOC2/DOC3/DOC4` | ✅ | ❌ | Documentation de l'atelier — pas du projet |
 | `.roomodes` | ✅ (template) | ✅ (copie) | Copié, peut être adapté par projet |
 | `.clinerules` | ✅ (template) | ✅ (copie) | Copié, peut être adapté par projet |
 | `Modelfile` | ✅ (template) | ✅ (copie) | Copié si Mode Ollama utilisé |
-| `proxy.py` | ✅ (template) | ✅ (copie) | Copié si Mode Gemini utilisé |
+| `template/proxy.py` | ✅ (template) | ✅ (copie) | Copié si Mode Gemini utilisé |
 | `requirements.txt` | ✅ (template) | ✅ (copie) | Copié si Mode Gemini utilisé |
 | `scripts/` | ✅ (template) | ✅ (copie) | Copié dans chaque projet |
-| `prompts/SP-*.md` | ✅ (source de vérité) | ✅ (copie) | Copié — le projet a sa propre copie versionnée |
-| `prompts/README.md` | ✅ (template) | ✅ (copie) | Copié |
+| `template/prompts/SP-*.md` | ✅ (source de vérité) | ✅ (copie) | Copié — le projet a sa propre copie versionnée |
+| `template/prompts/README.md` | ✅ (template) | ✅ (copie) | Copié |
 | `memory-bank/` | ❌ | ✅ (spécifique) | Unique par projet — ne jamais copier d'un projet à l'autre |
 | `src/` (code applicatif) | ❌ | ✅ (spécifique) | Unique par projet |
 | `docs/qa/` | ❌ | ✅ (spécifique) | Rapports QA spécifiques au projet |
@@ -432,7 +432,7 @@ PHASE MAINTENANCE (continue)
 │
 ├── Bugs → Mode QA Engineer (rapport) + Mode Developer (fix)
 ├── Nouvelles features → Mode Product Owner (US) + Mode Developer (impl)
-└── Améliorations atelier → Mettre à jour PRE-agentic-agile-dev-framework/
+└── Améliorations atelier → Mettre à jour agentic-agile-workbench/
 ```
 
 ---
@@ -474,7 +474,7 @@ PHASE MAINTENANCE (continue)
 ### Pour un Nouveau Projet
 
 - [ ] Dépôt Git créé en dehors du dossier de l'atelier
-- [ ] Fichiers de l'atelier copiés (`.roomodes`, `.clinerules`, `proxy.py`, `scripts/`, `prompts/`)
+- [ ] Fichiers de l'atelier copiés (`.roomodes`, `.clinerules`, `template/proxy.py`, `scripts/`, `prompts/`)
 - [ ] `.gitignore` créé (venv/, .env, __pycache__, *.log)
 - [ ] Memory Bank initialisée (7 fichiers créés)
 - [ ] `memory-bank/projectBrief.md` rempli avec la vision du projet
@@ -512,7 +512,7 @@ PHASE MAINTENANCE (continue)
 | [SP-005] | System Prompt | `template/prompts/SP-005-persona-developer.md` | `roleDefinition` Developer — intégré dans `.roomodes` du projet |
 | [SP-006] | System Prompt | `template/prompts/SP-006-persona-qa-engineer.md` | `roleDefinition` QA Engineer — intégré dans `.roomodes` du projet |
 | [SP-007] | System Prompt | `template/prompts/SP-007-gem-gemini-roo-agent.md` | Instructions du Gem Gemini "Roo Code Agent" — déploiement manuel hors Git |
-| [DEPLOY-SCRIPT] | Script PowerShell | `template/scripts/deploy-to-project.ps1` | Script de déploiement automatisé de l'atelier sur un projet (paramètres : `-ProjectPath`, `-Update`, `-DryRun`) |
+| [DEPLOY-SCRIPT] | Script PowerShell | `template/template/scripts/deploy-to-project.ps1` | Script de déploiement automatisé de l'atelier sur un projet (paramètres : `-ProjectPath`, `-Update`, `-DryRun`) |
 | [WORKBENCH-VERSION] | Fichier de version | `template/.workbench-version` | Fichier copié dans chaque projet pour tracer la version de l'atelier déployée |
 | [VERSION] | Fichier de version | `VERSION` (racine du workbench) | Version courante du workbench (format SemVer MAJOR.MINOR.PATCH) |
 | [CHANGELOG] | Journal des modifications | `CHANGELOG.md` (racine du workbench) | Historique des versions du workbench avec procédure de mise à jour des projets |

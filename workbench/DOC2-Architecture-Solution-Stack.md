@@ -241,7 +241,7 @@ Ce principe garantit que :
 **Exigences adressées :** REQ-7.1, REQ-7.2, REQ-7.3, REQ-7.4, REQ-7.5
 
 ### DA-013 — Vérification automatique via script PowerShell + hook Git pre-commit
-**Décision :** Un script `scripts/check-prompts-sync.ps1` compare le contenu déployé avec les SP canoniques via comparaison normalisée (correction encodage `\r\n`/`\n`, désérialisation JSON pour `.roomodes`, regex robuste d'extraction). Un hook Git `.git/hooks/pre-commit` appelle ce script automatiquement et bloque le commit si désynchronisation détectée. SP-007 est exclu de la vérification automatique avec avertissement de vérification manuelle.
+**Décision :** Un script `template/template/scripts/check-prompts-sync.ps1` compare le contenu déployé avec les SP canoniques via comparaison normalisée (correction encodage `\r\n`/`\n`, désérialisation JSON pour `.roomodes`, regex robuste d'extraction). Un hook Git `.git/hooks/pre-commit` appelle ce script automatiquement et bloque le commit si désynchronisation détectée. SP-007 est exclu de la vérification automatique avec avertissement de vérification manuelle.
 **Justification :** REGLE 6 étant une directive comportementale, elle peut être ignorée par un agent LLM. Le hook pre-commit transforme la vérification en contrainte technique non-contournable.
 **Exigences adressées :** REQ-8.1, REQ-8.2, REQ-8.3, REQ-8.4
 
@@ -363,7 +363,7 @@ Si stream=true  → SSE : data:{chunk}\n\ndata:{done}\n\ndata:[DONE]\n\n
 Si stream=false → JSON : {"id":..., "choices":[{"message":{"content":"..."}}]}
 ```
 
-**Code complet `proxy.py` v2.0 (DA-006, DA-007, DA-008, DA-009, DA-014) :**
+**Code complet `template/proxy.py` v2.0 (DA-006, DA-007, DA-008, DA-009, DA-014) :**
 
 ```python
 """
@@ -571,19 +571,19 @@ RAPPEL : Aucun texte avant la premiere balise XML. Aucun texte apres la derniere
 | **`mychen76/qwen3_cline_roocode:32b`** | Moteur LLM Local | Modèle principal fine-tuné Tool Calling Roo Code | DA-004 | REQ-1.1 |
 | **`Modelfile` (T=0.15, num_ctx=131072)** | Moteur LLM Local | Déterminisme + fenêtre contexte 128K tokens | DA-004 | REQ-1.2, REQ-1.3 |
 | **`qwen3:7b` + Boomerang Tasks** | Moteur LLM Local | Délégation tâches légères au modèle secondaire | DA-005 | REQ-1.4 |
-| **`proxy.py` — POST `/v1/chat/completions`** | Proxy Hybride | Point d'entrée unique, interception requêtes Roo Code | DA-006, DA-007 | REQ-2.1.1, REQ-2.1.2 |
-| **`proxy.py` — `_format_prompt()`** | Proxy Hybride | Extraction payload, filtrage system prompt (GEM MODE) | DA-008 | REQ-2.1.3, REQ-2.1.4 |
-| **`proxy.py` — `_clean_content()`** | Proxy Hybride | Nettoyage images base64, remplacement par message textuel | DA-009 | REQ-2.1.5 |
-| **`proxy.py` — `pyperclip.copy()`** | Proxy Hybride | Injection prompt formaté dans presse-papiers Windows | — | REQ-2.2.1 |
-| **`proxy.py` — Séparateurs `[USER]`, `[ASSISTANT]`** | Proxy Hybride | Format lisible avec séparateurs explicites | DA-008 | REQ-2.2.2 |
-| **`proxy.py` — Messages console horodatés** | Proxy Hybride | Notification utilisateur avec timestamp et 5 instructions | — | REQ-2.2.3 |
-| **`proxy.py` — Boucle `asyncio` + `pyperclip.paste()`** | Proxy Hybride | Polling asynchrone non-bloquant toutes les secondes | DA-006 | REQ-2.3.1 |
-| **`proxy.py` — Comparaison hash MD5** | Proxy Hybride | Détection changement presse-papiers | — | REQ-2.3.2 |
-| **`proxy.py` — Timeout 300s + HTTP 408** | Proxy Hybride | Gestion non-réponse utilisateur | — | REQ-2.3.3 |
-| **`proxy.py` — `_validate_response()`** | Proxy Hybride | Vérification présence balises XML Roo Code (warning non-bloquant) | — | REQ-2.3.4 |
-| **`proxy.py` — `_stream_response()` (SSE)** | Proxy Hybride | Réponse SSE en un seul chunk si `stream=true` | DA-014 | REQ-2.4.1, REQ-2.4.3 |
-| **`proxy.py` — `_build_json_response()`** | Proxy Hybride | Réponse JSON OpenAI complète si `stream=false` | DA-007 | REQ-2.4.2, REQ-2.4.3 |
-| **`proxy.py` — Transmission contenu brut** | Proxy Hybride | Contenu Gemini transmis tel quel sans modification | — | REQ-2.4.4 |
+| **`template/proxy.py` — POST `/v1/chat/completions`** | Proxy Hybride | Point d'entrée unique, interception requêtes Roo Code | DA-006, DA-007 | REQ-2.1.1, REQ-2.1.2 |
+| **`template/proxy.py` — `_format_prompt()`** | Proxy Hybride | Extraction payload, filtrage system prompt (GEM MODE) | DA-008 | REQ-2.1.3, REQ-2.1.4 |
+| **`template/proxy.py` — `_clean_content()`** | Proxy Hybride | Nettoyage images base64, remplacement par message textuel | DA-009 | REQ-2.1.5 |
+| **`template/proxy.py` — `pyperclip.copy()`** | Proxy Hybride | Injection prompt formaté dans presse-papiers Windows | — | REQ-2.2.1 |
+| **`template/proxy.py` — Séparateurs `[USER]`, `[ASSISTANT]`** | Proxy Hybride | Format lisible avec séparateurs explicites | DA-008 | REQ-2.2.2 |
+| **`template/proxy.py` — Messages console horodatés** | Proxy Hybride | Notification utilisateur avec timestamp et 5 instructions | — | REQ-2.2.3 |
+| **`template/proxy.py` — Boucle `asyncio` + `pyperclip.paste()`** | Proxy Hybride | Polling asynchrone non-bloquant toutes les secondes | DA-006 | REQ-2.3.1 |
+| **`template/proxy.py` — Comparaison hash MD5** | Proxy Hybride | Détection changement presse-papiers | — | REQ-2.3.2 |
+| **`template/proxy.py` — Timeout 300s + HTTP 408** | Proxy Hybride | Gestion non-réponse utilisateur | — | REQ-2.3.3 |
+| **`template/proxy.py` — `_validate_response()`** | Proxy Hybride | Vérification présence balises XML Roo Code (warning non-bloquant) | — | REQ-2.3.4 |
+| **`template/proxy.py` — `_stream_response()` (SSE)** | Proxy Hybride | Réponse SSE en un seul chunk si `stream=true` | DA-014 | REQ-2.4.1, REQ-2.4.3 |
+| **`template/proxy.py` — `_build_json_response()`** | Proxy Hybride | Réponse JSON OpenAI complète si `stream=false` | DA-007 | REQ-2.4.2, REQ-2.4.3 |
+| **`template/proxy.py` — Transmission contenu brut** | Proxy Hybride | Contenu Gemini transmis tel quel sans modification | — | REQ-2.4.4 |
 | **`memory-bank/`** | Mémoire | Conteneur mémoire contextuelle, intégré Git | DA-003 | REQ-4.1, REQ-4.5 |
 | **`memory-bank/activeContext.md`** | Mémoire | Mémoire vive de session, lu et écrit à chaque session | DA-002, DA-003 | REQ-4.2, REQ-4.3, REQ-4.4 |
 | **`memory-bank/progress.md`** | Mémoire | Checklist phases le workbench et features produit | DA-002, DA-003 | REQ-4.2, REQ-4.3, REQ-4.4 |
@@ -601,11 +601,11 @@ RAPPEL : Aucun texte avant la premiere balise XML. Aucun texte apres la derniere
 | **Commutateur Provider Roo Code** | Commutateur LLM | Bascule entre Ollama/Proxy/Anthropic sans modifier Roo Code | DA-007, DA-011 | REQ-2.0 |
 | **Variable `USE_GEM_MODE`** | Proxy Hybride | Active le filtrage du system prompt quand Gem configuré | DA-008 | REQ-2.1.4 |
 | **Répertoire `prompts/`** | Registre Prompts | Source de vérité unique pour tous les system prompts | DA-012 | REQ-7.1 |
-| **Fichiers `prompts/SP-XXX-*.md`** | Registre Prompts | Fichiers canoniques avec en-tête YAML (id, version, target, changelog) | DA-012 | REQ-7.1, REQ-7.2, REQ-7.4 |
-| **`prompts/README.md`** | Registre Prompts | Index du registre avec tableau ID/fichier/cible/Hors Git | DA-012 | REQ-7.2 |
+| **Fichiers `template/prompts/SP-XXX-*.md`** | Registre Prompts | Fichiers canoniques avec en-tête YAML (id, version, target, changelog) | DA-012 | REQ-7.1, REQ-7.2, REQ-7.4 |
+| **`template/prompts/README.md`** | Registre Prompts | Index du registre avec tableau ID/fichier/cible/Hors Git | DA-012 | REQ-7.2 |
 | **REGLE 6 dans `.clinerules`** | Registre Prompts | Directive impérative : vérifier cohérence prompts avant commit | DA-012 | REQ-7.3 |
 | **Flag `hors_git: true` dans SP-007** | Registre Prompts | Marqueur déploiement manuel, déclenche mention commit obligatoire | DA-012 | REQ-7.5 |
-| **`scripts/check-prompts-sync.ps1`** | Vérification Prompts | Comparaison normalisée SP canoniques vs artefacts, rapport PASS/FAIL avec diff | DA-013 | REQ-8.1, REQ-8.3, REQ-8.4 |
+| **`template/template/scripts/check-prompts-sync.ps1`** | Vérification Prompts | Comparaison normalisée SP canoniques vs artefacts, rapport PASS/FAIL avec diff | DA-013 | REQ-8.1, REQ-8.3, REQ-8.4 |
 | **`.git/hooks/pre-commit`** | Vérification Prompts | Hook Git appelant check-prompts-sync.ps1, bloque commit si désync | DA-013 | REQ-8.2 |
 
 ---
@@ -626,7 +626,7 @@ RAPPEL : Aucun texte avant la premiere balise XML. Aucun texte apres la derniere
 | [SP-006] | System Prompt | `template/prompts/SP-006-persona-qa-engineer.md` | `roleDefinition` du persona QA Engineer dans `.roomodes` |
 | [SP-007] | System Prompt | `template/prompts/SP-007-gem-gemini-roo-agent.md` | Instructions du Gem Gemini "Roo Code Agent" — déploiement manuel hors Git (`hors_git: true`) |
 | [OLLAMA] | Outil externe | https://ollama.com | Moteur d'inférence LLM local — expose une API REST OpenAI-compatible sur `localhost:11434` |
-| [FASTAPI] | Bibliothèque Python | https://fastapi.tiangolo.com | Framework web ASGI Python utilisé pour le serveur proxy (`proxy.py`) |
+| [FASTAPI] | Bibliothèque Python | https://fastapi.tiangolo.com | Framework web ASGI Python utilisé pour le serveur proxy (`template/proxy.py`) |
 | [UVICORN] | Bibliothèque Python | https://www.uvicorn.org | Serveur ASGI de production pour FastAPI |
 | [PYPERCLIP] | Bibliothèque Python | https://pypi.org/project/pyperclip | Gestion du presse-papiers Windows depuis Python |
 | [ANTHROPIC] | API externe | https://api.anthropic.com | API officielle Anthropic — endpoint de connexion directe pour le Mode Cloud |
@@ -653,7 +653,7 @@ RAPPEL : Aucun texte avant la premiere balise XML. Aucun texte apres la derniere
 | **LAAW** | Local Agentic Agile Workflow | Blueprint mychen76 — source d'inspiration pour la Memory Bank segmentée et les personas Agile. |
 | **LLM** | Large Language Model | Grand modèle de langage. Trois instances dans le workbench : Qwen3-32B (local), Gemini Pro (cloud Google), Claude Sonnet (cloud Anthropic). |
 | **MCP** | Model Context Protocol | Protocole d'extension Roo Code pour outils externes. Accessible uniquement au persona Developer. |
-| **MD5** | Message Digest 5 | Algorithme de hachage. Utilisé par le proxy pour détecter les changements de presse-papiers (`_hash()` dans `proxy.py`). |
+| **MD5** | Message Digest 5 | Algorithme de hachage. Utilisé par le proxy pour détecter les changements de presse-papiers (`_hash()` dans `template/proxy.py`). |
 | **NTFS** | New Technology File System | Système de fichiers Windows. Stocke physiquement la Memory Bank et les fichiers de configuration. |
 | **PO** | Product Owner | Persona Agile — vision produit, User Stories, backlog. Mode `product-owner` dans `.roomodes`. |
 | **PRD** | Product Requirements Document | Document d'exigences produit. DOC1 est le PRD du workbench. |
@@ -690,7 +690,7 @@ RAPPEL : Aucun texte avant la premiere balise XML. Aucun texte apres la derniere
 | **Mode Proxy** | Roo Code → proxy FastAPI `localhost:8000` → presse-papiers → Gemini Web. Gratuit, nécessite copier-coller humain (DA-006 à DA-014, REQ-2.x). |
 | **Persona Agile** | Mode Roo Code simulant un rôle Scrum. Défini dans `.roomodes` avec `roleDefinition` (comportement) et `groups` (permissions RBAC). |
 | **Polling** | Vérification périodique d'un état. Le proxy vérifie le presse-papiers toutes les secondes via `asyncio.sleep(1.0)` (DA-006, REQ-2.3.1). |
-| **Proxy** | Serveur FastAPI local (`proxy.py`) interceptant les requêtes Roo Code, les relayant vers Gemini Web via presse-papiers, et retournant la réponse (DA-006, DA-007). |
+| **Proxy** | Serveur FastAPI local (`template/proxy.py`) interceptant les requêtes Roo Code, les relayant vers Gemini Web via presse-papiers, et retournant la réponse (DA-006, DA-007). |
 | **Registre de prompts** | Répertoire `template/prompts/` — source de vérité unique pour tous les system prompts, versionnés avec métadonnées YAML (DA-012, REQ-7.x). |
 | **Séquence VÉRIFIER→CRÉER→LIRE→AGIR** | Protocole obligatoire au démarrage de session : vérifier Memory Bank → créer si absente → lire → agir. Défini dans REGLE 1 de `.clinerules` (DA-002, REQ-4.2). |
 | **SSE (Server-Sent Events)** | Streaming HTTP unidirectionnel. Le proxy retourne la réponse Gemini en un seul chunk SSE pour compatibilité avec Roo Code en mode `stream: true` (DA-014, REQ-2.4.1). |

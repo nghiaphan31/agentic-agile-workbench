@@ -245,13 +245,13 @@ Vous devez voir une réponse JSON listant vos modèles. Si erreur de connexion, 
 **Objectif :** Créer le dépôt Git qui versionnera TOUT : code, scripts, prompts, configurations, Memory Bank.
 **Exigences adressées :** REQ-000, REQ-4.1, REQ-4.5
 
-> **Principe fondamental :** Dans le workbench, Git ne versionne pas seulement le code applicatif. Il versionne l'intégralité de l'intelligence du projet : les prompts système (`.clinerules`, `.roomodes`), les scripts (`proxy.py`), la configuration (`Modelfile`), et la mémoire persistante (`memory-bank/`). Chaque modification significative de l'un de ces éléments doit faire l'objet d'un commit Git avec un message descriptif.
+> **Principe fondamental :** Dans le workbench, Git ne versionne pas seulement le code applicatif. Il versionne l'intégralité de l'intelligence du projet : les prompts système (`.clinerules`, `.roomodes`), les scripts (`template/proxy.py`), la configuration (`Modelfile`), et la mémoire persistante (`memory-bank/`). Chaque modification significative de l'un de ces éléments doit faire l'objet d'un commit Git avec un message descriptif.
 
 ### Étape 2.1 — Créer le Dossier du Projet
 
 ```powershell
-mkdir C:\Users\$env:USERNAME\Projects\mon-projet
-cd C:\Users\$env:USERNAME\Projects\mon-projet
+mkdir C:\Users\nghia\AGENTIC_DEVELOPMENT_PROJECTS\projects\mon-projet
+cd C:\Users\nghia\AGENTIC_DEVELOPMENT_PROJECTS\projects\mon-projet
 code .
 ```
 
@@ -559,7 +559,7 @@ TOUT doit etre versionne sous Git, sans exception :
 - Les fichiers de configuration (Modelfile, .roomodes, .clinerules, requirements.txt)
 - La Memory Bank (memory-bank/*.md)
 - Les prompts systeme (prompts/SP-*.md et prompts/README.md)
-- Les documents de plans et d'architecture (plans/*.md)
+- Les documents de plans et d'architecture (workbench/*.md)
 - Les rapports QA (docs/qa/*.md)
 
 ### 5.2 — Quand commiter
@@ -984,7 +984,7 @@ git commit -m "feat(workbench): Memory Bank (7 fichiers) + .clinerules (6 règle
 
 ---
 
-## PHASE 6 : Proxy Gemini Chrome — `proxy.py` v2.0 avec SSE
+## PHASE 6 : Proxy Gemini Chrome — `template/proxy.py` v2.0 avec SSE
 
 **Objectif :** Créer le serveur proxy Python FastAPI qui relaie les requêtes Roo Code vers Gemini Chrome via le presse-papiers Windows, avec support SSE transparent.
 **Exigences adressées :** REQ-2.1.1 à REQ-2.4.4
@@ -1018,9 +1018,9 @@ pip freeze > requirements.txt
 
 ---
 
-### Étape 6.3 — Créer `proxy.py` v2.0
+### Étape 6.3 — Créer `template/proxy.py` v2.0
 
-Créez `proxy.py` à la racine du projet. Source canonique : [`SP-007-gem-gemini-roo-agent.md`](../prompts/SP-007-gem-gemini-roo-agent.md) pour le system prompt du Gem associé.
+Créez `template/proxy.py` à la racine du projet. Source canonique : [`SP-007-gem-gemini-roo-agent.md`](../prompts/SP-007-gem-gemini-roo-agent.md) pour le system prompt du Gem associé.
 
 ```python
 """
@@ -1227,7 +1227,7 @@ Réponse attendue : liste contenant `"id": "gemini-manual"`.
 
 ---
 
-### Étape 6.6 — Versionner `proxy.py` et les Scripts
+### Étape 6.6 — Versionner `template/proxy.py` et les Scripts
 
 ```powershell
 git add proxy.py requirements.txt scripts/
@@ -1696,9 +1696,9 @@ git commit -m "feat(prompts): initialisation registre SP canoniques (SP-001 à S
 
 ---
 
-### Étape 12.1 — Créer `scripts/check-prompts-sync.ps1`
+### Étape 12.1 — Créer `template/template/scripts/check-prompts-sync.ps1`
 
-Créez `scripts/check-prompts-sync.ps1` et collez **exactement** ce code :
+Créez `template/template/scripts/check-prompts-sync.ps1` et collez **exactement** ce code :
 
 ```powershell
 <#
@@ -1884,7 +1884,7 @@ $hookContent = @'
 #!/bin/sh
 # le workbench — Hook pre-commit : vérification cohérence prompts (REQ-8.2, DA-013)
 echo "le workbench pre-commit : vérification cohérence prompts..."
-powershell.exe -ExecutionPolicy Bypass -File "scripts/check-prompts-sync.ps1"
+powershell.exe -ExecutionPolicy Bypass -File "template/scripts/check-prompts-sync.ps1"
 if [ $? -ne 0 ]; then
     echo "COMMIT BLOQUÉ : Désynchronisation détectée dans les prompts."
     echo "Corrigez les désynchronisations avant de commiter."
@@ -1906,7 +1906,7 @@ Set-Content -Path $hookPath -Value $hookContent -Encoding UTF8 -NoNewline
 ```powershell
 # Tester manuellement le script
 .\venv\Scripts\Activate.ps1  # Si nécessaire pour l'environnement
-powershell.exe -ExecutionPolicy Bypass -File "scripts/check-prompts-sync.ps1"
+powershell.exe -ExecutionPolicy Bypass -File "template/scripts/check-prompts-sync.ps1"
 ```
 
 **Sortie attendue (tout synchronisé) :**
@@ -1957,7 +1957,7 @@ git checkout .clinerules
 ### Étape 12.5 — Versionner les Scripts et le Hook
 
 ```powershell
-git add scripts/check-prompts-sync.ps1
+git add template/scripts/check-prompts-sync.ps1
 git commit -m "feat(prompts): check-prompts-sync.ps1 + hook pre-commit — vérification cohérence automatique"
 ```
 
@@ -1966,7 +1966,7 @@ git commit -m "feat(prompts): check-prompts-sync.ps1 + hook pre-commit — véri
 ---
 
 **Critère de validation Phase 12 :**
-- `scripts/check-prompts-sync.ps1` s'exécute sans erreur et affiche `6 PASS | 0 FAIL`
+- `template/template/scripts/check-prompts-sync.ps1` s'exécute sans erreur et affiche `6 PASS | 0 FAIL`
 - Un commit avec `.clinerules` modifié est bloqué par le hook pre-commit
 - La restauration de `.clinerules` débloque le commit
 
@@ -1995,7 +1995,7 @@ git commit -m "feat(prompts): check-prompts-sync.ps1 + hook pre-commit — véri
 │   ├── projectBrief.md      # Vision, objectifs, Non-Goals
 │   ├── systemPatterns.md    # Architecture, conventions, patterns
 │   └── techContext.md       # Stack, commandes, config backends LLM
-├── plans/                   # Documents de planification (DOC1, DOC2, DOC3)
+├── workbench/                   # Documents de planification (DOC1, DOC2, DOC3)
 │   ├── DOC1-PRD-Unified-Agentic-Framework.md
 │   ├── DOC2-Architecture-Solution-Stack.md
 │   └── DOC3-Plan-Implementation-COMPLETE.md
@@ -2034,7 +2034,7 @@ git commit -m "feat(prompts): check-prompts-sync.ps1 + hook pre-commit — véri
 - [ ] Phase 3 : `Modelfile` compilé (`ollama create uadf-agent -f Modelfile`)
 - [ ] Phase 4 : `.roomodes` avec 4 personas RBAC validés
 - [ ] Phase 5 : Memory Bank (7 fichiers) + `.clinerules` (6 règles) — séquence VÉRIFIER→CRÉER→LIRE→AGIR validée
-- [ ] Phase 6 : `proxy.py` v2.0 démarre et répond sur `/health`
+- [ ] Phase 6 : `template/proxy.py` v2.0 démarre et répond sur `/health`
 - [ ] Phase 7 : Gem Gemini "Roo Code Agent" créé et répond avec balises XML
 - [ ] Phase 8 : Commutateur 3 modes configuré dans Roo Code
 - [ ] Phase 9 : Tests end-to-end validés (3 modes + RBAC + Memory Bank + Git)
@@ -2096,7 +2096,7 @@ git commit -m "feat(prompts): check-prompts-sync.ps1 + hook pre-commit — véri
 | **REQ** | Requirement (Exigence) | Identifiant des exigences dans DOC1. Chaque phase de ce document référence les REQ qu'elle implémente. |
 | **SM** | Scrum Master | Persona Agile facilitateur pur — Memory Bank + Git uniquement, sans code ni tests. |
 | **SP** | System Prompt | Fichier canonique du registre `template/prompts/` avec métadonnées YAML. |
-| **SSE** | Server-Sent Events | Protocole de streaming HTTP serveur→client. Implémenté dans `proxy.py` v2.0 (Phase 6). |
+| **SSE** | Server-Sent Events | Protocole de streaming HTTP serveur→client. Implémenté dans `template/proxy.py` v2.0 (Phase 6). |
 | **le workbench** | Agentic Agile Workbench | Nom du système décrit dans ce document. |
 | **VRAM** | Video Random Access Memory | Mémoire GPU. Qwen3-32B nécessite 8+ Go de VRAM (Phase 1, prérequis). |
 | **YAML** | YAML Ain't Markup Language | Format de sérialisation lisible. Utilisé pour les en-têtes des fichiers SP (Phase 11). |
@@ -2123,8 +2123,8 @@ git commit -m "feat(prompts): check-prompts-sync.ps1 + hook pre-commit — véri
 | **Mode Local** | Roo Code → Ollama `localhost:11434` → Qwen3-32B. Configuré en Phase 8. |
 | **Mode Proxy** | Roo Code → proxy FastAPI `localhost:8000` → presse-papiers → Gemini Web. Configuré en Phase 8. |
 | **Persona Agile** | Mode Roo Code simulant un rôle Scrum. Défini dans `.roomodes` en Phase 4. |
-| **Polling** | Vérification périodique du presse-papiers toutes les secondes dans `proxy.py` (Phase 6). |
-| **Proxy** | Serveur FastAPI local (`proxy.py`) créé en Phase 6. Intercepte les requêtes Roo Code et les relaie vers Gemini Web. |
+| **Polling** | Vérification périodique du presse-papiers toutes les secondes dans `template/proxy.py` (Phase 6). |
+| **Proxy** | Serveur FastAPI local (`template/proxy.py`) créé en Phase 6. Intercepte les requêtes Roo Code et les relaie vers Gemini Web. |
 | **Registre de prompts** | Répertoire `template/prompts/` créé en Phase 11. Source de vérité unique pour tous les system prompts. |
 | **Séquence VÉRIFIER→CRÉER→LIRE→AGIR** | Protocole obligatoire au démarrage de session. Défini dans REGLE 1 de `.clinerules` (Phase 5), validé en Phase 9. |
 | **Token** | Unité de traitement LLM ≈ 0,75 mot. La fenêtre 128K tokens ≈ 96 000 mots. |
