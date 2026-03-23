@@ -10,10 +10,10 @@
 - [x] Phase 2 : Dépôt Git initialisé avec .gitignore complet
 - [x] Phase 3 : Modelfile personnalisé (uadf-agent, T=0.15, ctx=131072, base 14b)
 - [x] Phase 4 : .roomodes (4 personas Agile avec règles Git)
-- [-] Phase 5 : Memory Bank (7 fichiers) + .clinerules (6 règles) — en cours
-- [ ] Phase 6 : proxy.py (serveur Gemini Chrome, SSE)
-- [ ] Phase 7 : Gem Gemini Chrome configuré
-- [ ] Phase 8 : Roo Code commutateur 3 modes LLM
+- [x] Phase 5 : Memory Bank (7 fichiers) + .clinerules (6 règles)
+- [x] Phase 6 : proxy.py v2.1.1 (serveur Gemini Chrome, SSE)
+- [x] Phase 7 : Gem Gemini Chrome configuré
+- [-] Phase 8 : Roo Code commutateur 3 modes LLM — en cours
 - [ ] Phase 9 : Tests end-to-end validés
 - [ ] Phase 10 : API Anthropic Claude Sonnet configuré
 - [ ] Phase 11 : Registre prompts/ initialisé

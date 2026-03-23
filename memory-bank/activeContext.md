@@ -2,23 +2,26 @@
 
 **Date de mise à jour :** 2026-03-23
 **Mode actif :** developer
-**Backend LLM actif :** Ollama uadf-agent
+**Backend LLM actif :** Claude Sonnet API (claude-sonnet-4-6)
 
 ## Tâche en cours
-Initialisation du projet le workbench — Configuration de l'environnement de développement.
+Phase 8 — Configuration du commutateur 3 modes LLM dans Roo Code.
 
 ## Dernier résultat
-Structure initiale du projet créée. Memory Bank initialisée. Dépôt Git initialisé.
-Phases 0 à 4 complètes. Phase 5 en cours (Memory Bank).
+Phases 0 à 7 complètes. Phase 8 en cours.
+- Étape 8.1 : Profil "ollama_local" à créer dans Roo Code (Ollama, http://calypso:11434, uadf-agent)
+- Étape 8.2 : Profil "gemini_proxy" à créer dans Roo Code (OpenAI Compatible, http://localhost:8000/v1, gemini-manual)
+- FIX-019 appliqué : proxy.py v2.1.1 — force UTF-8 stdout Windows (UnicodeEncodeError cp1252 corrigé)
 
 ## Prochain(s) pas
-- [ ] Compléter les informations dans projectBrief.md
-- [ ] Définir les premières User Stories dans productContext.md
-- [ ] Configurer le proxy Gemini Chrome (proxy.py) — Phase 6
-- [ ] Configurer le Gem Gemini Chrome — Phase 7
+- [ ] Créer profil "ollama_local" dans Roo Code Settings > Providers
+- [ ] Créer profil "gemini_proxy" dans Roo Code Settings > Providers
+- [ ] Tester Mode 1 Ollama (envoyer message depuis Roo Code, vérifier logs Ollama sur calypso)
+- [ ] Tester Mode 2 Proxy Gemini (proxy affiche PROMPT COPIE !)
+- [ ] Mettre à jour memory-bank/techContext.md avec URLs réelles (étape 8.4)
 
 ## Blocages / Questions ouvertes
-Aucun blocage identifié pour le moment.
+Aucun blocage actif.
 
 ## Dernier commit Git
-4651622 — feat(agile): ajout personas Agile RBAC avec règles Git intégrées (.roomodes)
+193a7b1 — fix(proxy): v2.1.1 FIX-019 — force UTF-8 stdout Windows pour eviter UnicodeEncodeError cp1252

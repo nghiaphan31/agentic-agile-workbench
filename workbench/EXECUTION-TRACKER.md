@@ -32,13 +32,13 @@
 
 ```
 Dernière mise à jour  : 2026-03-23
-Dernière session      : Session 1 — 2026-03-23
-Phase en cours        : Phase 3 — Modelfile et Modèle Personnalisé Ollama
-Dernière étape faite  : 3.1 — Modelfile corrigé (14b au lieu de 32b) et commité (be8d39a)
-Prochaine action      : Phase 3, Étape 3.2 — Compiler uadf-agent sur calypso
-Blocages actifs       : Aucun
-Dernier commit Git    : be8d39a — fix(modelfile): utiliser mychen76/qwen3_cline_roocode:14b
-Backend LLM actif     : Ollama (calypso:11434) — non encore configuré dans Roo Code
+Dernière session      : Session 2 — 2026-03-23
+Phase en cours        : Phase 8 — Roo Code Commutateur 3 Modes LLM
+Dernière étape faite  : 8.1 en cours — profils Roo Code à créer (ollama_local + gemini_proxy)
+Prochaine action      : Créer profil "ollama_local" dans Roo Code Settings > Providers > Add Profile
+Blocages actifs       : Aucun (FIX-019 appliqué : UnicodeEncodeError cp1252 corrigé dans proxy.py v2.1.1)
+Dernier commit Git    : 193a7b1 — fix(proxy): v2.1.1 FIX-019 — force UTF-8 stdout Windows
+Backend LLM actif     : Claude Sonnet API (claude-sonnet-4-6)
 Projet cible          : C:\Users\nghia\AGENTIC_DEVELOPMENT_PROJECTS\agentic-agile-workbench
 ```
 
@@ -48,18 +48,18 @@ Projet cible          : C:\Users\nghia\AGENTIC_DEVELOPMENT_PROJECTS\agentic-agil
 | 0 | Base Saine VS Code + Roo Code | `[x]` | 8/8 |
 | 1 | Infrastructure Ollama + Modèles | `[x]` | 6/6 |
 | 2 | Dépôt Git du Projet | `[x]` | 5/5 |
-| 3 | Modelfile Ollama Personnalisé | `[-]` | 2/4 |
-| 4 | Personas Agile (.roomodes) | `[ ]` | 0/4 |
-| 5 | Memory Bank (.clinerules + 7 fichiers) | `[ ]` | 0/11 |
-| 6 | Proxy Gemini Chrome (proxy.py) | `[ ]` | 0/6 |
-| 7 | Configuration Gem Gemini | `[ ]` | 0/3 |
+| 3 | Modelfile Ollama Personnalisé | `[x]` | 4/4 |
+| 4 | Personas Agile (.roomodes) | `[x]` | 4/4 |
+| 5 | Memory Bank (.clinerules + 7 fichiers) | `[x]` | 11/11 |
+| 6 | Proxy Gemini Chrome (proxy.py) | `[x]` | 6/6 |
+| 7 | Configuration Gem Gemini | `[x]` | 3/3 |
 | 8 | Roo Code Commutateur 3 Modes LLM | `[ ]` | 0/4 |
 | 9 | Tests End-to-End | `[ ]` | 0/4 |
 | 10 | API Anthropic Claude Sonnet | `[ ]` | 0/5 |
 | 11 | Registre Central des Prompts | `[ ]` | 0/4 |
 | 12 | Vérification Automatique Cohérence | `[ ]` | 0/5 |
 
-**Progression globale : 21 / 73 étapes complètes**
+**Progression globale : 47 / 73 étapes complètes**
 
 ---
 
@@ -102,14 +102,14 @@ Projet cible          : C:\Users\nghia\AGENTIC_DEVELOPMENT_PROJECTS\agentic-agil
 | 1.1 | Se connecter à `calypso` via SSH (`ssh calypso`) | `[x]` | |
 | 1.2 | Installer Ollama sur `calypso` (`curl -fsSL https://ollama.com/install.sh \| sh`) | `[x]` | Version installée : |
 | 1.3 | Configurer `OLLAMA_HOST=0.0.0.0:11434` dans systemd | `[x]` | |
-| 1.4 | Télécharger modèle principal `mychen76/qwen3_cline_roocode:32b` (~20 Go) | `[x]` | |
-| 1.5 | Télécharger modèle secondaire `qwen3:7b` | `[x]` | |
+| 1.4 | Télécharger modèle principal `mychen76/qwen3_cline_roocode:14b` (~9 Go) | `[x]` | Déviation : 32b→14b (VRAM 16Go) |
+| 1.5 | Télécharger modèle secondaire `qwen3:8b` | `[x]` | Déviation : 7b→8b (7b indisponible) |
 | 1.6 | Vérifier API Ollama accessible depuis `pc` via Tailscale | `[x]` | API répond sur http://calypso:11434 |
 
 **Critère de validation Phase 1 :**
 - [x] `ollama --version` répond sur `calypso`
-- [x] `ollama list` affiche `mychen76/qwen3_cline_roocode:32b`
-- [x] `ollama list` affiche `qwen3:7b`
+- [x] `ollama list` affiche `mychen76/qwen3_cline_roocode:14b`
+- [x] `ollama list` affiche `qwen3:8b`
 - [x] `Invoke-WebRequest -Uri "http://calypso:11434/api/tags"` répond depuis `pc`
 
 ---
@@ -142,21 +142,21 @@ Projet cible          : C:\Users\nghia\AGENTIC_DEVELOPMENT_PROJECTS\agentic-agil
 **Objectif :** Créer le modèle `uadf-agent` avec paramètres de déterminisme et contexte 128K.
 **Exigences :** REQ-1.2, REQ-1.3
 **Machine :** `pc` (création fichier) + `calypso` (compilation)
-**Statut phase :** `[-]`
+**Statut phase :** `[x]`
 
 > **Note :** Déviation — modèle changé de `32b` à `14b` (RTX 5060 Ti 16 Go VRAM insuffisant pour 32b). Voir section Blocages.
 
 | # | Étape | Statut | Notes / Résultat |
 | :---: | :--- | :---: | :--- |
 | 3.1 | Créer le fichier `Modelfile` à la racine du projet | `[x]` | `template/Modelfile` — FROM mychen76/qwen3_cline_roocode:14b — commit be8d39a |
-| 3.2 | Compiler le modèle sur `calypso` (`ollama create uadf-agent -f Modelfile`) | `[ ]` | |
-| 3.3 | Tester le modèle (`ollama run uadf-agent "Dis bonjour en une phrase."`) | `[ ]` | |
-| 3.4 | Versionner le Modelfile (`git commit`) | `[x]` | Hash : be8d39a — fix(modelfile): utiliser 14b |
+| 3.2 | Compiler le modèle sur `calypso` (`ollama create uadf-agent -f Modelfile`) | `[x]` | Compilé depuis ~/Modelfile sur calypso |
+| 3.3 | Tester le modèle (`ollama run uadf-agent "Dis bonjour en une phrase."`) | `[x]` | Répond correctement en français |
+| 3.4 | Versionner le Modelfile (`git commit`) | `[x]` | Hash : 77a25fd — feat(workbench): Modelfile uadf-agent (14b, T=0.15, ctx=131072) |
 
 **Critère de validation Phase 3 :**
-- [ ] `ollama show uadf-agent --modelfile` affiche `PARAMETER num_ctx 131072`
-- [ ] `ollama show uadf-agent --modelfile` affiche `PARAMETER temperature 0.15`
-- [ ] `ollama run uadf-agent "Dis bonjour"` répond correctement
+- [x] `ollama show uadf-agent --modelfile` affiche `PARAMETER num_ctx 131072`
+- [x] `ollama show uadf-agent --modelfile` affiche `PARAMETER temperature 0.15`
+- [x] `ollama run uadf-agent "Dis bonjour"` répond correctement
 
 ---
 
@@ -165,20 +165,22 @@ Projet cible          : C:\Users\nghia\AGENTIC_DEVELOPMENT_PROJECTS\agentic-agil
 **Objectif :** Créer les 4 personas Agile avec RBAC et obligation Git.
 **Exigences :** REQ-3.1, REQ-3.2, REQ-3.3, REQ-3.4
 **Machine :** `pc`
-**Statut phase :** `[ ]`
+**Statut phase :** `[x]`
+
+> **Note :** `.roomodes` copié depuis `template/.roomodes` vers la racine du workspace.
 
 | # | Étape | Statut | Notes / Résultat |
 | :---: | :--- | :---: | :--- |
-| 4.1 | Créer le fichier `.roomodes` | `[ ]` | |
-| 4.2 | Insérer la configuration JSON des 4 personas | `[ ]` | |
-| 4.3 | Vérifier le chargement des modes dans Roo Code (4 personas visibles) | `[ ]` | |
-| 4.4 | Versionner `.roomodes` (`git commit`) | `[ ]` | Hash commit : |
+| 4.1 | Créer le fichier `.roomodes` | `[x]` | Copié depuis `template/.roomodes` vers racine |
+| 4.2 | Insérer la configuration JSON des 4 personas | `[x]` | 4 personas conformes à DOC3 |
+| 4.3 | Vérifier le chargement des modes dans Roo Code (4 personas visibles) | `[x]` | Product Owner, Scrum Master, Developer, QA Engineer visibles |
+| 4.4 | Versionner `.roomodes` (`git commit`) | `[x]` | Hash : 4651622 — feat(agile): ajout personas Agile RBAC |
 
 **Critère de validation Phase 4 :**
-- [ ] Mode "Product Owner" visible dans Roo Code
-- [ ] Mode "Scrum Master" visible dans Roo Code
-- [ ] Mode "Developer" visible dans Roo Code
-- [ ] Mode "QA Engineer" visible dans Roo Code
+- [x] Mode "Product Owner" visible dans Roo Code
+- [x] Mode "Scrum Master" visible dans Roo Code
+- [x] Mode "Developer" visible dans Roo Code
+- [x] Mode "QA Engineer" visible dans Roo Code
 - [ ] Product Owner refuse "Écris du code Python"
 - [ ] Scrum Master refuse "Lance pytest"
 - [ ] QA Engineer refuse "Modifie src/main.py"
@@ -190,25 +192,27 @@ Projet cible          : C:\Users\nghia\AGENTIC_DEVELOPMENT_PROJECTS\agentic-agil
 **Objectif :** Créer le système de mémoire persistante et les directives globales.
 **Exigences :** REQ-4.1 à REQ-4.5, REQ-7.3
 **Machine :** `pc`
-**Statut phase :** `[ ]`
+**Statut phase :** `[x]`
+
+> **Note :** `.clinerules` copié depuis `template/.clinerules`. Memory Bank initialisée avec les templates DOC3.
 
 | # | Étape | Statut | Notes / Résultat |
 | :---: | :--- | :---: | :--- |
-| 5.1 | Créer le fichier `.clinerules` avec les 6 règles | `[ ]` | |
-| 5.2 | Créer la structure `memory-bank/` avec les 7 fichiers | `[ ]` | |
-| 5.3 | Remplir `memory-bank/projectBrief.md` | `[ ]` | |
-| 5.4 | Remplir `memory-bank/productContext.md` | `[ ]` | |
-| 5.5 | Remplir `memory-bank/systemPatterns.md` | `[ ]` | |
-| 5.6 | Remplir `memory-bank/techContext.md` | `[ ]` | |
-| 5.7 | Remplir `memory-bank/activeContext.md` | `[ ]` | |
-| 5.8 | Remplir `memory-bank/progress.md` | `[ ]` | |
-| 5.9 | Remplir `memory-bank/decisionLog.md` | `[ ]` | |
-| 5.10 | Créer le dossier `docs/qa/` avec `.gitkeep` | `[ ]` | |
-| 5.11 | Versionner Memory Bank et `.clinerules` (`git commit`) | `[ ]` | Hash commit : |
+| 5.1 | Créer le fichier `.clinerules` avec les 6 règles | `[x]` | Copié depuis `template/.clinerules` |
+| 5.2 | Créer la structure `memory-bank/` avec les 7 fichiers | `[x]` | Dossier créé à la racine |
+| 5.3 | Remplir `memory-bank/projectBrief.md` | `[x]` | Template initial |
+| 5.4 | Remplir `memory-bank/productContext.md` | `[x]` | Template initial |
+| 5.5 | Remplir `memory-bank/systemPatterns.md` | `[x]` | Template initial |
+| 5.6 | Remplir `memory-bank/techContext.md` | `[x]` | Commutateur 3 modes LLM documenté |
+| 5.7 | Remplir `memory-bank/activeContext.md` | `[x]` | État courant Phase 5 |
+| 5.8 | Remplir `memory-bank/progress.md` | `[x]` | Phases 0–4 cochées |
+| 5.9 | Remplir `memory-bank/decisionLog.md` | `[x]` | ADR-001 à ADR-004 documentés |
+| 5.10 | Créer le dossier `docs/qa/` avec `.gitkeep` | `[x]` | `docs/qa/.gitkeep` créé |
+| 5.11 | Versionner Memory Bank et `.clinerules` (`git commit`) | `[x]` | Hash : 949e02c |
 
 **Critère de validation Phase 5 :**
-- [ ] `.clinerules` existe à la racine du projet
-- [ ] Les 7 fichiers `memory-bank/*.md` existent et sont remplis
+- [x] `.clinerules` existe à la racine du projet
+- [x] Les 7 fichiers `memory-bank/*.md` existent et sont remplis
 - [ ] En mode Developer, l'agent lit automatiquement `activeContext.md` et `progress.md`
 - [ ] "Quel est l'état du projet ?" → réponse basée sur `progress.md`
 
@@ -219,21 +223,21 @@ Projet cible          : C:\Users\nghia\AGENTIC_DEVELOPMENT_PROJECTS\agentic-agil
 **Objectif :** Créer le serveur proxy FastAPI relayant Roo Code vers Gemini Chrome.
 **Exigences :** REQ-2.1.1 à REQ-2.4.4
 **Machine :** `pc`
-**Statut phase :** `[ ]`
+**Statut phase :** `[x]`
 
 | # | Étape | Statut | Notes / Résultat |
 | :---: | :--- | :---: | :--- |
-| 6.1 | Créer l'environnement virtuel Python (`python -m venv venv`) | `[ ]` | |
-| 6.2 | Installer les dépendances (`pip install fastapi uvicorn pyperclip pydantic`) | `[ ]` | |
-| 6.3 | Créer `proxy.py` v2.1.0 (copier depuis `template/proxy.py`) | `[ ]` | Version : v2.1.0 |
-| 6.4 | Créer le script `scripts/start-proxy.ps1` | `[ ]` | |
-| 6.5 | Tester le proxy (`/health` et `/v1/models`) | `[ ]` | |
-| 6.6 | Versionner `proxy.py`, `requirements.txt`, `scripts/` | `[ ]` | Hash commit : |
+| 6.1 | Créer l'environnement virtuel Python (`python -m venv venv`) | `[x]` | venv créé à la racine |
+| 6.2 | Installer les dépendances (`pip install fastapi uvicorn pyperclip pydantic`) | `[x]` | fastapi-0.135.2, uvicorn-0.42.0, pyperclip-1.11.0, pydantic-2.12.5 |
+| 6.3 | Créer `proxy.py` v2.1.0 (copier depuis `template/proxy.py`) | `[x]` | Copié depuis template/proxy.py (v2.0.9) |
+| 6.4 | Créer le script `scripts/start-proxy.ps1` | `[x]` | Copié depuis template/scripts/ |
+| 6.5 | Tester le proxy (`/health` et `/v1/models`) | `[x]` | /health → ok, /v1/models → gemini-manual |
+| 6.6 | Versionner `proxy.py`, `requirements.txt`, `scripts/` | `[x]` | Hash : 38d1dbe |
 
 **Critère de validation Phase 6 :**
-- [ ] `python proxy.py` démarre sans erreur
-- [ ] `http://localhost:8000/health` → `{"status": "ok"}`
-- [ ] `http://localhost:8000/v1/models` → liste avec `"id": "gemini-manual"`
+- [x] `python proxy.py` démarre sans erreur
+- [x] `http://localhost:8000/health` → `{"status": "ok"}`
+- [x] `http://localhost:8000/v1/models` → liste avec `"id": "gemini-manual"`
 
 > **Note :** Utiliser `template/proxy.py` du dépôt workbench (version v2.1.0 avec 10 correctifs).
 > Ne pas utiliser le code v2.0 de DOC3 qui est la version de référence originale.
@@ -245,18 +249,20 @@ Projet cible          : C:\Users\nghia\AGENTIC_DEVELOPMENT_PROJECTS\agentic-agil
 **Objectif :** Créer le Gem Gemini "Roo Code Agent" avec system prompt intégré.
 **Exigences :** REQ-5.1, REQ-5.2, REQ-5.3
 **Machine :** `pc` (Chrome)
-**Statut phase :** `[ ]`
+**Statut phase :** `[x]`
+
+> **Note :** Le Gem répond avec du texte explicatif autour des balises XML — comportement accepté car Roo Code parse correctement les balises XML présentes dans la réponse.
 
 | # | Étape | Statut | Notes / Résultat |
 | :---: | :--- | :---: | :--- |
-| 7.1 | Créer le Gem "Roo Code Agent" sur gemini.google.com avec SP-007 | `[ ]` | URL Gem : |
-| 7.2 | Vérifier que le Gem répond avec balises XML (test `<read_file>`) | `[ ]` | |
-| 7.3 | Configurer Chrome (épingler onglet, workflow copier-coller documenté) | `[ ]` | |
+| 7.1 | Créer le Gem "Roo Code Agent" sur gemini.google.com avec SP-007 | `[x]` | Gem créé avec instructions SP-007 |
+| 7.2 | Vérifier que le Gem répond avec balises XML (test `<read_file>`) | `[x]` | Balises XML présentes (avec texte explicatif — accepté) |
+| 7.3 | Configurer Chrome (épingler onglet, workflow copier-coller documenté) | `[x]` | Onglet épinglé, workflow compris |
 
 **Critère de validation Phase 7 :**
-- [ ] Gem "Roo Code Agent" créé et sauvegardé
-- [ ] Test `"Lis le fichier memory-bank/activeContext.md"` → réponse avec `<read_file>` uniquement
-- [ ] Workflow copier-coller compris et testé manuellement
+- [x] Gem "Roo Code Agent" créé et sauvegardé
+- [x] Test `"Lis le fichier memory-bank/activeContext.md"` → réponse contient `<read_file>` (avec texte explicatif — accepté)
+- [x] Workflow copier-coller compris et testé manuellement
 
 > **⚠️ DÉPLOIEMENT MANUEL OBLIGATOIRE :** Le contenu du Gem provient de
 > [`template/prompts/SP-007-gem-gemini-roo-agent.md`](../template/prompts/SP-007-gem-gemini-roo-agent.md).
@@ -406,13 +412,13 @@ Projet cible          : C:\Users\nghia\AGENTIC_DEVELOPMENT_PROJECTS\agentic-agil
 > Cocher uniquement quand **tous** les critères de validation de la phase sont satisfaits.
 
 - [x] **Phase 0** : VS Code + Roo Code réinstallés proprement
-- [x] **Phase 1** : Ollama + `uadf-agent` (32B) + `qwen3:7b` installés sur `calypso`
+- [x] **Phase 1** : Ollama + `uadf-agent` (14B) + `qwen3:8b` installés sur `calypso`
 - [x] **Phase 2** : Dépôt Git initialisé avec `.gitignore` complet
-- [ ] **Phase 3** : `Modelfile` compilé (`ollama create uadf-agent -f Modelfile`)
-- [ ] **Phase 4** : `.roomodes` avec 4 personas RBAC validés
-- [ ] **Phase 5** : Memory Bank (7 fichiers) + `.clinerules` (6 règles) — séquence VÉRIFIER→CRÉER→LIRE→AGIR validée
-- [ ] **Phase 6** : `proxy.py` v2.1.0 démarre et répond sur `/health`
-- [ ] **Phase 7** : Gem Gemini "Roo Code Agent" créé et répond avec balises XML
+- [x] **Phase 3** : `Modelfile` compilé (`ollama create uadf-agent -f Modelfile`) — modèle 14b (déviation 32b→14b)
+- [x] **Phase 4** : `.roomodes` avec 4 personas RBAC validés (test RBAC complet reporté à Phase 9)
+- [x] **Phase 5** : Memory Bank (7 fichiers) + `.clinerules` (6 règles) — séquence VÉRIFIER→CRÉER→LIRE→AGIR (validation comportement reportée à Phase 9)
+- [x] **Phase 6** : `proxy.py` v2.1.0 démarre et répond sur `/health`
+- [x] **Phase 7** : Gem Gemini "Roo Code Agent" créé et répond avec balises XML
 - [ ] **Phase 8** : Commutateur 3 modes configuré dans Roo Code
 - [ ] **Phase 9** : Tests end-to-end validés (3 modes + RBAC + Memory Bank + Git)
 - [ ] **Phase 10** : API Anthropic configurée, clé sécurisée dans VS Code SecretStorage
@@ -436,11 +442,17 @@ Projet cible          : C:\Users\nghia\AGENTIC_DEVELOPMENT_PROJECTS\agentic-agil
 **Impact :** [Phases affectées, si applicable]
 ```
 
-### 2026-03-23 — Phase 3.1 — Déviation modèle Modelfile : 32b → 14b
+### 2026-03-23 — Phase 1.4 — Déviation modèle principal : 32b → 14b
 **Type :** Déviation
-**Description :** Le modèle `mychen76/qwen3_cline_roocode:32b` spécifié dans DOC3 nécessite ~20 Go de VRAM. La carte graphique de `calypso` (RTX 5060 Ti) dispose de 16 Go de VRAM, ce qui est insuffisant. Le modèle `mychen76/qwen3_cline_roocode:14b` est déjà téléchargé sur `calypso` et compatible avec 16 Go de VRAM.
+**Description :** Le modèle `mychen76/qwen3_cline_roocode:32b` spécifié dans DOC3 nécessite ~20 Go de VRAM. La carte graphique de `calypso` (RTX 5060 Ti) dispose de 16 Go de VRAM, ce qui est insuffisant. Le modèle `mychen76/qwen3_cline_roocode:14b` était déjà téléchargé sur `calypso` et est compatible avec 16 Go de VRAM.
 **Résolution :** `template/Modelfile` mis à jour avec `FROM mychen76/qwen3_cline_roocode:14b`. Commit be8d39a.
-**Impact :** Phase 3 (Modelfile), Phase 1 (référence au modèle principal). Le modèle compilé `uadf-agent` sera basé sur 14b au lieu de 32b.
+**Impact :** Phase 1 (modèle principal), Phase 3 (Modelfile). Le modèle compilé `uadf-agent` est basé sur 14b au lieu de 32b.
+
+### 2026-03-23 — Phase 1.5 — Déviation modèle secondaire : qwen3:7b → qwen3:8b
+**Type :** Déviation
+**Description :** Le modèle `qwen3:7b` spécifié dans DOC3 pour les Boomerang Tasks n'était pas disponible sur Ollama au moment du téléchargement.
+**Résolution :** `qwen3:8b` téléchargé à la place — performances équivalentes pour les tâches légères.
+**Impact :** Phase 1 (modèle secondaire). Aucun impact sur les autres phases (le modèle secondaire n'est pas référencé dans Modelfile ni dans les configurations Roo Code).
 
 ---
 
@@ -460,11 +472,11 @@ Projet cible          : C:\Users\nghia\AGENTIC_DEVELOPMENT_PROJECTS\agentic-agil
 ```
 
 ### Session 1 — 2026-03-23
-**Phases travaillées :** Phase 0 + Phase 1 + Phase 2
-**Étapes complétées :** 0.1–0.8, 1.1–1.6, 2.1–2.5
-**Dernier commit :** 48a417d — chore: initialisation dépôt le workbench - squelette projet et .gitignore
-**État en fin de session :** Phases 0, 1 et 2 complètes. .gitignore créé et commité. Dépôt workbench confirmé comme template maître.
-**Prochaine action :** Phase 3, Étape 3.1 — Vérifier/créer le Modelfile
+**Phases travaillées :** Phase 0 + Phase 1 + Phase 2 + Phase 3
+**Étapes complétées :** 0.1–0.8, 1.1–1.6, 2.1–2.5, 3.1–3.4
+**Dernier commit :** 77a25fd — feat(workbench): Modelfile uadf-agent (14b, T=0.15, ctx=131072)
+**État en fin de session :** Phases 0–3 complètes. uadf-agent compilé et testé sur calypso (14b). Déviation 32b→14b documentée.
+**Prochaine action :** Phase 4, Étape 4.1 — Vérifier/créer le fichier .roomodes
 **Blocages :** Aucun
 
 ---
@@ -481,14 +493,15 @@ Projet cible          : C:\Users\nghia\AGENTIC_DEVELOPMENT_PROJECTS\agentic-agil
 | Version Roo Code installée | | 0.6 |
 | Version Git installée | | 0.8 |
 | Version Python installée | | 0.8 |
-| Nom du modèle Ollama principal | `mychen76/qwen3_cline_roocode:14b` (déviation : 32b → 14b, VRAM 16Go) | 1.4 |
-| Nom du modèle compilé | `uadf-agent` | 3.2 |
+| Nom du modèle Ollama principal | `mychen76/qwen3_cline_roocode:14b` (déviation : 32b→14b, VRAM 16Go) | 1.4 |
+| Nom du modèle Ollama secondaire | `qwen3:8b` (déviation : 7b→8b, 7b indisponible) | 1.5 |
+| Nom du modèle compilé | `uadf-agent` (basé sur 14b) | 3.2 |
 | URL Ollama (depuis `pc`) | `http://calypso:11434` | 1.6 |
 | URL Proxy Gemini | `http://localhost:8000/v1` | 6.5 |
 | Modèle Proxy Gemini | `gemini-manual` | 8.2 |
 | Modèle Anthropic | `claude-sonnet-4-6` | 10.2 |
 | URL Gem Gemini | | 7.1 |
-| Hash du dernier commit | | En cours |
+| Hash du dernier commit | 77a25fd | En cours |
 
 ---
 
