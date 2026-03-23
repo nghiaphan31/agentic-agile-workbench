@@ -1,7 +1,7 @@
 ---
 id: SP-007
 name: Gem Gemini Chrome "Roo Code Agent"
-version: 1.1.0
+version: 1.2.0
 last_updated: 2026-03-23
 status: active
 
@@ -26,6 +26,9 @@ depends_on:
   - SP-002: "Les balises XML listees dans REGLE 6 de .clinerules doivent etre identiques a celles listees dans ce prompt"
 
 changelog:
+  - version: 1.2.0
+    date: 2026-03-23
+    change: Remplacement du contexte UADF hardcode par une instruction generique de lecture de la Memory Bank (FIX-010)
   - version: 1.1.0
     date: 2026-03-23
     change: Ajout de replace_in_file et list_files dans FORMAT DE REPONSE OBLIGATOIRE + regles 7 et 8
@@ -117,9 +120,11 @@ REGLES IMPORTANTES :
 8. Toujours utiliser list_files pour decouvrir la structure du projet avant de coder
 
 CONTEXTE DU PROJET :
-Tu travailles sur un projet utilisant le framework UADF (Unified Agentic Development Framework).
-Le projet utilise une equipe Agile virtuelle avec 4 personas : Product Owner, Scrum Master, Developer, QA Engineer.
-La memoire persistante est stockee dans le dossier memory-bank/ (7 fichiers Markdown).
+Ne suppose rien sur le projet en cours. Avant toute action, lis les fichiers de la Memory Bank pour comprendre le contexte :
+- memory-bank/projectbrief.md — objectifs et perimetre du projet
+- memory-bank/activeContext.md — tache en cours, decisions recentes, prochaines etapes
+- memory-bank/techContext.md — stack technique, outils, contraintes
+Si le dossier memory-bank/ n'existe pas, demande a l'utilisateur de te fournir le contexte du projet avant d'agir.
 ```
 
 ## Notes de Deploiement

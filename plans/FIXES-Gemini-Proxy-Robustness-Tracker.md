@@ -4,7 +4,7 @@
 **Source review:** `plans/REVIEW-Gemini-Proxy-Path-Robustness.md` + `plans/REVIEW-Gemini-Proxy-Path-Robustness-Part2.md`
 **Created:** 2026-03-23
 **Last updated:** 2026-03-23
-**Status:** 🟡 9/12 fixes applied
+**Status:** 🟡 10/12 fixes applied
 
 ---
 
@@ -235,11 +235,11 @@ This file is the **single source of truth** for tracking the application of all 
 ---
 
 ### FIX-010 — SP-007: make project context agnostic
-- **Status:** [ ] PENDING
+- **Status:** [x] DONE
 - **File to change:** `template/prompts/SP-007-gem-gemini-roo-agent.md` + manual Gemini deployment
 - **Gap addressed:** SP-007 Issue 2 (hardcoded UADF context)
 - **What to do:** Replace the hardcoded "CONTEXTE DU PROJET" section with a generic instruction to read the Memory Bank for project context.
-- **Applied:** [ ] Date: ___________ | Commit: ___________
+- **Applied:** [x] Date: 2026-03-23 | Commit: 7c38b41
 
 ---
 
@@ -267,8 +267,8 @@ This file is the **single source of truth** for tracking the application of all 
 | :--- | :---: | :---: | :---: |
 | P0 — Blocking | 3 | 3 | 0 |
 | P1 — High | 5 | 5 | 0 |
-| P2 — Medium | 4 | 1 | 3 |
-| **TOTAL** | **12** | **9** | **3** |
+| P2 — Medium | 4 | 2 | 2 |
+| **TOTAL** | **12** | **10** | **2** |
 
 ---
 
@@ -286,6 +286,7 @@ This file is the **single source of truth** for tracking the application of all 
 | 2026-03-23 | Session 7 | FIX-007 — Comportement HTTP 408 documenté dans DOC5 section 9.6 (GAP-004) | 8bfc3d1 |
 | 2026-03-23 | Session 8 | FIX-008 — MAX_HISTORY_CHARS troncature historique dans _format_prompt() (GAP-001) | dbd43d7 |
 | 2026-03-23 | Session 9 | FIX-009 — Subsection 9.4.1 découpage tâches Mode Proxy dans DOC5 (GAP-007) | 3a6c694 |
+| 2026-03-23 | Session 10 | FIX-010 — SP-007 v1.2.0 contexte projet agnostique (Memory Bank) — DEPLOIEMENT MANUEL REQUIS | 7c38b41 |
 
 ---
 
