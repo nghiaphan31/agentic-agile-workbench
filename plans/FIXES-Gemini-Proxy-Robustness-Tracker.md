@@ -7,7 +7,7 @@
 
 **Created:** 2026-03-23
 **Last updated:** 2026-03-23
-**Status:** ✅ 12/12 fixes from Review 1 applied | ⚠️ 3 new fixes from Review 2 pending (0 blocking)
+**Status:** ✅ 12/12 fixes from Review 1 applied | ⚠️ 1 new fix from Review 2 pending (0 blocking)
 
 ---
 
@@ -366,12 +366,12 @@ This file is the **single source of truth** for tracking the application of all 
 ---
 
 ### FIX-018 — Proxy: remove "ou effacer l'historique existant" from console instruction
-- **Status:** [ ] PENDING
+- **Status:** [x] DONE
 - **File to change:** `template/proxy.py`
 - **Gap addressed:** GAP R1-001 (clearing history in existing Gemini conversation may not reload Gem system prompt â€” only "NOUVELLE conversation" is safe)
-- **What to do:** In [`chat_completions()`](template/proxy.py), replace the line `"2. âš ï¸  NOUVELLE conversation (ou effacer l'historique existant)"` with `"2. âš ï¸  TOUJOURS ouvrir une NOUVELLE conversation Gemini"`.
+- **What to do:** In [`chat_completions()`](template/proxy.py), replace the line `"2. ⚠️  NOUVELLE conversation (ou effacer l'historique existant)"` with `"2. ⚠️  TOUJOURS ouvrir une NOUVELLE conversation Gemini"`.
 - **Verification:** Console output no longer mentions "effacer l'historique".
-- **Applied:** [ ] Date: — | Commit: —
+- **Applied:** [x] Date: 2026-03-23 | Commit: TBD
 
 ---
 
@@ -394,8 +394,8 @@ This file is the **single source of truth** for tracking the application of all 
 | **Review 1 — P2 Medium** | 4 | 4 | 0 |
 | **Review 2 - P0 Blocking** | 2 | 2 | **0** |
 | **Review 2 - P1 High** | 2 | 2 | **0** |
-| **Review 2 - P2 Medium** | 3 | 1 | **2** |
-| **TOTAL** | **19** | **17** | **2** |
+| **Review 2 - P2 Medium** | 3 | 2 | **1** |
+| **TOTAL** | **19** | **18** | **1** |
 
 ---
 
@@ -409,6 +409,7 @@ This file is the **single source of truth** for tracking the application of all 
 | 2026-03-23 | Session 15 | FIX-015 — Garde runtime <new_task> bloquant dans _wait_clipboard() — proxy v2.0.7 (GAP R1-003) | 20e1485 |
 | 2026-03-23 | Session 16 | FIX-016 — Fallback troncature _format_prompt() pour message unique > MAX_HISTORY_CHARS — proxy v2.0.8 (REG-002) | 2542856 |
 | 2026-03-23 | Session 17 | FIX-017 — asyncio.Lock() serialisation presse-papiers + avertissement file d'attente — proxy v2.0.9 (GAP R1-004) | 610afdc |
+| 2026-03-23 | Session 18 | FIX-018 — Suppression "ou effacer l'historique existant" → TOUJOURS NOUVELLE conversation — proxy v2.1.0 (GAP R1-001) | TBD |
 
 ---
 

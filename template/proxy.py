@@ -14,6 +14,7 @@ Changelog:
   v2.0.7 - 2026-03-23 : FIX-015 — Garde runtime <new_task> dans _wait_clipboard() pour eviter deadlock (GAP R1-003)
   v2.0.8 - 2026-03-23 : FIX-016 — Fallback troncature dans _format_prompt() quand un seul message depasse MAX_HISTORY_CHARS (REG-002)
   v2.0.9 - 2026-03-23 : FIX-017 — asyncio.Lock() pour serialisation du presse-papiers (GAP R1-004)
+  v2.1.0 - 2026-03-23 : FIX-018 — Suppression "ou effacer l'historique existant" — TOUJOURS NOUVELLE conversation (GAP R1-001)
 """
 import asyncio, hashlib, json, os, time, uuid
 from datetime import datetime
@@ -206,7 +207,7 @@ async def chat_completions(request: ChatRequest):
         print(f"[{ts}] ══════════════════════════════════════════════════")
         print(f"[{ts}] PROMPT COPIE ({len(formatted)} chars) — ACTIONS REQUISES :")
         print(f"         1. Chrome → gemini.google.com → Gem 'Roo Code Agent'")
-        print(f"         2. ⚠️  NOUVELLE conversation (ou effacer l'historique existant)")
+        print(f"         2. ⚠️  TOUJOURS ouvrir une NOUVELLE conversation Gemini")
         print(f"         3. Ctrl+V pour coller le prompt")
         print(f"         4. Attendre la fin de la reponse Gemini")
         print(f"         5. Ctrl+A puis Ctrl+C pour copier TOUTE la reponse")
