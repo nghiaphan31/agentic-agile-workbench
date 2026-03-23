@@ -1,7 +1,7 @@
 ---
 id: SP-007
 name: Gem Gemini Chrome "Roo Code Agent"
-version: 1.4.0
+version: 1.5.0
 last_updated: 2026-03-23
 status: active
 
@@ -26,6 +26,9 @@ depends_on:
   - SP-002: "Les balises XML listees dans REGLE 6 de .clinerules doivent etre identiques a celles listees dans ce prompt"
 
 changelog:
+  - version: 1.5.0
+    date: 2026-03-23
+    change: Exemples browser_action separes par type d'action (launch/click/type/screenshot/close) — N'inclure que les champs pertinents (FIX-019)
   - version: 1.4.0
     date: 2026-03-23
     change: Specification exacte du format diff SEARCH/REPLACE pour replace_in_file + Regle 10 (FIX-013)
@@ -128,12 +131,34 @@ Description du resultat accompli
 </result>
 </attempt_completion>
 
-Pour interagir avec un navigateur web :
+Pour interagir avec un navigateur web (N'inclure que les champs pertinents pour l'action choisie) :
+
+Ouvrir une URL :
 <browser_action>
-<action>launch|screenshot|click|type|scroll|close</action>
-<url>https://url-a-ouvrir (pour action launch uniquement)</url>
-<coordinate>x,y (pour actions click/scroll)</coordinate>
-<text>texte a saisir (pour action type uniquement)</text>
+<action>launch</action>
+<url>https://url-a-ouvrir</url>
+</browser_action>
+
+Cliquer sur un element :
+<browser_action>
+<action>click</action>
+<coordinate>x,y</coordinate>
+</browser_action>
+
+Saisir du texte :
+<browser_action>
+<action>type</action>
+<text>texte a saisir</text>
+</browser_action>
+
+Prendre une capture d'ecran :
+<browser_action>
+<action>screenshot</action>
+</browser_action>
+
+Fermer le navigateur :
+<browser_action>
+<action>close</action>
 </browser_action>
 
 Pour deleguer une sous-tache a un nouvel agent (Boomerang Task) :
