@@ -83,7 +83,7 @@ This file is the **single source of truth** for tracking the application of all 
   5. **MANUALLY deploy to Gemini Web** (gemini.google.com > Gems > "Roo Code Agent" > Edit > paste new instructions > Save)
   6. Commit with message: `chore(prompts): SP-007 v1.1.0 - add replace_in_file + list_files - DEPLOIEMENT MANUEL EFFECTUE`
 - **Verification:** In Gemini Gem, send "Modifie la ligne 5 du fichier src/app.py" — Gemini should respond with `<replace_in_file>` not `<write_to_file>`.
-- **Applied:** [x] Date: 2026-03-23 | Commit: PENDING
+- **Applied:** [x] Date: 2026-03-23 | Commit: 62ea897
 
 ---
 
@@ -278,7 +278,7 @@ This file is the **single source of truth** for tracking the application of all 
 | :--- | :--- | :--- | :--- |
 | 2026-03-23 | Initial review | Tracker created | — |
 | 2026-03-23 | Session 1 | FIX-001 — Console multi-ligne NOUVELLE conversation | fceb6fd |
-| 2026-03-23 | Session 2 | FIX-002 — SP-007 v1.1.0 replace_in_file + list_files | PENDING |
+| 2026-03-23 | Session 2 | FIX-002 — SP-007 v1.1.0 replace_in_file + list_files | 62ea897 |
 
 ---
 
