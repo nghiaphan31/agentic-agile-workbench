@@ -147,7 +147,7 @@ This file is the **single source of truth** for tracking the application of all 
       ...
   ```
 - **Verification:** Send 3 consecutive requests — console shows REQUEST #1, #2, #3.
-- **Applied:** [x] Date: 2026-03-23 | Commit: c4f7ce0
+- **Applied:** [x] Date: 2026-03-23 | Commit: 521baa9
 
 ---
 
@@ -281,7 +281,7 @@ This file is the **single source of truth** for tracking the application of all 
 | 2026-03-23 | Session 2 | FIX-002 — SP-007 v1.1.0 replace_in_file + list_files | 62ea897 |
 | 2026-03-23 | Session 3 | FIX-003 — Boomerang Tasks limitation documentée (DOC1+DOC2+DOC5) | 51bf71a |
 | 2026-03-23 | Session 4 | FIX-004 — try/except pyperclip.paste() dans _wait_clipboard() | 10a4c81 |
-| 2026-03-23 | Session 5 | FIX-005 — Compteur de requetes #N dans la console (P-002) | c4f7ce0 |
+| 2026-03-23 | Session 5 | FIX-005 — Compteur de requetes #N dans la console (P-002) | 521baa9 |
 
 ---
 
