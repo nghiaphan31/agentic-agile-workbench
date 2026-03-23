@@ -18,15 +18,21 @@
 
 .EXAMPLE
     # Déploiement initial sur un nouveau projet
-    .\deploy-to-project.ps1 -ProjectPath "C:\Projets\mon-nouveau-projet"
+    # Structure canonique : $env:USERPROFILE\AGENTIC_DEVELOPMENT_PROJECTS\
+    #   ├── agentic-agile-workbench\   (l'atelier — template maître)
+    #   └── PROJECTS\mon-nouveau-projet\   (le projet applicatif)
+    $Projet = "$env:USERPROFILE\AGENTIC_DEVELOPMENT_PROJECTS\PROJECTS\mon-nouveau-projet"
+    .\deploy-to-project.ps1 -ProjectPath $Projet
 
 .EXAMPLE
     # Mise à jour d'un projet existant
-    .\deploy-to-project.ps1 -ProjectPath "C:\Projets\mon-projet" -Update
+    $Projet = "$env:USERPROFILE\AGENTIC_DEVELOPMENT_PROJECTS\PROJECTS\mon-projet"
+    .\deploy-to-project.ps1 -ProjectPath $Projet -Update
 
 .EXAMPLE
     # Simulation sans modification
-    .\deploy-to-project.ps1 -ProjectPath "C:\Projets\mon-projet" -DryRun
+    $Projet = "$env:USERPROFILE\AGENTIC_DEVELOPMENT_PROJECTS\PROJECTS\mon-projet"
+    .\deploy-to-project.ps1 -ProjectPath $Projet -DryRun
 #>
 
 param(

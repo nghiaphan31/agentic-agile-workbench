@@ -250,8 +250,15 @@ Vous devez voir une réponse JSON listant vos modèles. Si erreur de connexion, 
 ### Étape 2.1 — Créer le Dossier du Projet
 
 ```powershell
-mkdir C:\Users\nghia\AGENTIC_DEVELOPMENT_PROJECTS\projects\mon-projet
-cd C:\Users\nghia\AGENTIC_DEVELOPMENT_PROJECTS\projects\mon-projet
+# Structure canonique des dossiers :
+# $env:USERPROFILE\AGENTIC_DEVELOPMENT_PROJECTS\
+# ├── agentic-agile-workbench\   ← L'ATELIER (template maître, ce dépôt)
+# └── PROJECTS\                  ← Tous les projets applicatifs
+#     └── mon-projet\
+
+$Projet = "$env:USERPROFILE\AGENTIC_DEVELOPMENT_PROJECTS\PROJECTS\mon-projet"
+New-Item -Path $Projet -ItemType Directory -Force
+cd $Projet
 code .
 ```
 

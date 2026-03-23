@@ -106,35 +106,39 @@ Avant de commencer, l'atelier doit être installé et fonctionnel sur votre mach
 ### 3.2 Étape 1 — Créer le Dépôt du Nouveau Projet
 
 ```powershell
-# Créer le dossier du nouveau projet (EN DEHORS du dossier de l'atelier)
-New-Item -Path "C:\Projets" -Name "mon-nouveau-projet" -ItemType Directory
-cd "C:\Projets\mon-nouveau-projet"
+# Structure canonique :
+# $env:USERPROFILE\AGENTIC_DEVELOPMENT_PROJECTS\
+# ├── agentic-agile-workbench\   ← L'ATELIER (template maître, ne pas modifier)
+# └── PROJECTS\                  ← Tous les projets applicatifs
+#     └── mon-nouveau-projet\
+
+$Atelier = "$env:USERPROFILE\AGENTIC_DEVELOPMENT_PROJECTS\agentic-agile-workbench"
+$Projet  = "$env:USERPROFILE\AGENTIC_DEVELOPMENT_PROJECTS\PROJECTS\mon-nouveau-projet"
+
+# Créer le dossier du nouveau projet (sous PROJECTS\, séparé de l'atelier)
+New-Item -Path $Projet -ItemType Directory -Force
+cd $Projet
 
 # Initialiser Git
 git init
 git branch -M main
 ```
 
-> **Important :** Le nouveau projet est un dépôt Git **séparé** de l'atelier. Ne créez pas le projet à l'intérieur du dossier `agentic-agile-workbench/`.
+> **Important :** Le nouveau projet est un dépôt Git **séparé** de l'atelier. L'atelier (`agentic-agile-workbench/`) est le **template maître protégé** — ne créez jamais un projet à l'intérieur. Tous les projets applicatifs vivent sous `AGENTIC_DEVELOPMENT_PROJECTS\PROJECTS\`.
 
-### 3.3 Étape 2 — Copier les Fichiers de l'Atelier
+### 3.3 Étape 2 — Déployer les Fichiers de l'Atelier
+
+Le script de déploiement copie automatiquement tous les fichiers nécessaires et crée la Memory Bank :
 
 ```powershell
-# Définir le chemin de l'atelier (adaptez selon votre installation)
-$Atelier = "C:\Users\[VOTRE_NOM]\AGENTIC_DEVELOPMENT_PROJECTS\projects\agentic-agile-workbench"
-$Projet = "C:\Projets\mon-nouveau-projet"
+# Déploiement en une commande (depuis n'importe où)
+$Atelier = "$env:USERPROFILE\AGENTIC_DEVELOPMENT_PROJECTS\agentic-agile-workbench"
+$Projet  = "$env:USERPROFILE\AGENTIC_DEVELOPMENT_PROJECTS\PROJECTS\mon-nouveau-projet"
 
-# Copier les fichiers de configuration
-Copy-Item "$Atelier\.roomodes" "$Projet\"
-Copy-Item "$Atelier\.clinerules" "$Projet\"
-Copy-Item "$Atelier\Modelfile" "$Projet\"          # Si Mode Ollama
-Copy-Item "$Atelier\proxy.py" "$Projet\"           # Si Mode Gemini
-Copy-Item "$Atelier\requirements.txt" "$Projet\"   # Si Mode Gemini
-
-# Copier les dossiers
-Copy-Item "$Atelier\scripts" "$Projet\" -Recurse
-Copy-Item "$Atelier\prompts" "$Projet\" -Recurse
+& "$Atelier\template\scripts\deploy-to-project.ps1" -ProjectPath $Projet
 ```
+
+Le script déploie : `.roomodes`, `.clinerules`, `Modelfile`, `proxy.py`, `requirements.txt`, `prompts/`, `scripts/`, `memory-bank/` (7 fichiers vides), `docs/qa/`.
 
 ### 3.4 Étape 3 — Créer le `.gitignore`
 
@@ -161,21 +165,20 @@ Thumbs.db
 
 ### 3.5 Étape 4 — Initialiser la Memory Bank
 
-```powershell
-# Créer la structure Memory Bank
-New-Item -Path "$Projet" -Name "memory-bank" -ItemType Directory
-New-Item -Path "$Projet\memory-bank" -Name "projectBrief.md" -ItemType File
-New-Item -Path "$Projet\memory-bank" -Name "productContext.md" -ItemType File
-New-Item -Path "$Projet\memory-bank" -Name "systemPatterns.md" -ItemType File
-New-Item -Path "$Projet\memory-bank" -Name "techContext.md" -ItemType File
-New-Item -Path "$Projet\memory-bank" -Name "activeContext.md" -ItemType File
-New-Item -Path "$Projet\memory-bank" -Name "progress.md" -ItemType File
-New-Item -Path "$Projet\memory-bank" -Name "decisionLog.md" -ItemType File
+> **Cette étape est automatisée par le script `deploy-to-project.ps1`** (section 3.3). La Memory Bank (7 fichiers) et `docs/qa/` sont créés automatiquement. Passez directement à l'étape 5.
 
-# Créer le dossier des rapports QA
-New-Item -Path "$Projet" -Name "docs" -ItemType Directory
-New-Item -Path "$Projet\docs" -Name "qa" -ItemType Directory
-New-Item -Path "$Projet\docs\qa" -Name ".gitkeep" -ItemType File
+Si vous avez besoin de recréer manuellement :
+
+```powershell
+$Projet = "$env:USERPROFILE\AGENTIC_DEVELOPMENT_PROJECTS\PROJECTS\mon-nouveau-projet"
+
+New-Item -Path "$Projet\memory-bank" -ItemType Directory
+@("projectBrief.md","productContext.md","systemPatterns.md","techContext.md",
+  "activeContext.md","progress.md","decisionLog.md") | ForEach-Object {
+    New-Item -Path "$Projet\memory-bank\$_" -ItemType File
+}
+New-Item -Path "$Projet\docs\qa" -ItemType Directory -Force
+New-Item -Path "$Projet\docs\qa\.gitkeep" -ItemType File
 ```
 
 ### 3.6 Étape 5 — Remplir `memory-bank/projectBrief.md`
@@ -242,7 +245,10 @@ Avec un nouveau projet, la Memory Bank est vide et se remplit progressivement. A
 ### 4.2 Étape 1 — Ouvrir le Projet Existant
 
 ```powershell
-cd "C:\Projets\mon-projet-legacy"
+# Si le projet legacy est déjà dans AGENTIC_DEVELOPMENT_PROJECTS\PROJECTS\
+$Projet = "$env:USERPROFILE\AGENTIC_DEVELOPMENT_PROJECTS\PROJECTS\mon-projet-legacy"
+# Sinon, adaptez le chemin vers l'emplacement actuel du projet
+cd $Projet
 
 # Si Git n'est pas encore initialisé
 git init
@@ -257,15 +263,11 @@ git commit -m "chore(init): état initial du code avant refactoring le workbench
 Identique au cas "Nouveau Projet" (section 3.3) :
 
 ```powershell
-$Atelier = "C:\Users\[VOTRE_NOM]\AGENTIC_DEVELOPMENT_PROJECTS\projects\agentic-agile-workbench"
-$Projet = "C:\Projets\mon-projet-legacy"
+$Atelier = "$env:USERPROFILE\AGENTIC_DEVELOPMENT_PROJECTS\agentic-agile-workbench"
+$Projet  = "$env:USERPROFILE\AGENTIC_DEVELOPMENT_PROJECTS\PROJECTS\mon-projet-legacy"
+# (ou le chemin actuel du projet legacy si différent)
 
-Copy-Item "$Atelier\.roomodes" "$Projet\"
-Copy-Item "$Atelier\.clinerules" "$Projet\"
-Copy-Item "$Atelier\proxy.py" "$Projet\"
-Copy-Item "$Atelier\requirements.txt" "$Projet\"
-Copy-Item "$Atelier\scripts" "$Projet\" -Recurse
-Copy-Item "$Atelier\prompts" "$Projet\" -Recurse
+& "$Atelier\template\scripts\deploy-to-project.ps1" -ProjectPath $Projet
 ```
 
 ### 4.4 Étape 3 — Créer la Memory Bank (avec contexte existant)
