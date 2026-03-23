@@ -1,0 +1,39 @@
+# Environnement Python (jamais versionné)
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# Variables d'environnement (contient des clés API — JAMAIS versionné)
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+logs/
+
+# Fichiers temporaires Windows
+Thumbs.db
+Desktop.ini
+*.tmp
+
+# Fichiers VS Code locaux (paramètres personnels, pas de projet)
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
+
+# IMPORTANT : Les fichiers suivants DOIVENT être versionnés (ne pas les ajouter ici)
+# .roomodes        -> Versionné (personas Agile)
+# .clinerules      -> Versionné (règles Memory Bank + Git)
+# Modelfile        -> Versionné (config modèle Ollama)
+# proxy.py         -> Versionné (serveur proxy Gemini)
+# memory-bank/     -> Versionné (mémoire persistante)
+# requirements.txt -> Versionné (dépendances Python)
+# prompts/         -> Versionné (registre central des prompts)
+# scripts/         -> Versionné (scripts PowerShell)
