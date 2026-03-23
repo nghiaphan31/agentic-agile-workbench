@@ -381,7 +381,7 @@ This file is the **single source of truth** for tracking the application of all 
 - **Gap addressed:** GAP R1-006 (`browser_action` template shows all optional fields simultaneously — Gemini may include irrelevant fields in every response)
 - **What to do:** Replace the single `browser_action` template block with separate minimal examples for each action type (`launch`, `click`, `type`, `screenshot`, `close`). Add note: "N'inclure que les champs pertinents pour l'action choisie."
 - **Verification:** In Gemini Gem, send "Ouvre https://example.com" — Gemini should respond with only `<action>launch</action>` and `<url>` fields, no extra fields.
-- **Applied:** [x] Date: 2026-03-23 | Commit: 6ec990f
+- **Applied:** [x] Date: 2026-03-23 | Commit: 642110d
 
 ---
 
@@ -410,7 +410,7 @@ This file is the **single source of truth** for tracking the application of all 
 | 2026-03-23 | Session 16 | FIX-016 — Fallback troncature _format_prompt() pour message unique > MAX_HISTORY_CHARS — proxy v2.0.8 (REG-002) | 2542856 |
 | 2026-03-23 | Session 17 | FIX-017 — asyncio.Lock() serialisation presse-papiers + avertissement file d'attente — proxy v2.0.9 (GAP R1-004) | 610afdc |
 | 2026-03-23 | Session 18 | FIX-018 — Suppression "ou effacer l'historique existant" → TOUJOURS NOUVELLE conversation — proxy v2.1.0 (GAP R1-001) | b61d1ef |
-| 2026-03-23 | Session 19 | FIX-019 — SP-007 v1.5.0 exemples browser_action separes par type d'action — DEPLOIEMENT MANUEL REQUIS (GAP R1-006) | 6ec990f |
+| 2026-03-23 | Session 19 | FIX-019 — SP-007 v1.5.0 exemples browser_action separes par type d'action — DEPLOIEMENT MANUEL REQUIS (GAP R1-006) | 642110d |
 
 ---
 
