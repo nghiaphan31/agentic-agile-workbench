@@ -1,10 +1,13 @@
-# Fix Tracker — Gemini Proxy Robustness Improvements
+﻿# Fix Tracker — Gemini Proxy Robustness Improvements
 ## Agentic Agile Workbench
 
-**Source review:** `plans/REVIEW-Gemini-Proxy-Path-Robustness.md` + `plans/REVIEW-Gemini-Proxy-Path-Robustness-Part2.md`
+**Source reviews:**
+- Review 1: `plans/REVIEW-Gemini-Proxy-Path-Robustness.md` + `plans/REVIEW-Gemini-Proxy-Path-Robustness-Part2.md`
+- Review 2: `plans/REVIEW2-Gemini-Proxy-Path-Robustness-After-Fixes.md` ← **POST-FIX VERIFICATION**
+
 **Created:** 2026-03-23
 **Last updated:** 2026-03-23
-**Status:** ✅ 12/12 fixes applied
+**Status:** ✅ 12/12 fixes from Review 1 applied | ⚠️ 7 new fixes from Review 2 pending (2 blocking)
 
 ---
 
@@ -261,14 +264,14 @@ This file is the **single source of truth** for tracking the application of all 
 
 ---
 
-## Progress Summary
+## Progress Summary (Review 1 — COMPLETE)
 
 | Priority | Total | Done | Remaining |
 | :--- | :---: | :---: | :---: |
 | P0 — Blocking | 3 | 3 | 0 |
 | P1 — High | 5 | 5 | 0 |
 | P2 — Medium | 4 | 4 | 0 |
-| **TOTAL** | **12** | **12** | **0** |
+| **TOTAL Review 1** | **12** | **12** | **0** |
 
 ---
 
@@ -289,16 +292,129 @@ This file is the **single source of truth** for tracking the application of all 
 | 2026-03-23 | Session 10 | FIX-010 — SP-007 v1.2.0 contexte projet agnostique (Memory Bank) — DEPLOIEMENT MANUEL REQUIS | 7c38b41 |
 | 2026-03-23 | Session 11 | FIX-011 — LIMITATIONS CONNUES DU MODE PROXY GEMINI ajoutées dans DOC5 section 9.4 (GAP-003, GAP-006, GAP-007) | 3e9805f |
 | 2026-03-23 | Session 12 | FIX-012 — SP-007 v1.3.0 browser_action + new_task (avec avertissement proxy) — DEPLOIEMENT MANUEL REQUIS | d7603c0 |
+| 2026-03-23 | Review 2 | REVIEW2 written — 3 regressions + 6 new gaps identified (FIX-013 to FIX-019 added) | — |
 
 ---
 
-## How to Start the Next Session
+## REVIEW 2 FIXES — From `plans/REVIEW2-Gemini-Proxy-Path-Robustness-After-Fixes.md`
 
-Copy this prompt into Roo Code (any mode) to resume work on these fixes:
+> These fixes address regressions and new gaps found during the post-fix verification (Review 2).
+> Apply in order: P0 → P1 → P2.
+
+---
+
+## P0 — Blocking (Review 2) — apply before any regular use of proxy mode
+
+### FIX-013 — SP-007: add exact `replace_in_file` diff format specification
+- **Status:** [x] DONE
+- **File to change:** `template/prompts/SP-007-gem-gemini-roo-agent.md` + **MANUAL DEPLOYMENT to Gemini Web**
+- **Gap addressed:** REG-003 + GAP R1-002 (`replace_in_file` promoted without format spec — always fails in practice)
+- **What to do:**
+  1. In [`SP-007-gem-gemini-roo-agent.md`](template/prompts/SP-007-gem-gemini-roo-agent.md), replace the `<replace_in_file>` diff placeholder `[bloc de recherche et remplacement]` with the exact format using the literal `<<<<<<< SEARCH`, `:start_line:[N]`, `-------`, `=======`, `>>>>>>> REPLACE` markers.
+  2. Add Rule 10 to "REGLES IMPORTANTES": "Le format du diff pour replace_in_file est STRICT — utiliser exactement le format SEARCH/REPLACE. Ne pas utiliser le format unified diff (- / +). Le numero de ligne (:start_line:) est obligatoire."
+  3. Increment SP-007 version from `1.3.0` to `1.4.0`
+  4. Add changelog entry
+  5. **MANUALLY deploy to Gemini Web** (gemini.google.com > Gems > "Roo Code Agent" > Edit > paste new instructions > Save)
+  6. Commit with message: `chore(prompts): SP-007 v1.4.0 - add exact replace_in_file diff format - DEPLOIEMENT MANUEL REQUIS`
+- **Verification:** In Gemini Gem, send "Modifie la ligne 5 du fichier src/app.py pour changer 'old' en 'new'" — Gemini should respond with `<replace_in_file>` using the SEARCH/REPLACE marker format, NOT unified diff (`-`/`+`).
+- **Applied:** [x] Date: 2026-03-23 | Commit: —
+
+---
+
+### FIX-014 — Proxy: make short-content check blocking + raise threshold to 100 chars
+- **Status:** [ ] PENDING
+- **File to change:** `template/proxy.py`
+- **Gap addressed:** REG-001 (FIX-006 warns but still injects short/garbage content into Roo Code)
+- **What to do:** In [`_wait_clipboard()`](template/proxy.py), replace the current non-blocking check (threshold 20, non-blocking) with a blocking version (threshold 100, `initial_hash = _hash(current)` then `continue`). Also update proxy version to `2.0.6` and add changelog entry.
+- **Verification:** Copy a 50-char string (e.g., a URL) while proxy is polling — proxy should print warning and continue polling (NOT inject the URL into Roo Code).
+- **Applied:** [ ] Date: — | Commit: —
+
+---
+
+## P1 — High Priority (Review 2)
+
+### FIX-015 — Proxy: add `<new_task>` runtime guard in `_wait_clipboard()`
+- **Status:** [ ] PENDING
+- **File to change:** `template/proxy.py`
+- **Gap addressed:** GAP R1-003 (`<new_task>` not blocked at runtime — causes deadlock if Gemini ignores SP-007 Rule 9)
+- **What to do:** In [`_wait_clipboard()`](template/proxy.py), after the length check and before `_validate_response()`, add a check: if `"<new_task>" in current`, print a critical error message, reset `initial_hash = _hash(current)`, and `continue` polling. This forces the human to copy a corrected response without `<new_task>`.
+- **Verification:** Manually copy a string containing `<new_task>` while proxy is polling — proxy should print the error and continue polling (NOT inject into Roo Code).
+- **Applied:** [ ] Date: — | Commit: —
+
+---
+
+### FIX-016 — Proxy: fix `_format_prompt()` truncation fallback for single-message overflow
+- **Status:** [ ] PENDING
+- **File to change:** `template/proxy.py`
+- **Gap addressed:** REG-002 (FIX-008 truncation returns raw mid-message content when a single message exceeds `MAX_HISTORY_CHARS`)
+- **What to do:** In [`_format_prompt()`](template/proxy.py), add an `else` branch to the truncation block: when `boundary = truncated.find("[USER]")` returns -1 (no `[USER]` found), use `full.rfind("[USER]")` to find the last user message and keep it intact with a truncation header. This ensures Gemini always receives a complete, context-headed message even when a single message exceeds the limit.
+- **Verification:** Send a conversation where a single user message exceeds 40,000 chars (e.g., inject a large file content) — proxy should keep the full last `[USER]` message intact with the truncation header, not return a raw mid-message string.
+- **Applied:** [ ] Date: — | Commit: —
+
+---
+
+## P2 — Medium Priority (Review 2)
+
+### FIX-017 — Proxy: add `asyncio.Lock()` for clipboard serialization
+- **Status:** [ ] PENDING
+- **File to change:** `template/proxy.py`
+- **Gap addressed:** GAP R1-004 (request counter not thread-safe — two concurrent requests both poll the clipboard and both return the same response)
+- **What to do:** Add a module-level `_clipboard_lock = asyncio.Lock()`. In `chat_completions()`, wrap the `pyperclip.copy()` + `_wait_clipboard()` block with `async with _clipboard_lock:`. Add a console warning when a request is queued waiting for the lock.
+- **Verification:** Send two simultaneous requests — second request should queue and wait, not race with the first.
+- **Applied:** [ ] Date: — | Commit: —
+
+---
+
+### FIX-018 — Proxy: remove "ou effacer l'historique existant" from console instruction
+- **Status:** [ ] PENDING
+- **File to change:** `template/proxy.py`
+- **Gap addressed:** GAP R1-001 (clearing history in existing Gemini conversation may not reload Gem system prompt â€” only "NOUVELLE conversation" is safe)
+- **What to do:** In [`chat_completions()`](template/proxy.py), replace the line `"2. âš ï¸  NOUVELLE conversation (ou effacer l'historique existant)"` with `"2. âš ï¸  TOUJOURS ouvrir une NOUVELLE conversation Gemini"`.
+- **Verification:** Console output no longer mentions "effacer l'historique".
+- **Applied:** [ ] Date: — | Commit: —
+
+---
+
+### FIX-019 — SP-007: fix `browser_action` template (separate examples per action type)
+- **Status:** [ ] PENDING
+- **File to change:** `template/prompts/SP-007-gem-gemini-roo-agent.md` + **MANUAL DEPLOYMENT to Gemini Web**
+- **Gap addressed:** GAP R1-006 (`browser_action` template shows all optional fields simultaneously — Gemini may include irrelevant fields in every response)
+- **What to do:** Replace the single `browser_action` template block with separate minimal examples for each action type (`launch`, `click`, `type`, `screenshot`, `close`). Add note: "N'inclure que les champs pertinents pour l'action choisie."
+- **Verification:** In Gemini Gem, send "Ouvre https://example.com" — Gemini should respond with only `<action>launch</action>` and `<url>` fields, no extra fields.
+- **Applied:** [ ] Date: — | Commit: —
+
+---
+
+## Progress Summary
+
+| Priority | Total | Done | Remaining |
+| :--- | :---: | :---: | :---: |
+| **Review 1 — P0 Blocking** | 3 | 3 | 0 |
+| **Review 1 — P1 High** | 5 | 5 | 0 |
+| **Review 1 — P2 Medium** | 4 | 4 | 0 |
+| **Review 2 - P0 Blocking** | 2 | 1 | **1** |
+| **Review 2 - P1 High** | 2 | 0 | **2** |
+| **Review 2 - P2 Medium** | 3 | 0 | **3** |
+| **TOTAL** | **19** | **13** | **6** |
+
+---
+
+## Changelog (continued)
+
+| Date | Session | Fix Applied | Commit |
+| :--- | :--- | :--- | :--- |
+| 2026-03-23 | Review 2 | REVIEW2 written - 3 regressions + 6 new gaps identified (FIX-013 to FIX-019 added) | -- |
+| 2026-03-23 | Session 13 | FIX-013 — SP-007 v1.4.0 format exact diff SEARCH/REPLACE pour replace_in_file + Regle 10 — DEPLOIEMENT MANUEL REQUIS | — |
+
+---
+
+## How to Start the Next Session (Review 2 Fixes)
+
+Copy this prompt into Roo Code (any mode) to resume work on Review 2 fixes:
 
 ```
 Lis le fichier plans/FIXES-Gemini-Proxy-Robustness-Tracker.md.
-Identifie le prochain fix PENDING dans l'ordre P0 → P1 → P2.
-Applique ce fix selon les instructions détaillées dans le tracker.
-Une fois appliqué, mets à jour le tracker (checkbox + date + commit hash) et commite les deux fichiers ensemble.
+Identifie le prochain fix PENDING dans la section "REVIEW 2 FIXES", ordre P0 -> P1 -> P2.
+Applique ce fix selon les instructions detaillees dans le tracker.
+Une fois applique, mets a jour le tracker (checkbox + date + commit hash) et commite les deux fichiers ensemble.
 ```
