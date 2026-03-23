@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-le workbench Proxy v2.2.0 — Pont Roo Code <-> Gemini Chrome
+le workbench Proxy v2.3.0 — Pont Roo Code <-> Gemini Chrome
 Supporte stream=true (SSE) et stream=false (JSON complet).
 Exigences: REQ-2.1.1 a REQ-2.4.4
 
@@ -19,6 +19,7 @@ Changelog:
   v2.1.1 - 2026-03-23 : FIX-019 — Force UTF-8 stdout sur Windows pour eviter UnicodeEncodeError cp1252
   v2.2.0 - 2026-03-23 : FIX-020 — Validation XML bloquante (Gemini texte libre bloque comme <new_task>) (GAP R2-001)
                          FIX-021 — Detection balises XML echappees markdown (\<read_file\>) avec message specifique (GAP R2-002)
+  v2.3.0 - 2026-03-23 : FIX-022 — GEM MODE n'envoie que le dernier message [USER] (pas l'historique) pour eviter contamination de contexte (GAP R2-003)
 """
 import asyncio, hashlib, json, os, sys, time, uuid
 from datetime import datetime
@@ -65,7 +66,7 @@ class ChatRequest(BaseModel):
     max_tokens: Optional[int] = None
     stream: Optional[bool] = False
 
-app = FastAPI(title="le workbench Proxy", version="2.2.0")
+app = FastAPI(title="le workbench Proxy", version="2.3.0")
 
 def _hash(text: str) -> str:
     return hashlib.md5(text.encode("utf-8")).hexdigest()
@@ -88,15 +89,38 @@ def _clean_content(content) -> str:
     return str(content)
 
 def _format_prompt(messages: List[MessageContent]) -> str:
-    """Formate les messages en texte lisible. REQ-2.1.3, REQ-2.1.4, REQ-2.2.2"""
+    """Formate les messages en texte lisible. REQ-2.1.3, REQ-2.1.4, REQ-2.2.2
+
+    FIX-022: En GEM MODE, n'envoie que le dernier message [USER] pour eviter la contamination
+    de contexte. Le Gem Gemini a ses propres instructions et chaque conversation est nouvelle —
+    envoyer l'historique complet fait que Gemini continue le contexte precedent au lieu de
+    traiter la nouvelle demande independamment. (GAP R2-003)
+    """
+    # FIX-022: GEM MODE — extraire uniquement le dernier message utilisateur
+    if USE_GEM_MODE:
+        last_user_content = None
+        for msg in reversed(messages):
+            if msg.role == "user":
+                content = _clean_content(msg.content)
+                if content.strip():
+                    last_user_content = content
+                    break
+        if last_user_content:
+            return "[USER]\n" + last_user_content
+        # Fallback: aucun message user trouve, envoyer le dernier message quel que soit le role
+        for msg in reversed(messages):
+            content = _clean_content(msg.content)
+            if content.strip():
+                return content
+        return ""
+
+    # MODE COMPLET (non-GEM): envoyer l'historique complet avec troncature
     parts = []
     for msg in messages:
         content = _clean_content(msg.content)
         if not content.strip():
             continue
         if msg.role == "system":
-            if USE_GEM_MODE:
-                continue
             parts.append("[SYSTEM PROMPT]\n" + content)
         elif msg.role == "user":
             parts.append("[USER]\n" + content)
@@ -113,15 +137,10 @@ def _format_prompt(messages: List[MessageContent]) -> str:
             truncated = "[...HISTORIQUE TRONQUE...]\n\n---\n\n" + truncated[boundary:]
         else:
             # FIX-016: Fallback quand un seul message depasse MAX_HISTORY_CHARS (REG-002)
-            # boundary == -1 signifie qu'aucun [USER] n'existe dans les derniers MAX_HISTORY_CHARS chars
-            # => un seul message depasse la limite. On cherche le dernier [USER] dans le texte complet
-            # pour garantir que Gemini recoit toujours un message complet avec en-tete de contexte.
             last_user = full.rfind("[USER]")
             if last_user >= 0:
                 truncated = "[...HISTORIQUE TRONQUE...]\n\n---\n\n" + full[last_user:]
             else:
-                # Aucun [USER] dans tout le texte (ex: uniquement des messages [ASSISTANT])
-                # On retourne le texte brut tronque avec l'en-tete de contexte
                 truncated = "[...HISTORIQUE TRONQUE...]\n\n---\n\n" + truncated
         print(f"  AVERTISSEMENT: Historique tronque ({len(full)} -> {len(truncated)} chars)")
         return truncated
@@ -256,8 +275,8 @@ async def list_models():
 
 @app.get("/health")
 async def health_check():
-    return {"status": "ok", "proxy": "le workbench", "version": "2.2.0", "gem_mode": USE_GEM_MODE}
+    return {"status": "ok", "proxy": "le workbench", "version": "2.3.0", "gem_mode": USE_GEM_MODE}
 
 if __name__ == "__main__":
-    print(f"{'='*60}\n  le workbench PROXY v2.2.0 | http://localhost:{PORT}/v1\n  Mode: {'GEM' if USE_GEM_MODE else 'COMPLET'} | Timeout: {TIMEOUT_SECONDS}s\n{'='*60}")
+    print(f"{'='*60}\n  le workbench PROXY v2.3.0 | http://localhost:{PORT}/v1\n  Mode: {'GEM' if USE_GEM_MODE else 'COMPLET'} | Timeout: {TIMEOUT_SECONDS}s\n{'='*60}")
     uvicorn.run(app, host="0.0.0.0", port=PORT, log_level="warning")
