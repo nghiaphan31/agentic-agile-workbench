@@ -1,3 +1,16 @@
+# ⚠️ DOCUMENT OBSOLÈTE — REDIRECTION
+
+> **Ce fichier est remplacé par [`DOC3-Plan-Implementation-COMPLETE.md`](DOC3-Plan-Implementation-COMPLETE.md)**
+>
+> **Version :** 3.0 — Document unique fusionné (phases 0-12 en continu)
+> **Date de remplacement :** 2026-03-23
+>
+> **Raison :** Les phases 0-12 ont été fusionnées en un seul document pour éliminer la navigation entre deux fichiers. Le nouveau document intègre également les arbitrages v2.0 : séquence VÉRIFIER→CRÉER→LIRE→AGIR, Scrum Master pur facilitateur, proxy SSE, `claude-sonnet-4-6`.
+>
+> **Ne pas modifier ce fichier.** Toutes les modifications doivent être apportées à [`DOC3-Plan-Implementation-COMPLETE.md`](DOC3-Plan-Implementation-COMPLETE.md).
+
+---
+
 # Document 3 : Plan d'Implementation Sequentiel
 ## Systeme Agentique Local Agile, Persistant & Hybride (UADF)
 

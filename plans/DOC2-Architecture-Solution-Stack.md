@@ -1,65 +1,65 @@
 # Document 2 : Architecture, Solution et Stack Technique
-## Système Agentique Local Agile, Persistant & Hybride (UADF)
+## Unified Agentic Development Framework (UADF)
 
 **Nom du Projet :** Unified Agentic Development Framework (UADF)
-**Version :** 1.0
-**Date :** 2026-03-22
-**Référence PRD :** DOC1-PRD-Unified-Agentic-Framework.md
+**Version :** 2.0 — Refactorisé (arbitrages intégrés, streaming SSE, RBAC précis)
+**Date :** 2026-03-23
+**Référence PRD :** DOC1-PRD-Unified-Agentic-Framework.md v2.0
 
 ---
 
-## 1. Vue d'Ensemble Architecturale
+## 1. Principe Directeur
 
-### 1.1 Principe Directeur
-
-L'architecture UADF repose sur un principe central : **Roo Code est le seul et unique moteur d'exécution agentique**. Tous les autres composants (moteur LLM local, proxy clipboard, API cloud, Memory Bank, personas Agile) sont des **fournisseurs de services** qui s'interfacent avec Roo Code via des protocoles standardisés (API OpenAI-compatible, API Anthropic native, système de fichiers, configuration JSON).
+**Roo Code est le seul et unique moteur d'exécution agentique.** Tous les autres composants (moteur LLM local, proxy clipboard, API cloud, Memory Bank, personas Agile) sont des **fournisseurs de services** qui s'interfacent avec Roo Code via des protocoles standardisés.
 
 Ce principe garantit que :
 - Le comportement de Roo Code n'est jamais modifié, quelle que soit la source LLM utilisée.
 - Le basculement entre les trois backends (Ollama local, Proxy Gemini Chrome, API Anthropic Claude) est transparent pour Roo Code — seul le paramètre "API Provider" change.
 - La Memory Bank et les personas Agile fonctionnent identiquement dans les trois modes.
 
-### 1.2 Diagramme d'Architecture Globale (3 Modes LLM)
+---
+
+## 2. Diagramme d'Architecture Globale
 
 ```
 +-----------------------------------------------------------------------------------+
 |                           LAPTOP WINDOWS (VS Code)                                |
 |                                                                                   |
 |  +--------------------------------------------------------------------------+    |
-|  |                      ROO CODE (Extension VS Code)                         |    |
+|  |                      ROO CODE (Extension VS Code)                        |    |
 |  |                                                                          |    |
 |  |  +-------------+  +--------------+  +----------------------------+      |    |
 |  |  |  .roomodes  |  | .clinerules  |  |   Memory Bank Reader       |      |    |
-|  |  |  (Personas  |  |  (Triggers   |  |   (Lecture/Ecriture .md)   |      |    |
-|  |  |   Agile)    |  |   Memoire)   |  |                            |      |    |
+|  |  |  (4 Personas|  |  (6 Regles   |  |   (Lecture/Ecriture .md)   |      |    |
+|  |  |   Agile)    |  |   imperatives|  |                            |      |    |
 |  |  +-------------+  +--------------+  +----------------------------+      |    |
 |  |                                                                          |    |
-|  |         API OpenAI-Compatible (HTTP)    |    API Anthropic (HTTPS)       |    |
-|  +------------------+----------------------+----------------+---------------+    |
-|                     |                                       |                    |
-|         +-----------+------------+                          |                    |
-|         |    COMMUTATEUR LLM     |  (Parametre Provider     |                    |
-|         |    (3 modes)           |   dans Roo Code)         |                    |
-|         +-----------+------------+                          |                    |
-|                     |                                       |                    |
-|       +-------------+-------------+                         |                    |
-|       |                           |                         |                    |
-|  +----+----------+   +------------+----------+   +----------+-----------+        |
-|  | MODE 1        |   | MODE 2                |   | MODE 3               |        |
-|  | LOCAL         |   | PROXY GEMINI          |   | CLOUD DIRECT         |        |
-|  |               |   |                       |   |                      |        |
-|  | Ollama        |   | proxy.py              |   | API Anthropic        |        |
-|  | localhost:    |   | localhost:8000        |   | api.anthropic.com    |        |
-|  | 11434         |   | (FastAPI)             |   | (HTTPS natif)        |        |
-|  |               |   |         |             |   |                      |        |
-|  | Qwen3-32B     |   | Presse- |             |   | claude-sonnet-4-5    |        |
-|  | (Modelfile    |   | papiers |             |   | (Provider Anthropic  |        |
-|  |  T=0.15)      |   | Windows |             |   |  integre Roo Code)   |        |
-|  |               |   |         |             |   |                      |        |
-|  | Gratuit       |   | Gratuit |             |   | Payant a l'usage     |        |
-|  | 100% local    |   | Copier- |             |   | Entierement auto     |        |
-|  | Hors ligne    |   | coller  |             |   | Connexion requise    |        |
-|  +---------------+   +----+----+             +----------------------+---+        |
+|  |    API OpenAI-Compatible (HTTP)         API Anthropic (HTTPS)            |    |
+|  +------------------+-----------------------+----------------+--------------+    |
+|                     |                                        |                   |
+|         +-----------+------------+                           |                   |
+|         |    COMMUTATEUR LLM     |  (Parametre Provider      |                   |
+|         |    (3 modes)           |   dans Roo Code)          |                   |
+|         +-----------+------------+                           |                   |
+|                     |                                        |                   |
+|       +-------------+-------------+                          |                   |
+|       |                           |                          |                   |
+|  +----+----------+   +------------+----------+   +-----------+-----------+       |
+|  | MODE 1        |   | MODE 2                |   | MODE 3                |       |
+|  | LOCAL         |   | PROXY GEMINI          |   | CLOUD DIRECT          |       |
+|  |               |   |                       |   |                       |       |
+|  | Ollama        |   | proxy.py              |   | API Anthropic         |       |
+|  | localhost:    |   | localhost:8000        |   | api.anthropic.com     |       |
+|  | 11434         |   | (FastAPI + SSE)       |   | (HTTPS natif)         |       |
+|  |               |   |         |             |   |                       |       |
+|  | uadf-agent    |   | Presse- |             |   | claude-sonnet-4-6     |       |
+|  | (Qwen3-32B    |   | papiers |             |   | (Provider Anthropic   |       |
+|  |  T=0.15)      |   | Windows |             |   |  integre Roo Code)    |       |
+|  |               |   |         |             |   |                       |       |
+|  | Gratuit       |   | Gratuit |             |   | Payant a l'usage      |       |
+|  | 100% local    |   | Copier- |             |   | Entierement auto      |       |
+|  | Hors ligne    |   | coller  |             |   | Connexion requise     |       |
+|  +---------------+   +----+----+             +-----------------------+---+       |
 |                           |                                                       |
 |                  +--------+---------+                                             |
 |                  |  INTERVENTION    |                                             |
@@ -72,7 +72,7 @@ Ce principe garantit que :
                +------------+------+    +-------+------+--------+
                |   GEMINI CHROME   |    |  ANTHROPIC CLOUD      |
                |   (Gem dedie      |    |  api.anthropic.com    |
-               |    Roo Code)      |    |  claude-sonnet-4-5    |
+               |    Roo Code)      |    |  claude-sonnet-4-6    |
                +-------------------+    +-----------------------+
 
 +-----------------------------------------------------------------------------------+
@@ -85,245 +85,301 @@ Ce principe garantit que :
 |  +-- systemPatterns.md    (Architecture & Conventions)                            |
 |  +-- techContext.md       (Stack & Commandes des 3 modes)                         |
 |  +-- activeContext.md     (Tache en cours - Memoire Vive)                         |
-|  +-- progress.md          (Checklist Epics & Features)                            |
+|  +-- progress.md          (Checklist Phases & Features)                           |
 |  +-- decisionLog.md       (ADR - Architecture Decision Records)                   |
++-----------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------+
+|                       REGISTRE PROMPTS (prompts/)                                 |
+|   Source de verite unique pour tous les system prompts — Git versionne            |
+|                                                                                   |
+|  prompts/                                                                         |
+|  +-- README.md             (Index du registre)                                    |
+|  +-- SP-001-ollama-modelfile-system.md   -> Modelfile[SYSTEM]                     |
+|  +-- SP-002-clinerules-global.md         -> .clinerules (fichier entier)          |
+|  +-- SP-003-persona-product-owner.md    -> .roomodes[product-owner]               |
+|  +-- SP-004-persona-scrum-master.md     -> .roomodes[scrum-master]                |
+|  +-- SP-005-persona-developer.md        -> .roomodes[developer]                   |
+|  +-- SP-006-persona-qa-engineer.md      -> .roomodes[qa-engineer]                 |
+|  +-- SP-007-gem-gemini-roo-agent.md     -> gemini.google.com (HORS GIT)           |
 +-----------------------------------------------------------------------------------+
 ```
 
 ---
 
-## 2. Stack Technique Detaillee
+## 3. Stack Technique Détaillée
 
-### 2.1 Couche Interface & Orchestration
+### 3.1 Couche Interface & Orchestration
 
-| Composant | Technologie | Version Recommandee | Role |
+| Composant | Technologie | Version | Rôle |
 | :--- | :--- | :--- | :--- |
-| **IDE** | Visual Studio Code | Derniere stable | Environnement de developpement principal |
-| **Extension Agentique** | Roo Code | Derniere stable | Moteur d'execution agentique, pont entre LLM et systeme de fichiers |
-| **Format de Configuration** | JSON (`.roomodes`) | — | Definition des personas Agile et de leurs permissions |
-| **Format de Regles** | Markdown/Texte (`.clinerules`) | — | Directives comportementales injectees dans chaque session |
+| **IDE** | Visual Studio Code | Dernière stable | Environnement de développement principal |
+| **Extension Agentique** | Roo Code | Dernière stable | Moteur d'exécution agentique, pont LLM ↔ système de fichiers |
+| **Personas Agile** | JSON (`.roomodes`) | — | Définition des 4 personas et de leurs permissions RBAC |
+| **Directives Session** | Markdown (`.clinerules`) | — | 6 règles impératives injectées dans chaque session |
 
-### 2.2 Couche Moteur LLM Local (Mode Souverain)
+### 3.2 Couche Moteur LLM Local (Mode Souverain)
 
-| Composant | Technologie | Version Recommandee | Role |
+| Composant | Technologie | Version | Rôle |
 | :--- | :--- | :--- | :--- |
-| **Moteur d'Inference** | Ollama | Derniere stable | Gestion VRAM, chargement des poids, API REST locale |
-| **Modele Principal** | `mychen76/qwen3_cline_roocode:32b` | 32B quantifie | Cerveau principal, optimise Tool Calling Roo Code |
-| **Modele Secondaire** | `qwen3:7b` | 7B | Agent delegue pour taches legeres (Boomerang) |
-| **Configuration Modele** | `Modelfile` Ollama | — | Verrouillage Temperature=0.15, Min_P=0.03, num_ctx=131072 |
-| **Port d'Ecoute** | `localhost:11434` | — | API REST compatible OpenAI exposee par Ollama |
+| **Moteur d'Inférence** | Ollama | Dernière stable | Gestion VRAM, chargement des poids, API REST locale |
+| **Modèle Principal** | `mychen76/qwen3_cline_roocode:32b` | 32B quantifié | Cerveau principal, fine-tuné Tool Calling Roo Code |
+| **Modèle Secondaire** | `qwen3:7b` | 7B | Agent délégué pour tâches légères (Boomerang Tasks) |
+| **Configuration Modèle** | `Modelfile` Ollama | — | Verrouillage T=0.15, Min_P=0.03, num_ctx=131072 |
+| **Port d'Écoute** | `localhost:11434` | — | API REST compatible OpenAI exposée par Ollama |
 
-### 2.3 Couche Proxy Gemini Chrome (Mode Hybride)
+### 3.3 Couche Proxy Gemini Chrome (Mode Hybride)
 
-| Composant | Technologie | Version Recommandee | Role |
+| Composant | Technologie | Version | Rôle |
 | :--- | :--- | :--- | :--- |
 | **Langage** | Python | 3.10+ | Langage du serveur proxy |
-| **Framework Web** | FastAPI | 0.110+ | Serveur ASGI leger, emulation API OpenAI |
+| **Framework Web** | FastAPI | 0.110+ | Serveur ASGI léger, émulation API OpenAI + SSE |
 | **Serveur ASGI** | Uvicorn | 0.29+ | Serveur de production pour FastAPI |
-| **Gestion Presse-Papiers** | Pyperclip | 1.8+ | Lecture/ecriture presse-papiers Windows |
+| **Gestion Presse-Papiers** | Pyperclip | 1.8+ | Lecture/écriture presse-papiers Windows |
 | **Gestion Async** | asyncio (stdlib Python) | — | Boucle de polling non-bloquante |
-| **Port d'Ecoute** | `localhost:8000` | — | Point d'entree pour Roo Code en mode proxy |
-| **Environnement Virtuel** | venv (stdlib Python) | — | Isolation des dependances |
+| **Streaming** | StreamingResponse (FastAPI) | — | Réponse SSE en un seul chunk pour compatibilité Roo Code |
+| **Port d'Écoute** | `localhost:8000` | — | Point d'entrée pour Roo Code en mode proxy |
+| **Environnement Virtuel** | venv (stdlib Python) | — | Isolation des dépendances |
 
-### 2.4 Couche Memoire Persistante
+### 3.4 Couche Mémoire Persistante
 
-| Composant | Technologie | Role |
+| Composant | Technologie | Rôle |
 | :--- | :--- | :--- |
-| **Systeme de Fichiers** | NTFS Windows | Stockage physique des fichiers `.md` |
-| **Format de Donnees** | Markdown (`.md`) | Lisibilite humaine, compatibilite Git |
-| **Versionnement** | Git | Tracabilite des modifications de la Memory Bank |
-| **Repertoire** | `memory-bank/` (racine projet) | Conteneur de toute la memoire contextuelle |
+| **Système de Fichiers** | NTFS Windows | Stockage physique des fichiers `.md` |
+| **Format de Données** | Markdown (`.md`) | Lisibilité humaine, compatibilité Git |
+| **Versionnement** | Git | Traçabilité des modifications de la Memory Bank |
+| **Répertoire** | `memory-bank/` (racine projet) | Conteneur de toute la mémoire contextuelle |
 
-### 2.5 Couche Interface Gemini Chrome
+### 3.5 Couche Interface Gemini Chrome
 
-| Composant | Technologie | Role |
+| Composant | Technologie | Rôle |
 | :--- | :--- | :--- |
-| **Interface Web** | Gemini Chrome (gemini.google.com) | LLM cloud gratuit, moteur de generation |
-| **Profil Dedie** | Gem Gemini (instructions systeme) | Contient le system prompt Roo Code pour eviter retransmission |
-| **Navigateur** | Google Chrome | Acces a l'interface Gemini Web |
+| **Interface Web** | Gemini Chrome (gemini.google.com) | LLM cloud gratuit, moteur de génération |
+| **Profil Dédié** | Gem Gemini "Roo Code Agent" | Contient le system prompt Roo Code (SP-007) |
+| **Navigateur** | Google Chrome | Accès à l'interface Gemini Web |
+
+### 3.6 Couche Moteur LLM Cloud Direct (Mode Claude API)
+
+| Composant | Technologie | Version | Rôle |
+| :--- | :--- | :--- | :--- |
+| **Fournisseur API** | Anthropic API | v1 (stable) | API cloud officielle, connexion directe sans proxy |
+| **Modèle** | `claude-sonnet-4-6` | Dernière stable Sonnet | Modèle haute qualité, natif Roo Code, tool use intégré |
+| **Endpoint** | `https://api.anthropic.com` | — | Point d'entrée HTTPS officiel Anthropic |
+| **Authentification** | Clé API (`sk-ant-api03-...`) | — | Stockée dans VS Code SecretStorage via Roo Code |
+| **Provider Roo Code** | "Anthropic" (natif) | — | Fournisseur intégré dans Roo Code, aucun middleware |
+
+### 3.7 Couche Vérification de Cohérence des Prompts
+
+| Composant | Technologie | Rôle |
+| :--- | :--- | :--- |
+| **Script de vérification** | PowerShell (`check-prompts-sync.ps1`) | Comparaison normalisée SP canoniques vs artefacts déployés |
+| **Hook Git** | Shell script (`.git/hooks/pre-commit`) | Appel automatique du script avant chaque commit |
+| **Registre** | Répertoire `prompts/` (Markdown + YAML) | Source de vérité unique pour tous les system prompts |
 
 ---
 
-## 3. Architecture des Couches Fonctionnelles
+## 4. Décisions d'Architecture
+
+### DA-001 — `.roomodes` comme registre central des personas Agile
+**Décision :** Le fichier `.roomodes` est le registre central des personas Agile. Il définit pour chaque rôle : son identifiant unique (`slug`), son nom d'affichage, son `roleDefinition` (system prompt comportemental), et ses `groups` de permissions. Ce fichier est statique et versionné dans Git.
+**Justification :** Séparation claire entre configuration (`.roomodes`) et comportement (`.clinerules`). Le `roleDefinition` est la source de vérité du comportement de chaque persona.
+**Exigences adressées :** REQ-3.1, REQ-3.2, REQ-3.3, REQ-3.4
+
+### DA-002 — `.clinerules` comme déclencheur de session universel
+**Décision :** Le fichier `.clinerules` contient 6 règles impératives injectées au-dessus de chaque prompt utilisateur, forçant l'agent à suivre la séquence VÉRIFIER→CRÉER→LIRE→AGIR pour la Memory Bank, à versionner sous Git, et à maintenir la cohérence du registre de prompts. Ces directives sont inconditionnelles et s'appliquent à tous les modes.
+**Justification :** Le `.clinerules` est le filet de sécurité universel. Même si un persona oublie sa propre règle, `.clinerules` la rappelle systématiquement à chaque session.
+**Exigences adressées :** REQ-4.2, REQ-4.3, REQ-7.3
+
+### DA-003 — Memory Bank segmentée en 7 fichiers thématiques
+**Décision :** La Memory Bank est segmentée en 7 fichiers thématiques pour éviter la pollution contextuelle et optimiser l'attention du LLM. Chaque fichier a une responsabilité unique et non-chevauchante.
+**Justification :** Un fichier monolithique forcerait le LLM à charger toute la mémoire à chaque session. La segmentation permet de charger uniquement les fichiers pertinents selon la tâche.
+**Exigences adressées :** REQ-4.4
+
+### DA-004 — Modelfile avec paramètres de déterminisme verrouillés
+**Décision :** Le modèle `mychen76/qwen3_cline_roocode:32b` est compilé avec un `Modelfile` personnalise verrouillant : `temperature 0.15`, `min_p 0.03`, `top_p 0.95`, `repeat_penalty 1.1`, `num_ctx 131072`, `num_gpu 99`, `num_thread 8`. Ces valeurs sont non-modifiables à l'exécution.
+**Justification :** Le déterminisme maximal élimine les hallucinations lors de la génération de code. La fenêtre de 128K tokens permet de charger simultanément le projet et la Memory Bank.
+**Exigences adressées :** REQ-1.2, REQ-1.3
+
+### DA-005 — Boomerang Tasks pour délégation aux modèles légers
+**Décision :** Le workflow "Boomerang Tasks" de Roo Code est utilisé pour déléguer les tâches répétitives ou volumineuses (analyse de logs, génération de tests unitaires) au modèle secondaire `qwen3:7b`.
+**Justification :** Optimisation VRAM et accélération des cycles répétitifs. Le modèle 32B reste disponible pour les décisions complexes.
+**Exigences adressées :** REQ-1.4
+
+### DA-006 — FastAPI + asyncio pour le proxy
+**Décision :** FastAPI est choisi plutôt que Flask pour sa gestion native de l'asynchronisme (asyncio), indispensable pour maintenir la connexion HTTP ouverte pendant l'attente de l'intervention humaine (polling du presse-papiers) sans bloquer le serveur.
+**Justification :** Flask est synchrone par défaut — il bloquerait le serveur pendant le polling. FastAPI avec asyncio maintient le serveur réactif (endpoint `/health` répond pendant le polling).
+**Exigences adressées :** REQ-2.3.1, REQ-2.1.1
+
+### DA-007 — Émulation format OpenAI Chat Completions
+**Décision :** Le proxy émule exactement le format de l'API OpenAI Chat Completions (`/v1/chat/completions`). Cette décision garantit une compatibilité native avec Roo Code configuré en mode "OpenAI Compatible", sans aucune modification du code source de Roo Code.
+**Justification :** Roo Code supporte nativement le format OpenAI. En émulant ce format, le proxy est transparent pour Roo Code.
+**Exigences adressées :** REQ-2.1.2, REQ-2.4.2
+
+### DA-008 — Mode "Gem dédié" avec filtrage du system prompt
+**Décision :** Le proxy implémente un mode `USE_GEM_MODE=true` (défaut) qui filtre le message `system` lors de la copie dans le presse-papiers. Lorsque ce mode est actif, seuls les messages `user` et `assistant` sont transmis.
+**Justification :** Le system prompt de Roo Code représente plusieurs milliers de tokens. En le stockant dans le Gem Gemini (SP-007), on évite de le retransmettre à chaque requête, réduisant la taille du transfert de 50%+.
+**Exigences adressées :** REQ-2.1.4
+
+### DA-009 — Nettoyage des contenus base64
+**Décision :** Le proxy détecte et remplace les éléments `{"type": "image_url", ...}` par le message `[IMAGE OMISE - Non supportee par le proxy clipboard]`.
+**Justification :** Les images base64 peuvent représenter des centaines de Ko. Leur présence dans le presse-papiers rendrait le transfert impossible. Le remplacement par un message textuel préserve le contexte sans bloquer le flux.
+**Exigences adressées :** REQ-2.1.5
+
+### DA-010 — Gem Gemini avec system prompt Roo Code intégré
+**Décision :** Un "Gem" dédié est créé dans Gemini Web avec l'intégralité du system prompt de Roo Code (SP-007). Cette approche évite de retransmettre le system prompt à chaque requête via le presse-papiers.
+**Justification :** Le system prompt Roo Code est statique et ne change pas entre les requêtes. Le stocker dans le Gem une seule fois est plus efficace que de le retransmettre à chaque échange.
+**Exigences adressées :** REQ-5.1, REQ-5.2
+
+### DA-011 — Fournisseur Anthropic natif Roo Code pour le Mode Cloud
+**Décision :** La connexion à l'API Anthropic utilise le provider natif "Anthropic" intégré dans Roo Code. Le modèle de référence est `claude-sonnet-4-6`. La clé API est stockée dans VS Code SecretStorage, jamais dans les fichiers du projet.
+**Justification :** Le provider natif garantit la compatibilité totale avec le streaming, la vision et le tool use natif de Claude. VS Code SecretStorage est chiffré et non accessible depuis le système de fichiers, garantissant la sécurité de la clé API.
+**Exigences adressées :** REQ-6.1, REQ-6.2, REQ-6.3, REQ-6.4
+
+### DA-012 — Registre centralisé des system prompts dans `prompts/`
+**Décision :** Un répertoire `prompts/` versionné contient une copie canonique de chaque system prompt avec métadonnées YAML (cible, version, dépendances, changelog). REGLE 6 dans `.clinerules` impose la cohérence avant chaque commit. SP-007 (Gem Gemini) est marqué `hors_git: true` avec procédure de déploiement manuel documentée.
+**Justification :** Les system prompts sont dispersés dans plusieurs artefacts (.roomodes JSON, .clinerules texte, Modelfile compilé, Gemini Web externe). Sans registre centralisé, une modification de `.clinerules` peut rendre le Gem Gemini incohérent sans que personne ne le remarque.
+**Exigences adressées :** REQ-7.1, REQ-7.2, REQ-7.3, REQ-7.4, REQ-7.5
+
+### DA-013 — Vérification automatique via script PowerShell + hook Git pre-commit
+**Décision :** Un script `scripts/check-prompts-sync.ps1` compare le contenu déployé avec les SP canoniques via comparaison normalisée (correction encodage `\r\n`/`\n`, désérialisation JSON pour `.roomodes`, regex robuste d'extraction). Un hook Git `.git/hooks/pre-commit` appelle ce script automatiquement et bloque le commit si désynchronisation détectée. SP-007 est exclu de la vérification automatique avec avertissement de vérification manuelle.
+**Justification :** REGLE 6 étant une directive comportementale, elle peut être ignorée par un agent LLM. Le hook pre-commit transforme la vérification en contrainte technique non-contournable.
+**Exigences adressées :** REQ-8.1, REQ-8.2, REQ-8.3, REQ-8.4
+
+### DA-014 — Streaming SSE en un seul chunk pour le proxy
+**Décision :** Le proxy implémente le streaming SSE (Server-Sent Events) en retournant la réponse Gemini en un seul chunk SSE suivi de `data: [DONE]`. Si la requête contient `"stream": false`, une réponse JSON complète non-streamée est retournée. Le proxy détecte automatiquement le mode via le champ `stream` de la requête.
+**Justification :** Roo Code peut envoyer des requêtes avec `stream: true` (comportement par défaut dans certaines versions). Sans support SSE, le proxy retournerait une réponse JSON non-streamée que Roo Code pourrait rejeter en attendant le format SSE. L'implémentation SSE en un seul chunk est transparente pour Roo Code quelle que soit sa configuration.
+**Exigences adressées :** REQ-2.4.1, REQ-2.4.3
+
+---
+
+## 5. Architecture des Couches Fonctionnelles
 
 ### Couche A — Orchestration Comportementale (`.roomodes` & `.clinerules`)
 
-**Role :** Controle *comment* l'IA agit, quels outils elle peut utiliser, et quel comportement elle adopte.
+**Matrice RBAC des Permissions (DA-001) :**
 
-**Decision d'Architecture DA-001 :**
-> Le fichier `.roomodes` est le registre central des personas Agile. Il definit pour chaque role : son identifiant unique (`slug`), son nom d'affichage, son `roleDefinition` (system prompt comportemental), et ses `groups` de permissions (liste des outils Roo Code autorises). Ce fichier est statique et versionne dans Git.
-
-**Decision d'Architecture DA-002 :**
-> Le fichier `.clinerules` est le "declencheur de session". Il contient des directives imperatives injectees au-dessus de chaque prompt utilisateur, forcant l'agent a lire la Memory Bank au demarrage et a la mettre a jour a la cloture. Ces directives sont inconditionnelles et s'appliquent a tous les modes.
-
-**Matrice RBAC des Permissions :**
-
-| Groupe de Permission | Product Owner | Scrum Master | Developer | QA Engineer |
+| Permission | Product Owner | Scrum Master | Developer | QA Engineer |
 | :--- | :---: | :---: | :---: | :---: |
-| `read` (lecture fichiers) | OUI | OUI | OUI | OUI |
-| `write_docs` (ecriture docs/user stories) | OUI | OUI | OUI | NON |
-| `write_memory` (ecriture Memory Bank) | NON | OUI | OUI | NON |
-| `write` (ecriture code source) | NON | NON | OUI | NON |
-| `execute` (terminal general) | NON | NON | OUI | NON |
-| `execute_tests` (commandes de test) | NON | NON | OUI | OUI |
-| `write_reports` (ecriture rapports QA) | NON | NON | NON | OUI |
-| `browser` (acces navigateur) | NON | NON | OUI | OUI |
+| `read` (lecture tous fichiers) | ✅ | ✅ | ✅ | ✅ |
+| `edit` `memory-bank/productContext.md` | ✅ | ✅ | ✅ | ❌ |
+| `edit` `memory-bank/*.md` (tous) | ❌ | ✅ | ✅ | ❌ |
+| `edit` `docs/*.md` (documentation) | ✅ | ✅ | ✅ | ❌ |
+| `edit` `docs/qa/*.md` (rapports QA) | ❌ | ❌ | ❌ | ✅ |
+| `edit` code source (tous fichiers) | ❌ | ❌ | ✅ | ❌ |
+| `command` terminal général | ❌ | ❌ | ✅ | ❌ |
+| `command` Git uniquement | ❌ | ✅ | ✅ | ❌ |
+| `command` tests uniquement | ❌ | ❌ | ✅ | ✅ |
+| `browser` accès navigateur | ❌ | ❌ | ✅ | ✅ |
+| `mcp` accès MCP | ❌ | ❌ | ✅ | ❌ |
+
+**Commandes Git autorisées Scrum Master :** `git add`, `git commit`, `git status`, `git log`
+**Commandes test autorisées QA Engineer :** `npm test`, `npm run test`, `pytest`, `python -m pytest`, `dotnet test`, `go test`, `git status`, `git log`
 
 ---
 
 ### Couche B — Memory Bank (Fichiers Markdown)
 
-**Role :** Controle *ce que* l'IA sait. Fournit la continuite de contexte entre les sessions.
+**Structure et Responsabilités des 7 Fichiers (DA-003) :**
 
-**Decision d'Architecture DA-003 :**
-> La Memory Bank est segmentee en 7 fichiers thematiques pour eviter la pollution contextuelle et optimiser l'attention du LLM. Chaque fichier a une responsabilite unique et non-chevauchante.
-
-**Structure et Responsabilites des 7 Fichiers :**
-
-| Fichier | Frequence de Lecture | Frequence d'Ecriture | Contenu |
+| Fichier | Fréquence de Lecture | Fréquence d'Écriture | Contenu |
 | :--- | :--- | :--- | :--- |
-| `projectBrief.md` | Debut de projet | Rare (changements majeurs) | Vision, objectifs, Non-Goals, contraintes |
-| `productContext.md` | Debut de sprint | Par sprint | User Stories, valeur metier, personas utilisateurs |
-| `systemPatterns.md` | Avant toute modification d'architecture | Apres decision d'architecture | Structure des dossiers, conventions de nommage, patterns |
-| `techContext.md` | Avant toute commande de build/test | Apres changement de dependance | Stack, versions, commandes, variables d'environnement |
-| `activeContext.md` | **A chaque demarrage de session** | **A chaque fin de tache** | Tache en cours, dernier bug, prochaine action immediate |
-| `progress.md` | **A chaque demarrage de session** | **A chaque validation de feature** | Checklist Epics, features terminees/en cours/a faire |
-| `decisionLog.md` | Avant toute decision d'architecture | Apres toute decision d'architecture | ADR horodates avec contexte, decision, consequences |
+| `projectBrief.md` | Début de projet | Rare | Vision, objectifs, Non-Goals, contraintes |
+| `productContext.md` | Début de sprint | Par sprint | User Stories, valeur métier, backlog |
+| `systemPatterns.md` | Avant modification architecture | Après décision architecture | Structure dossiers, conventions, patterns |
+| `techContext.md` | Avant commande build/test | Après changement dépendance | Stack, versions, commandes, variables d'env |
+| `activeContext.md` | **À chaque démarrage session** | **À chaque fin de tâche** | Tâche en cours, dernier résultat, prochaine action |
+| `progress.md` | **À chaque démarrage session** | **À chaque validation feature** | Checklist phases UADF, features terminées/en cours |
+| `decisionLog.md` | Avant décision architecture | Après décision architecture | ADR horodatés avec contexte, décision, conséquences |
+
+**Séquence obligatoire au démarrage de session (DA-002, REQ-4.2) :**
+```
+1. VÉRIFIER existence de activeContext.md et progress.md
+2. Si absents → CRÉER depuis templates .clinerules (immédiatement)
+3. LIRE activeContext.md puis progress.md
+4. AGIR sur la demande utilisateur
+```
 
 ---
 
 ### Couche C — Moteur LLM Local (Ollama + Qwen3)
 
-**Role :** Fournit la capacite d'inference locale, souveraine et gratuite.
-
-**Decision d'Architecture DA-004 :**
-> Le modele `mychen76/qwen3_cline_roocode:32b` est utilise comme modele principal car il est specifiquement fine-tune pour respecter les balises XML de Roo Code. Un `Modelfile` personnalise est cree pour verrouiller les parametres de generation et maximiser la fenetre de contexte.
-
-**Contenu du `Modelfile` :**
+**Contenu du `Modelfile` (DA-004) :**
 ```dockerfile
 FROM mychen76/qwen3_cline_roocode:32b
 
-# Parametres de determinisme (anti-hallucination)
+# Parametres de determinisme (anti-hallucination) — REQ-1.3
 PARAMETER temperature 0.15
 PARAMETER min_p 0.03
 PARAMETER top_p 0.95
 PARAMETER repeat_penalty 1.1
 
-# Fenetre de contexte maximale (128K tokens)
+# Fenetre de contexte maximale (128K tokens) — REQ-1.2
 PARAMETER num_ctx 131072
 
-# Parametres de performance
+# Parametres de performance GPU
 PARAMETER num_gpu 99
 PARAMETER num_thread 8
 
 SYSTEM """
-Tu es un agent de developpement logiciel expert. Tu travailles dans l'environnement Roo Code.
+Tu es un agent de developpement logiciel expert integre dans Roo Code.
 Tu dois toujours utiliser les balises XML de Roo Code pour tes actions.
-Tu dois toujours lire la Memory Bank avant d'agir.
+Tu dois toujours lire la Memory Bank (memory-bank/) avant d'agir.
+Tu dois toujours mettre a jour la Memory Bank apres chaque tache.
+Apres chaque tache significative, tu dois effectuer un commit Git avec un message descriptif.
 """
 ```
-
-**Decision d'Architecture DA-005 :**
-> Le workflow "Boomerang Tasks" de Roo Code est utilise pour deleguer les taches repetitives ou volumineuses (analyse de logs, generation de tests unitaires) a un modele secondaire plus leger (`qwen3:7b`), reduisant la consommation VRAM et accelerant les cycles de developpement.
 
 ---
 
-### Couche D — Proxy Gemini Chrome (FastAPI + Pyperclip)
+### Couche D — Proxy Gemini Chrome (FastAPI + Pyperclip + SSE)
 
-**Role :** Transforme Roo Code en client d'une "fausse API" locale qui relaie les requetes vers Gemini Chrome via le presse-papiers.
-
-**Decision d'Architecture DA-006 :**
-> FastAPI est choisi plutot que Flask pour sa gestion native de l'asynchronisme (asyncio), indispensable pour maintenir la connexion HTTP ouverte pendant l'attente de l'intervention humaine (polling du presse-papiers) sans bloquer le serveur.
-
-**Decision d'Architecture DA-007 :**
-> Le proxy emule exactement le format de l'API OpenAI Chat Completions (`/v1/chat/completions`). Cette decision garantit une compatibilite native avec Roo Code configure en mode "OpenAI Compatible", sans aucune modification du code source de Roo Code.
-
-**Decision d'Architecture DA-008 :**
-> Le proxy implemente un mode "Gem dedie" (activable via variable d'environnement `USE_GEM_MODE=true`) qui filtre le `system prompt` de Roo Code lors de la copie dans le presse-papiers. Lorsque ce mode est actif, seuls le `user prompt` et l'historique de conversation sont transmis, reduisant drastiquement la taille du transfert.
-
-**Decision d'Architecture DA-009 :**
-> Le proxy detecte et supprime les contenus base64 (images) des requetes avant la copie dans le presse-papiers. Un message d'avertissement est injecte a la place du contenu image.
-
-**Flux de Donnees Detaille du Proxy :**
-
+**Flux de Données Détaillé :**
 ```
 ETAPE 1 — RECEPTION (Roo Code -> Proxy)
 POST http://localhost:8000/v1/chat/completions
-{
-  "model": "gemini-manual",
-  "messages": [
-    {"role": "system", "content": "[System Prompt Roo Code - des milliers de mots]"},
-    {"role": "user",   "content": "Cree un fichier hello.py qui affiche Bonjour"}
-  ],
-  "temperature": 0.0
-}
+{ "model": "gemini-manual", "messages": [...], "stream": true|false }
 
-ETAPE 2 — EXTRACTION & FORMATAGE (Proxy interne)
+ETAPE 2 — EXTRACTION & FORMATAGE
 Si USE_GEM_MODE=true : ignorer role:system
-Nettoyer les images base64
-Formater en texte lisible pour le presse-papiers :
-  [USER]
-  Cree un fichier hello.py qui affiche Bonjour
+Nettoyer images base64 → [IMAGE OMISE...]
+Formater : [USER]\n{contenu}\n\n---\n\n[ASSISTANT]\n{contenu}
 
-ETAPE 3 — UPLINK (Proxy -> Presse-Papiers)
+ETAPE 3 — UPLINK
 pyperclip.copy(formatted_prompt)
 hash_initial = md5(formatted_prompt)
-Console: "Prompt pret ! Collez dans Gemini Chrome (Ctrl+V)"
-[HUMAIN] Ctrl+V dans Gemini -> Gemini genere -> Ctrl+C
+Console: instructions numérotées pour l'utilisateur
 
-ETAPE 4 — POLLING ASYNCHRONE (Proxy surveille le presse-papiers)
+ETAPE 4 — POLLING ASYNCHRONE
 while True:
   await asyncio.sleep(1.0)
-  current = pyperclip.paste()
-  if md5(current) != hash_initial: break  # Reponse detectee
-  if elapsed > 300s: raise HTTP 408 Timeout
+  if md5(pyperclip.paste()) != hash_initial: break
+  if elapsed > 300s: raise HTTP 408
 
-ETAPE 5 — VALIDATION (Proxy verifie la reponse)
-Verifier presence balises XML Roo Code
-Si absent : warning console (non-bloquant)
+ETAPE 5 — VALIDATION
+Vérifier présence balises XML Roo Code (warning si absent, non-bloquant)
 
-ETAPE 6 — REINJECTION (Proxy -> Roo Code)
-HTTP 200 OK
-{
-  "id": "chatcmpl-proxy-{uuid}",
-  "object": "chat.completion",
-  "created": {timestamp},
-  "model": "gemini-manual",
-  "choices": [{
-    "index": 0,
-    "message": {"role": "assistant", "content": "[Reponse brute Gemini]"},
-    "finish_reason": "stop"
-  }],
-  "usage": {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
-}
+ETAPE 6 — REINJECTION
+Si stream=true  → SSE : data:{chunk}\n\ndata:{done}\n\ndata:[DONE]\n\n
+Si stream=false → JSON : {"id":..., "choices":[{"message":{"content":"..."}}]}
 ```
 
-**Code complet du Proxy (`proxy.py`) :**
+**Code complet `proxy.py` v2.0 (DA-006, DA-007, DA-008, DA-009, DA-014) :**
 
 ```python
 """
-UADF Proxy — Pont Roo Code <-> Gemini Chrome
-Emule l'API OpenAI Chat Completions en local.
-Exigences couvertes: REQ-2.1.1, REQ-2.1.2, REQ-2.1.3, REQ-2.1.4, REQ-2.1.5,
-                     REQ-2.2.1, REQ-2.2.2, REQ-2.2.3,
-                     REQ-2.3.1, REQ-2.3.2, REQ-2.3.3, REQ-2.3.4,
-                     REQ-2.4.1, REQ-2.4.2, REQ-2.4.3
+UADF Proxy v2.0 — Pont Roo Code <-> Gemini Chrome
+Supporte stream=true (SSE) et stream=false (JSON complet).
+Exigences: REQ-2.1.1 a REQ-2.4.4
 """
-import asyncio
-import hashlib
-import os
-import time
-import uuid
+import asyncio, hashlib, json, os, time, uuid
 from datetime import datetime
-from typing import List, Optional, Union
+from typing import AsyncGenerator, List, Optional, Union
 
-import pyperclip
-import uvicorn
+import pyperclip, uvicorn
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel
 
-# Configuration (REQ-2.1.4, REQ-2.3.3)
 USE_GEM_MODE = os.getenv("USE_GEM_MODE", "true").lower() == "true"
 POLLING_INTERVAL = float(os.getenv("POLLING_INTERVAL", "1.0"))
 TIMEOUT_SECONDS = int(os.getenv("TIMEOUT_SECONDS", "300"))
@@ -332,7 +388,7 @@ PORT = int(os.getenv("PROXY_PORT", "8000"))
 ROO_XML_TAGS = [
     "<write_to_file>", "<read_file>", "<execute_command>",
     "<attempt_completion>", "<ask_followup_question>", "<replace_in_file>",
-    "<list_files>", "<search_files>", "<browser_action>"
+    "<list_files>", "<search_files>", "<browser_action>", "<new_task>"
 ]
 
 class MessageContent(BaseModel):
@@ -346,13 +402,13 @@ class ChatRequest(BaseModel):
     max_tokens: Optional[int] = None
     stream: Optional[bool] = False
 
-app = FastAPI(title="UADF Proxy — Roo Code <-> Gemini Chrome")
+app = FastAPI(title="UADF Proxy", version="2.0.0")
 
 def _hash(text: str) -> str:
-    return hashlib.md5(text.encode()).hexdigest()
+    return hashlib.md5(text.encode("utf-8")).hexdigest()
 
 def _clean_content(content) -> str:
-    """Nettoie le contenu : supprime les images base64. (REQ-2.1.5)"""
+    """Nettoie le contenu : supprime les images base64. REQ-2.1.5"""
     if isinstance(content, str):
         return content
     if isinstance(content, list):
@@ -363,232 +419,191 @@ def _clean_content(content) -> str:
                     parts.append(item.get("text", ""))
                 elif item.get("type") == "image_url":
                     parts.append("[IMAGE OMISE - Non supportee par le proxy clipboard]")
+                else:
+                    parts.append(str(item))
         return "\n".join(parts)
     return str(content)
 
 def _format_prompt(messages: List[MessageContent]) -> str:
-    """Formate les messages en texte lisible. (REQ-2.2.2)"""
+    """Formate les messages en texte lisible. REQ-2.1.3, REQ-2.1.4, REQ-2.2.2"""
     parts = []
     for msg in messages:
         content = _clean_content(msg.content)
+        if not content.strip():
+            continue
         if msg.role == "system":
             if USE_GEM_MODE:
-                continue  # Le Gem contient deja le system prompt (REQ-2.1.4)
-            parts.append(f"[SYSTEM PROMPT]\n{content}")
+                continue
+            parts.append("[SYSTEM PROMPT]\n" + content)
         elif msg.role == "user":
-            parts.append(f"[USER]\n{content}")
+            parts.append("[USER]\n" + content)
         elif msg.role == "assistant":
-            parts.append(f"[ASSISTANT]\n{content}")
+            parts.append("[ASSISTANT]\n" + content)
     return "\n\n---\n\n".join(parts)
 
 def _validate_response(text: str) -> bool:
-    """Verifie la presence de balises XML Roo Code. (REQ-2.3.4)"""
+    """Verifie la presence de balises XML Roo Code. REQ-2.3.4"""
     return any(tag in text for tag in ROO_XML_TAGS)
 
-def _build_openai_response(content: str, model: str) -> dict:
-    """Construit une reponse au format OpenAI. (REQ-2.4.1)"""
+def _build_json_response(content: str, model: str) -> dict:
+    """Construit une reponse JSON OpenAI. REQ-2.4.2"""
     return {
-        "id": f"chatcmpl-proxy-{uuid.uuid4().hex[:8]}",
+        "id": "chatcmpl-proxy-" + uuid.uuid4().hex[:8],
         "object": "chat.completion",
         "created": int(time.time()),
         "model": model,
-        "choices": [{
-            "index": 0,
-            "message": {"role": "assistant", "content": content},
-            "finish_reason": "stop"
-        }],
+        "choices": [{"index": 0, "message": {"role": "assistant", "content": content}, "finish_reason": "stop"}],
         "usage": {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
     }
 
-@app.post("/v1/chat/completions")  # REQ-2.1.1, REQ-2.1.2
-async def chat_completions(request: ChatRequest):
-    ts = datetime.now().strftime("%H:%M:%S")
-    print(f"\n[{ts}] Requete recue de Roo Code (modele: {request.model})")
+async def _stream_response(content: str, model: str) -> AsyncGenerator[str, None]:
+    """Genere une reponse SSE en un seul chunk. REQ-2.4.1, DA-014"""
+    rid = "chatcmpl-proxy-" + uuid.uuid4().hex[:8]
+    ts = int(time.time())
+    chunk = {"id": rid, "object": "chat.completion.chunk", "created": ts, "model": model,
+             "choices": [{"index": 0, "delta": {"role": "assistant", "content": content}, "finish_reason": None}]}
+    yield f"data: {json.dumps(chunk)}\n\n"
+    done = {"id": rid, "object": "chat.completion.chunk", "created": ts, "model": model,
+            "choices": [{"index": 0, "delta": {}, "finish_reason": "stop"}]}
+    yield f"data: {json.dumps(done)}\n\n"
+    yield "data: [DONE]\n\n"
 
-    formatted = _format_prompt(request.messages)  # REQ-2.1.3, REQ-2.1.4, REQ-2.1.5
-    prompt_len = len(formatted)
-
-    pyperclip.copy(formatted)  # REQ-2.2.1
-    initial_hash = _hash(formatted)
-
-    # Notification utilisateur (REQ-2.2.3)
-    print(f"[{ts}] Prompt formate ({prompt_len} caracteres) copie dans le presse-papiers !")
-    print(f"[{ts}] ACTION REQUISE:")
-    print(f"         1. Allez dans Gemini Chrome")
-    print(f"         2. Collez le prompt (Ctrl+V)")
-    print(f"         3. Attendez la reponse de Gemini")
-    print(f"         4. Copiez la reponse (Ctrl+C)")
-    print(f"         Timeout dans {TIMEOUT_SECONDS} secondes...")
-
-    # Polling asynchrone (REQ-2.3.1, REQ-2.3.2)
-    start_time = time.time()
+async def _wait_clipboard(initial_hash: str, ts: str) -> str:
+    """Attend la reponse Gemini dans le presse-papiers. REQ-2.3.1, REQ-2.3.2, REQ-2.3.3"""
+    start = time.time()
     while True:
         await asyncio.sleep(POLLING_INTERVAL)
-        current_content = pyperclip.paste()
+        current = pyperclip.paste()
+        if _hash(current) != initial_hash:
+            elapsed = time.time() - start
+            print(f"[{ts}] REPONSE DETECTEE ! {len(current)} chars en {elapsed:.1f}s")
+            if not _validate_response(current):
+                print(f"[{ts}] AVERTISSEMENT : Aucune balise XML Roo Code detectee.")
+            return current
+        if time.time() - start > TIMEOUT_SECONDS:
+            raise HTTPException(status_code=408, detail="Timeout: Relancez votre requete dans Roo Code.")
 
-        if _hash(current_content) != initial_hash:
-            elapsed = time.time() - start_time
-            print(f"[{ts}] Reponse detectee ({len(current_content)} chars, {elapsed:.1f}s)")
-
-            # Validation (REQ-2.3.4)
-            if not _validate_response(current_content):
-                print(f"[{ts}] AVERTISSEMENT: Aucune balise XML Roo Code detectee.")
-                print(f"         Verifiez que votre Gem est correctement configure.")
-
-            # Reinjection (REQ-2.4.1, REQ-2.4.2, REQ-2.4.3)
-            response = _build_openai_response(current_content, request.model)
-            return JSONResponse(content=response, status_code=200)
-
-        elapsed = time.time() - start_time
-        if elapsed > TIMEOUT_SECONDS:  # REQ-2.3.3
-            raise HTTPException(
-                status_code=408,
-                detail=f"Timeout: Aucune reponse detectee apres {TIMEOUT_SECONDS}s."
-            )
+@app.post("/v1/chat/completions")
+async def chat_completions(request: ChatRequest):
+    """Point d'entree principal. REQ-2.1.1, REQ-2.1.2"""
+    ts = datetime.now().strftime("%H:%M:%S")
+    print(f"\n{'='*60}\n[{ts}] REQUETE | modele: {request.model} | stream: {request.stream}")
+    formatted = _format_prompt(request.messages)
+    pyperclip.copy(formatted)
+    initial_hash = _hash(formatted)
+    print(f"[{ts}] {'GEM MODE' if USE_GEM_MODE else 'MODE COMPLET'} | {len(formatted)} chars")
+    print(f"[{ts}] PROMPT COPIE ! ACTION : 1.Chrome 2.Gem 3.Ctrl+V 4.Attendre 5.Ctrl+A+C")
+    print(f"         Timeout dans {TIMEOUT_SECONDS}s...")
+    response_text = await _wait_clipboard(initial_hash, ts)
+    if request.stream:
+        return StreamingResponse(_stream_response(response_text, request.model), media_type="text/event-stream")
+    return JSONResponse(content=_build_json_response(response_text, request.model), status_code=200)
 
 @app.get("/v1/models")
 async def list_models():
-    """Endpoint de compatibilite OpenAI pour la liste des modeles."""
-    return JSONResponse(content={
-        "object": "list",
-        "data": [{"id": "gemini-manual", "object": "model", "created": int(time.time())}]
-    })
+    return JSONResponse({"object": "list", "data": [{"id": "gemini-manual", "object": "model", "created": int(time.time()), "owned_by": "uadf-proxy"}]})
+
+@app.get("/health")
+async def health_check():
+    return {"status": "ok", "proxy": "UADF", "version": "2.0.0", "gem_mode": USE_GEM_MODE}
 
 if __name__ == "__main__":
-    mode_str = "GEM MODE (system prompt filtre)" if USE_GEM_MODE else "MODE COMPLET"
-    print(f"UADF Proxy demarre sur http://localhost:{PORT}/v1")
-    print(f"Mode: {mode_str}")
-    print(f"Timeout: {TIMEOUT_SECONDS}s | Polling: {POLLING_INTERVAL}s")
-    uvicorn.run(app, host="0.0.0.0", port=PORT)
+    print(f"{'='*60}\n  UADF PROXY v2.0 | http://localhost:{PORT}/v1\n  Mode: {'GEM' if USE_GEM_MODE else 'COMPLET'} | Timeout: {TIMEOUT_SECONDS}s\n{'='*60}")
+    uvicorn.run(app, host="0.0.0.0", port=PORT, log_level="warning")
 ```
 
 ---
 
-### Couche E — Configuration Gemini Chrome (Gem Dedie)
+### Couche E — Configuration Gemini Chrome (Gem Dédié)
 
-**Role :** Prepare l'interface Gemini Web pour repondre dans le format exact attendu par Roo Code.
-
-**Decision d'Architecture DA-010 :**
-> Un "Gem" dedie est cree dans Gemini Web avec l'integralite du system prompt de Roo Code. Cette approche evite de retransmettre le system prompt (plusieurs milliers de tokens) a chaque requete via le presse-papiers, rendant le transfert ultra-leger et rapide.
-
-**Contenu du System Prompt du Gem Roo Code :**
+**Contenu du System Prompt du Gem "Roo Code Agent" (SP-007) :**
 ```
-Tu es l'agent de codage de Roo Code, un assistant IA expert en developpement logiciel.
+Tu es l'agent de codage integre dans Roo Code, un assistant IA expert en developpement logiciel.
 
 REGLES ABSOLUES ET NON-NEGOCIABLES :
 1. Tu dois TOUJOURS repondre en utilisant les balises XML de Roo Code.
-2. Tu ne dois JAMAIS generer de texte de courtoisie avant ou apres tes balises XML.
-3. Tu ne dois JAMAIS expliquer ce que tu vas faire : tu le fais directement.
-4. Tu dois TOUJOURS utiliser une seule balise XML par action.
+2. Tu ne dois JAMAIS generer de texte de courtoisie, d'introduction ou de conclusion.
+3. Tu ne dois JAMAIS expliquer ce que tu vas faire : tu le fais directement avec les balises XML.
+4. Tu dois traiter chaque message comme une instruction directe a executer.
+5. Si tu as besoin d'informations supplementaires, utilise ask_followup_question.
 
 BALISES XML DISPONIBLES :
-- <write_to_file><path>...</path><content>...</content></write_to_file>
-- <read_file><path>...</path></read_file>
-- <execute_command><command>...</command></execute_command>
-- <replace_in_file><path>...</path><diff>...</diff></replace_in_file>
-- <list_files><path>...</path></list_files>
-- <search_files><path>...</path><regex>...</regex></search_files>
-- <attempt_completion><result>...</result></attempt_completion>
-- <ask_followup_question><question>...</question></ask_followup_question>
+- write_to_file (path + content) : creer ou ecrire un fichier complet
+- read_file (path) : lire un fichier
+- execute_command (command) : executer une commande terminal
+- replace_in_file (path + diff) : modifier une partie d'un fichier
+- list_files (path) : lister les fichiers d'un dossier
+- search_files (path + regex) : rechercher dans les fichiers
+- attempt_completion (result) : signaler la completion d'une tache
+- ask_followup_question (question) : poser une question a l'utilisateur
 
-EXEMPLE DE REPONSE CORRECTE pour "Cree un fichier hello.py":
-<write_to_file>
-<path>hello.py</path>
-<content>
-print("Bonjour")
-</content>
-</write_to_file>
-<attempt_completion>
-<result>Fichier hello.py cree avec succes.</result>
-</attempt_completion>
+RAPPEL : Aucun texte avant la premiere balise XML. Aucun texte apres la derniere balise XML.
 ```
 
 ---
 
-## 2.6 Couche Moteur LLM Cloud Direct (Mode Claude API)
+### Couche F — Registre des Prompts (`prompts/`)
 
-| Composant | Technologie | Version Recommandee | Role |
-| :--- | :--- | :--- | :--- |
-| **Fournisseur API** | Anthropic API | v1 (stable) | API cloud officielle Anthropic, connexion directe sans proxy |
-| **Modele** | `claude-sonnet-4-5` | Derniere stable Sonnet | Modele de haute qualite, natif Roo Code, tool use integre |
-| **Endpoint** | `https://api.anthropic.com` | — | Point d'entree HTTPS officiel Anthropic |
-| **Authentification** | Cle API Anthropic (`sk-ant-...`) | — | Stockee dans VS Code SecretStorage via Roo Code |
-| **Provider Roo Code** | "Anthropic" (natif) | — | Fournisseur integre dans Roo Code, aucun middleware requis |
-
----
-
-## 4. Decisions d'Architecture — Recapitulatif
-
-| ID | Decision | Justification | Exigences Adressees |
-| :--- | :--- | :--- | :--- |
-| **DA-001** | `.roomodes` comme registre central des personas | Separation claire entre configuration et comportement | REQ-3.1, REQ-3.2 |
-| **DA-002** | `.clinerules` comme declencheur de session | Garantit la lecture/ecriture de la Memory Bank sans dependance au bon vouloir du LLM | REQ-4.2, REQ-4.3 |
-| **DA-003** | Memory Bank segmentee en 7 fichiers thematiques | Evite la pollution contextuelle, optimise l'attention du LLM | REQ-4.4 |
-| **DA-004** | Modelfile avec Temperature=0.15 et num_ctx=131072 | Determinisme maximal et contexte suffisant pour charger tout le projet | REQ-1.2, REQ-1.3 |
-| **DA-005** | Boomerang Tasks pour delegation aux modeles legers | Optimisation VRAM et acceleration des cycles repetitifs | REQ-1.4 |
-| **DA-006** | FastAPI + asyncio pour le proxy | Maintien de la connexion HTTP ouverte pendant l'attente humaine sans bloquer | REQ-2.3.1 |
-| **DA-007** | Emulation format OpenAI Chat Completions | Compatibilite native avec Roo Code sans modification de son code source | REQ-2.1.2, REQ-2.4.1 |
-| **DA-008** | Mode "Gem dedie" avec filtrage du system prompt | Reduction de 80%+ de la taille du transfert presse-papiers | REQ-2.1.4 |
-| **DA-009** | Nettoyage des contenus base64 | Evite les echecs silencieux lors de requetes contenant des images | REQ-2.1.5 |
-| **DA-010** | Gem Gemini avec system prompt Roo Code integre | Evite la retransmission du system prompt a chaque requete | REQ-5.1, REQ-5.2 |
-| **DA-011** | Fournisseur Anthropic natif Roo Code pour le Mode Cloud | Utiliser le provider integre "Anthropic" de Roo Code garantit la compatibilite totale avec le streaming, la vision et le tool use natif de Claude, sans aucun middleware ou proxy supplementaire. La cle API est stockee dans VS Code SecretStorage, jamais dans les fichiers du projet. | REQ-6.1, REQ-6.2, REQ-6.3, REQ-6.4 |
-| **DA-012** | Registre centralise des system prompts dans `prompts/` | Les system prompts etant disperses dans plusieurs artefacts (.roomodes JSON, .clinerules texte, Modelfile compile, Gemini Web externe), un repertoire `prompts/` versionne contient une copie canonique de chaque prompt avec metadonnees YAML (cible, version, dependances). REGLE 6 dans `.clinerules` impose la coherence avant chaque commit. Le seul prompt non-versionnable (Gem Gemini) est marque `hors_git: true` avec procedure de deploiement manuel documentee. | REQ-7.1, REQ-7.2, REQ-7.3, REQ-7.4, REQ-7.5 |
-| **DA-013** | Verification automatique de coherence via script PowerShell + hook Git pre-commit | REGLE 6 etant une directive comportementale (non technique), elle peut etre ignoree par un agent LLM. Un script `scripts/check-prompts-sync.ps1` compare le contenu deploye avec les SP canoniques et produit un rapport PASS/FAIL. Un hook Git `.git/hooks/pre-commit` appelle ce script automatiquement et bloque le commit si desynchronisation detectee. SP-007 est exclu de la verification automatique (externe Git) avec avertissement de verification manuelle. | REQ-8.1, REQ-8.2, REQ-8.3, REQ-8.4 |
+| Fichier SP | Cible de Déploiement | Champ Cible | Hors Git |
+| :--- | :--- | :--- | :---: |
+| `SP-001-ollama-modelfile-system.md` | `Modelfile` | Bloc `SYSTEM """..."""` | Non |
+| `SP-002-clinerules-global.md` | `.clinerules` | Fichier entier | Non |
+| `SP-003-persona-product-owner.md` | `.roomodes` | `customModes[0].roleDefinition` | Non |
+| `SP-004-persona-scrum-master.md` | `.roomodes` | `customModes[1].roleDefinition` | Non |
+| `SP-005-persona-developer.md` | `.roomodes` | `customModes[2].roleDefinition` | Non |
+| `SP-006-persona-qa-engineer.md` | `.roomodes` | `customModes[3].roleDefinition` | Non |
+| `SP-007-gem-gemini-roo-agent.md` | `gemini.google.com > Gems > Instructions` | Instructions du Gem | **Oui** |
 
 ---
 
-## 5. Matrice de Tracabilite Architecture / Fonctionnalite / Exigence
+## 6. Matrice de Traçabilité Architecture / Fonctionnalité / Exigence
 
-Cette matrice est le document de reference central. Elle relie chaque composant technique a sa fonctionnalite et aux exigences du PRD qu'il adresse.
-
-| Composant Architectural | Couche | Fonctionnalite Detaillee | Decisions | Exigences PRD |
+| Composant Architectural | Couche | Fonctionnalité | Décisions | Exigences PRD |
 | :--- | :--- | :--- | :--- | :--- |
-| **VS Code + Roo Code** | Interface | Environnement principal. Moteur d'execution agentique. Gestion fichiers, terminal, diffs. | — | REQ-000 |
-| **Fichier `.roomodes`** | Orchestration | Registre JSON des personas Agile. Definit slug, nom, roleDefinition et groupes de permissions. | DA-001 | REQ-3.1, REQ-3.2, REQ-3.3 |
-| **Fichier `.clinerules`** | Orchestration | Directives imperatives injectees dans chaque session. Force lecture Memory Bank au demarrage et ecriture a la cloture. | DA-002 | REQ-4.2, REQ-4.3 |
-| **Persona `product-owner`** | Orchestration | Mode Roo Code PO. Permissions limitees a lecture et ecriture de documentation uniquement. | DA-001 | REQ-3.1, REQ-3.2, REQ-3.3 |
-| **Persona `scrum-master`** | Orchestration | Mode Roo Code SM. Permissions incluant la gestion de la Memory Bank. | DA-001 | REQ-3.1, REQ-3.2, REQ-3.3 |
-| **Persona `developer`** | Orchestration | Mode Roo Code Dev. Permissions completes : code, terminal, navigateur. | DA-001 | REQ-3.1, REQ-3.2, REQ-3.3 |
-| **Persona `qa-engineer`** | Orchestration | Mode Roo Code QA. Permissions limitees aux commandes de test et rapports. | DA-001 | REQ-3.1, REQ-3.2, REQ-3.3 |
-| **Ollama (daemon Windows)** | Moteur LLM Local | Moteur d'inference local. Gestion VRAM. API REST compatible OpenAI sur localhost:11434. | — | REQ-1.0, REQ-000 |
-| **Modele `mychen76/qwen3_cline_roocode:32b`** | Moteur LLM Local | Modele principal fine-tune pour Tool Calling Roo Code. Genere les balises XML sans erreur de syntaxe. | DA-004 | REQ-1.1 |
-| **`Modelfile` (Temperature=0.15, Min_P=0.03)** | Moteur LLM Local | Verrouillage du determinisme. Elimination des hallucinations lors de la generation de code. | DA-004 | REQ-1.3 |
-| **`Modelfile` (num_ctx=131072)** | Moteur LLM Local | Fenetre de contexte 128K tokens. Chargement simultane du projet et de la Memory Bank. | DA-004 | REQ-1.2 |
-| **Modele secondaire `qwen3:7b` + Boomerang** | Moteur LLM Local | Delegation des taches repetitives au modele leger. Recuperation de la sortie par l'agent principal. | DA-005 | REQ-1.4 |
-| **`proxy.py` — Route POST `/v1/chat/completions`** | Proxy Hybride | Point d'entree unique. Intercepte les requetes HTTP POST de Roo Code au format OpenAI. | DA-006, DA-007 | REQ-2.1.1, REQ-2.1.2 |
-| **`proxy.py` — Fonction `_format_prompt()`** | Proxy Hybride | Extraction et formatage du payload. Separe system prompt, historique et user prompt. | DA-008 | REQ-2.1.3, REQ-2.1.4 |
-| **`proxy.py` — Fonction `_clean_content()`** | Proxy Hybride | Nettoyage des contenus base64. Remplace les images par un message d'avertissement textuel. | DA-009 | REQ-2.1.5 |
-| **`proxy.py` — `pyperclip.copy()`** | Proxy Hybride | Injection du prompt formate dans le presse-papiers Windows. | — | REQ-2.2.1 |
-| **`proxy.py` — Formatage avec separateurs** | Proxy Hybride | Structure lisible avec balises [SYSTEM PROMPT], [USER], [ASSISTANT] pour l'utilisateur humain. | DA-008 | REQ-2.2.2 |
-| **`proxy.py` — Messages console horodates** | Proxy Hybride | Notification utilisateur avec timestamp, taille du prompt et instructions d'action claires. | — | REQ-2.2.3 |
-| **`proxy.py` — Boucle `asyncio` + `pyperclip.paste()`** | Proxy Hybride | Polling asynchrone du presse-papiers toutes les secondes. Non-bloquant grace a asyncio. | DA-006 | REQ-2.3.1 |
-| **`proxy.py` — Comparaison de hash MD5** | Proxy Hybride | Detection du changement de contenu du presse-papiers. Identifie le moment ou l'humain a copie la reponse Gemini. | — | REQ-2.3.2 |
-| **`proxy.py` — Timeout 300s + HTTP 408** | Proxy Hybride | Gestion du cas de non-reponse. Retourne HTTP 408 avec message explicatif apres le delai configure. | — | REQ-2.3.3 |
-| **`proxy.py` — Fonction `_validate_response()`** | Proxy Hybride | Verification de la presence de balises XML Roo Code dans la reponse Gemini. Avertissement console si absent. | — | REQ-2.3.4 |
-| **`proxy.py` — Fonction `_build_openai_response()`** | Proxy Hybride | Construction du JSON de reponse au format OpenAI Chat Completions avec tous les champs requis. | DA-007 | REQ-2.4.1 |
-| **`proxy.py` — `JSONResponse(status_code=200)`** | Proxy Hybride | Cloture propre de la requete HTTP avec code 200 OK et Content-Type application/json. | — | REQ-2.4.2 |
-| **`proxy.py` — Transmission du contenu brut** | Proxy Hybride | Contenu de la reponse Gemini transmis tel quel dans choices[0].message.content sans modification. | — | REQ-2.4.3 |
-| **Repertoire `memory-bank/`** | Memoire | Conteneur de toute la memoire contextuelle. Integre au depot Git pour versionnement. | DA-003 | REQ-4.1, REQ-4.5 |
-| **`memory-bank/projectBrief.md`** | Memoire | Vision, objectifs, Non-Goals et contraintes du projet. Lu en debut de projet. | DA-003 | REQ-4.4 |
-| **`memory-bank/productContext.md`** | Memoire | User Stories, valeur metier, personas utilisateurs. Lu en debut de sprint. | DA-003 | REQ-4.4 |
-| **`memory-bank/systemPatterns.md`** | Memoire | Architecture des dossiers, conventions de nommage, patterns techniques. | DA-003 | REQ-4.4 |
-| **`memory-bank/techContext.md`** | Memoire | Stack technique, versions, commandes de build/test, variables d'environnement. | DA-003 | REQ-4.4 |
-| **`memory-bank/activeContext.md`** | Memoire | Memoire vive de la session. Tache en cours, dernier bug, prochaine action. Lu et ecrit a chaque session. | DA-002, DA-003 | REQ-4.2, REQ-4.3, REQ-4.4 |
-| **`memory-bank/progress.md`** | Memoire | Checklist macro des Epics et features. Lu et mis a jour a chaque validation de feature. | DA-002, DA-003 | REQ-4.2, REQ-4.3, REQ-4.4 |
-| **`memory-bank/decisionLog.md`** | Memoire | Registre des ADR horodates. Mis a jour apres chaque decision d'architecture. | DA-003 | REQ-4.4, REQ-4.5 |
-| **Gem Gemini Chrome** | Gemini Config | Profil dedie dans Gemini Web contenant l'integralite du system prompt Roo Code. Evite la retransmission a chaque requete. | DA-010 | REQ-5.1, REQ-5.2 |
-| **Instructions du Gem (balises XML)** | Gemini Config | Regles strictes imposant a Gemini de repondre uniquement avec les balises XML Roo Code, sans texte de courtoisie. | DA-010 | REQ-5.2 |
-| **Historique de conversation dans le presse-papiers** | Gemini Config | Transmission de l'historique multi-tours pour maintenir la coherence des reponses Gemini. | DA-008 | REQ-5.3 |
-| **Configuration Roo Code (Base URL)** | Commutateur LLM | Parametre permettant de basculer entre Ollama (port 11434), le proxy (port 8000) et l'API Anthropic sans modifier Roo Code. | DA-007, DA-011 | REQ-2.0 |
-| **Variable `USE_GEM_MODE`** | Proxy Hybride | Commutateur de comportement du proxy. Active le filtrage du system prompt quand le Gem est configure. | DA-008 | REQ-2.1.4 |
-| **Provider "Anthropic" dans Roo Code** | Cloud Direct | Fournisseur natif Roo Code pour l'API Anthropic. Connexion directe a api.anthropic.com sans proxy ni middleware. | DA-011 | REQ-6.3 |
-| **Cle API Anthropic (VS Code SecretStorage)** | Cloud Direct | Authentification aupres de l'API Anthropic. Stockee dans le gestionnaire de secrets chiffre de VS Code, jamais dans les fichiers du projet. | DA-011 | REQ-6.1, REQ-6.4 |
-| **Modele `claude-sonnet-4-5`** | Cloud Direct | Modele Claude Sonnet de haute qualite. Repond nativement aux balises XML Roo Code sans configuration supplementaire du format. | DA-011 | REQ-6.2 |
-| **Tableau comparatif 3 modes (DOC1 section 5)** | Commutateur LLM | Reference documentaire permettant a l'utilisateur de choisir le mode LLM adapte a son contexte (cout, vitesse, souverainete). | DA-011 | REQ-6.0, REQ-2.0 |
-| **Repertoire `prompts/`** | Registre Prompts | Dossier versionne contenant les 7 fichiers SP canoniques. Source de verite unique pour tous les system prompts du systeme. | DA-012 | REQ-7.1 |
-| **Fichiers `prompts/SP-XXX-*.md`** | Registre Prompts | Fichiers canoniques avec en-tete YAML (id, version, target_file, target_field, depends_on, changelog). Un fichier par prompt. | DA-012 | REQ-7.1, REQ-7.2, REQ-7.4 |
-| **`prompts/README.md`** | Registre Prompts | Index de tous les prompts avec tableau ID / fichier / cible / flag Hors Git. Point d'entree du registre. | DA-012 | REQ-7.2 |
-| **REGLE 6 dans `.clinerules`** | Registre Prompts | Directive imperative imposant la verification de coherence du registre avant tout commit touchant proxy.py, .roomodes, .clinerules ou Modelfile. | DA-012 | REQ-7.3 |
-| **Flag `hors_git: true` dans SP-007** | Registre Prompts | Marqueur identifiant le Gem Gemini comme le seul prompt a deploiement manuel. Declenche l'obligation de mention "DEPLOIEMENT MANUEL REQUIS" dans le commit. | DA-012 | REQ-7.5 |
-| **`scripts/check-prompts-sync.ps1`** | Verification Prompts | Script PowerShell comparant le contenu deploye de chaque artefact (Modelfile, .clinerules, .roomodes) avec le SP canonique correspondant. Produit un rapport PASS/FAIL avec diff si desynchronisation. SP-007 exclu avec avertissement manuel. | DA-013 | REQ-8.1, REQ-8.3, REQ-8.4 |
-| **`.git/hooks/pre-commit`** | Verification Prompts | Hook Git appelant automatiquement check-prompts-sync.ps1 avant chaque commit. Bloque le commit avec message explicatif si desynchronisation detectee entre un SP canonique et son artefact cible. | DA-013 | REQ-8.2 |
+| **VS Code + Roo Code** | Interface | Moteur d'exécution agentique central | — | REQ-000 |
+| **`.roomodes`** | Orchestration | Registre JSON des 4 personas Agile avec RBAC | DA-001 | REQ-3.1, REQ-3.2, REQ-3.3, REQ-3.4 |
+| **`.clinerules`** | Orchestration | 6 règles impératives : Memory Bank, Git, Cohérence Prompts | DA-002 | REQ-4.2, REQ-4.3, REQ-7.3 |
+| **Persona `product-owner`** | Orchestration | Rédaction User Stories, lecture docs, refus code | DA-001 | REQ-3.1, REQ-3.2, REQ-3.3 |
+| **Persona `scrum-master`** | Orchestration | Facilitation Agile, Memory Bank, Git uniquement, pas de tests | DA-001 | REQ-3.1, REQ-3.2, REQ-3.4 |
+| **Persona `developer`** | Orchestration | Implémentation complète, code + terminal + Git | DA-001 | REQ-3.1, REQ-3.2 |
+| **Persona `qa-engineer`** | Orchestration | Tests + rapports QA, pas de modification code source | DA-001 | REQ-3.1, REQ-3.2 |
+| **Ollama (daemon Windows)** | Moteur LLM Local | Inférence locale, API REST OpenAI sur localhost:11434 | — | REQ-1.0, REQ-000 |
+| **`mychen76/qwen3_cline_roocode:32b`** | Moteur LLM Local | Modèle principal fine-tuné Tool Calling Roo Code | DA-004 | REQ-1.1 |
+| **`Modelfile` (T=0.15, num_ctx=131072)** | Moteur LLM Local | Déterminisme + fenêtre contexte 128K tokens | DA-004 | REQ-1.2, REQ-1.3 |
+| **`qwen3:7b` + Boomerang Tasks** | Moteur LLM Local | Délégation tâches légères au modèle secondaire | DA-005 | REQ-1.4 |
+| **`proxy.py` — POST `/v1/chat/completions`** | Proxy Hybride | Point d'entrée unique, interception requêtes Roo Code | DA-006, DA-007 | REQ-2.1.1, REQ-2.1.2 |
+| **`proxy.py` — `_format_prompt()`** | Proxy Hybride | Extraction payload, filtrage system prompt (GEM MODE) | DA-008 | REQ-2.1.3, REQ-2.1.4 |
+| **`proxy.py` — `_clean_content()`** | Proxy Hybride | Nettoyage images base64, remplacement par message textuel | DA-009 | REQ-2.1.5 |
+| **`proxy.py` — `pyperclip.copy()`** | Proxy Hybride | Injection prompt formaté dans presse-papiers Windows | — | REQ-2.2.1 |
+| **`proxy.py` — Séparateurs `[USER]`, `[ASSISTANT]`** | Proxy Hybride | Format lisible avec séparateurs explicites | DA-008 | REQ-2.2.2 |
+| **`proxy.py` — Messages console horodatés** | Proxy Hybride | Notification utilisateur avec timestamp et 5 instructions | — | REQ-2.2.3 |
+| **`proxy.py` — Boucle `asyncio` + `pyperclip.paste()`** | Proxy Hybride | Polling asynchrone non-bloquant toutes les secondes | DA-006 | REQ-2.3.1 |
+| **`proxy.py` — Comparaison hash MD5** | Proxy Hybride | Détection changement presse-papiers | — | REQ-2.3.2 |
+| **`proxy.py` — Timeout 300s + HTTP 408** | Proxy Hybride | Gestion non-réponse utilisateur | — | REQ-2.3.3 |
+| **`proxy.py` — `_validate_response()`** | Proxy Hybride | Vérification présence balises XML Roo Code (warning non-bloquant) | — | REQ-2.3.4 |
+| **`proxy.py` — `_stream_response()` (SSE)** | Proxy Hybride | Réponse SSE en un seul chunk si `stream=true` | DA-014 | REQ-2.4.1, REQ-2.4.3 |
+| **`proxy.py` — `_build_json_response()`** | Proxy Hybride | Réponse JSON OpenAI complète si `stream=false` | DA-007 | REQ-2.4.2, REQ-2.4.3 |
+| **`proxy.py` — Transmission contenu brut** | Proxy Hybride | Contenu Gemini transmis tel quel sans modification | — | REQ-2.4.4 |
+| **`memory-bank/`** | Mémoire | Conteneur mémoire contextuelle, intégré Git | DA-003 | REQ-4.1, REQ-4.5 |
+| **`memory-bank/activeContext.md`** | Mémoire | Mémoire vive de session, lu et écrit à chaque session | DA-002, DA-003 | REQ-4.2, REQ-4.3, REQ-4.4 |
+| **`memory-bank/progress.md`** | Mémoire | Checklist phases UADF et features produit | DA-002, DA-003 | REQ-4.2, REQ-4.3, REQ-4.4 |
+| **`memory-bank/projectBrief.md`** | Mémoire | Vision, objectifs, Non-Goals, contraintes | DA-003 | REQ-4.4 |
+| **`memory-bank/productContext.md`** | Mémoire | User Stories, valeur métier, backlog | DA-003 | REQ-4.4 |
+| **`memory-bank/systemPatterns.md`** | Mémoire | Architecture, conventions, patterns techniques | DA-003 | REQ-4.4 |
+| **`memory-bank/techContext.md`** | Mémoire | Stack, versions, commandes, variables d'env | DA-003 | REQ-4.4 |
+| **`memory-bank/decisionLog.md`** | Mémoire | ADR horodatés après chaque décision d'architecture | DA-003 | REQ-4.4, REQ-4.5 |
+| **Gem Gemini "Roo Code Agent"** | Gemini Config | Profil dédié avec system prompt Roo Code complet (SP-007) | DA-010 | REQ-5.1, REQ-5.2 |
+| **Instructions du Gem (balises XML)** | Gemini Config | Règles strictes imposant réponses XML uniquement, sans texte parasite | DA-010 | REQ-5.2 |
+| **Historique conversation dans presse-papiers** | Gemini Config | Transmission historique multi-tours pour cohérence des réponses | DA-008 | REQ-5.3 |
+| **Provider "Anthropic" dans Roo Code** | Cloud Direct | Connexion directe à api.anthropic.com sans proxy | DA-011 | REQ-6.3 |
+| **Clé API Anthropic (VS Code SecretStorage)** | Cloud Direct | Authentification Anthropic, stockée chiffrée, jamais dans Git | DA-011 | REQ-6.1, REQ-6.4 |
+| **Modèle `claude-sonnet-4-6`** | Cloud Direct | Modèle Claude Sonnet haute qualité, natif Roo Code | DA-011 | REQ-6.2 |
+| **Commutateur Provider Roo Code** | Commutateur LLM | Bascule entre Ollama/Proxy/Anthropic sans modifier Roo Code | DA-007, DA-011 | REQ-2.0 |
+| **Variable `USE_GEM_MODE`** | Proxy Hybride | Active le filtrage du system prompt quand Gem configuré | DA-008 | REQ-2.1.4 |
+| **Répertoire `prompts/`** | Registre Prompts | Source de vérité unique pour tous les system prompts | DA-012 | REQ-7.1 |
+| **Fichiers `prompts/SP-XXX-*.md`** | Registre Prompts | Fichiers canoniques avec en-tête YAML (id, version, target, changelog) | DA-012 | REQ-7.1, REQ-7.2, REQ-7.4 |
+| **`prompts/README.md`** | Registre Prompts | Index du registre avec tableau ID/fichier/cible/Hors Git | DA-012 | REQ-7.2 |
+| **REGLE 6 dans `.clinerules`** | Registre Prompts | Directive impérative : vérifier cohérence prompts avant commit | DA-012 | REQ-7.3 |
+| **Flag `hors_git: true` dans SP-007** | Registre Prompts | Marqueur déploiement manuel, déclenche mention commit obligatoire | DA-012 | REQ-7.5 |
+| **`scripts/check-prompts-sync.ps1`** | Vérification Prompts | Comparaison normalisée SP canoniques vs artefacts, rapport PASS/FAIL avec diff | DA-013 | REQ-8.1, REQ-8.3, REQ-8.4 |
+| **`.git/hooks/pre-commit`** | Vérification Prompts | Hook Git appelant check-prompts-sync.ps1, bloque commit si désync | DA-013 | REQ-8.2 |

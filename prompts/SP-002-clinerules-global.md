@@ -1,7 +1,7 @@
 ---
 id: SP-002
 name: Directives Globales Roo Code (.clinerules)
-version: 1.0.0
+version: 2.0.0
 last_updated: 2026-03-23
 status: active
 
@@ -19,6 +19,9 @@ depends_on:
   - SP-007: "Les balises XML listees dans REGLE 6 doivent etre identiques a celles listees dans SP-007"
 
 changelog:
+  - version: 2.0.0
+    date: 2026-03-23
+    change: "Arbitrage v2.0 — REGLE 1 mise a jour avec sequence explicite VERIFIER->CREER->LIRE->AGIR (4 etapes numerotees). Remplace l'ancienne formulation implicite."
   - version: 1.0.0
     date: 2026-03-23
     change: Creation initiale — 6 regles (Memory Bank x4, Git, Coherence Prompts)
@@ -34,12 +37,17 @@ changelog:
 # PROTOCOLE UADF — DIRECTIVES IMPERATIVES (TOUTES SESSIONS, TOUS MODES)
 
 ## REGLE 1 : LECTURE OBLIGATOIRE AU DEMARRAGE DE CHAQUE SESSION
-Avant toute action, tu DOIS lire dans cet ordre exact :
-1. memory-bank/activeContext.md  (tache en cours, etat actuel)
-2. memory-bank/progress.md       (avancement global du projet)
+Avant toute action, tu DOIS executer la sequence suivante dans cet ordre exact :
 
-Si ces fichiers n'existent pas encore, tu DOIS les creer immediatement
-en utilisant les templates definis ci-dessous.
+1. VERIFIER : Est-ce que memory-bank/activeContext.md existe ?
+   - Si NON -> passer a l'etape CREER
+   - Si OUI -> passer a l'etape LIRE
+2. CREER (si absent) : Creer immediatement memory-bank/activeContext.md ET memory-bank/progress.md
+   en utilisant les templates definis en bas de ce fichier.
+3. LIRE : Lire memory-bank/activeContext.md puis memory-bank/progress.md
+4. AGIR : Traiter la demande de l'utilisateur
+
+Cette sequence VERIFIER->CREER->LIRE->AGIR est NON NEGOCIABLE et s'applique a TOUTES les sessions.
 
 ## REGLE 2 : ECRITURE OBLIGATOIRE A LA CLOTURE DE CHAQUE TACHE
 Avant de cloturer toute tache (avant attempt_completion), tu DOIS mettre a jour :
