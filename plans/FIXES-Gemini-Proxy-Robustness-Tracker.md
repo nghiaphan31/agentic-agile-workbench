@@ -48,7 +48,7 @@ This file is the **single source of truth** for tracking the application of all 
   print(f"         Timeout dans {TIMEOUT_SECONDS}s...")
   ```
 - **Verification:** Start proxy, send a test request from Roo Code, confirm the new multi-line message appears in console with the "NOUVELLE conversation" warning.
-- **Applied:** [x] Date: 2026-03-23 | Commit: PENDING
+- **Applied:** [x] Date: 2026-03-23 | Commit: fceb6fd
 
 ---
 
@@ -277,7 +277,7 @@ This file is the **single source of truth** for tracking the application of all 
 | Date | Session | Fix Applied | Commit |
 | :--- | :--- | :--- | :--- |
 | 2026-03-23 | Initial review | Tracker created | — |
-| 2026-03-23 | Session 1 | FIX-001 — Console multi-ligne NOUVELLE conversation | PENDING |
+| 2026-03-23 | Session 1 | FIX-001 — Console multi-ligne NOUVELLE conversation | fceb6fd |
 
 ---
 
