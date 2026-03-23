@@ -9,6 +9,7 @@ Changelog:
   v2.0.2 - 2026-03-23 : FIX-004 — try/except autour de pyperclip.paste() pour eviter crash si presse-papiers verrouille (P-003)
   v2.0.3 - 2026-03-23 : FIX-005 — Compteur de requetes dans la console pour distinguer les requetes concurrentes (P-002)
   v2.0.4 - 2026-03-23 : FIX-006 — Verification longueur minimale du contenu colle (GAP-005)
+  v2.0.5 - 2026-03-23 : FIX-008 — Troncature automatique de l'historique via MAX_HISTORY_CHARS (GAP-001)
 """
 import asyncio, hashlib, json, os, time, uuid
 from datetime import datetime
@@ -23,6 +24,8 @@ USE_GEM_MODE = os.getenv("USE_GEM_MODE", "true").lower() == "true"
 POLLING_INTERVAL = float(os.getenv("POLLING_INTERVAL", "1.0"))
 TIMEOUT_SECONDS = int(os.getenv("TIMEOUT_SECONDS", "300"))
 PORT = int(os.getenv("PROXY_PORT", "8000"))
+# FIX-008: Limite de taille de l'historique pour eviter l'explosion du presse-papiers (GAP-001)
+MAX_HISTORY_CHARS = int(os.getenv("MAX_HISTORY_CHARS", "40000"))
 
 # FIX-005: Compteur de requetes pour distinguer les requetes concurrentes dans la console (P-002)
 _request_counter = 0
@@ -44,7 +47,7 @@ class ChatRequest(BaseModel):
     max_tokens: Optional[int] = None
     stream: Optional[bool] = False
 
-app = FastAPI(title="le workbench Proxy", version="2.0.4")
+app = FastAPI(title="le workbench Proxy", version="2.0.5")
 
 def _hash(text: str) -> str:
     return hashlib.md5(text.encode("utf-8")).hexdigest()
@@ -81,7 +84,18 @@ def _format_prompt(messages: List[MessageContent]) -> str:
             parts.append("[USER]\n" + content)
         elif msg.role == "assistant":
             parts.append("[ASSISTANT]\n" + content)
-    return "\n\n---\n\n".join(parts)
+
+    full = "\n\n---\n\n".join(parts)
+    # FIX-008: Troncature de l'historique si depassement de MAX_HISTORY_CHARS (GAP-001)
+    if len(full) > MAX_HISTORY_CHARS:
+        truncated = full[-MAX_HISTORY_CHARS:]
+        # Trouver la premiere frontiere de section complete pour eviter un decoupe au milieu d'un message
+        boundary = truncated.find("[USER]")
+        if boundary > 0:
+            truncated = "[...HISTORIQUE TRONQUE...]\n\n---\n\n" + truncated[boundary:]
+        print(f"  AVERTISSEMENT: Historique tronque ({len(full)} -> {len(truncated)} chars)")
+        return truncated
+    return full
 
 def _validate_response(text: str) -> bool:
     """Verifie la presence de balises XML Roo Code. REQ-2.3.4"""
@@ -168,8 +182,8 @@ async def list_models():
 
 @app.get("/health")
 async def health_check():
-    return {"status": "ok", "proxy": "le workbench", "version": "2.0.4", "gem_mode": USE_GEM_MODE}
+    return {"status": "ok", "proxy": "le workbench", "version": "2.0.5", "gem_mode": USE_GEM_MODE}
 
 if __name__ == "__main__":
-    print(f"{'='*60}\n  le workbench PROXY v2.0.4 | http://localhost:{PORT}/v1\n  Mode: {'GEM' if USE_GEM_MODE else 'COMPLET'} | Timeout: {TIMEOUT_SECONDS}s\n{'='*60}")
+    print(f"{'='*60}\n  le workbench PROXY v2.0.5 | http://localhost:{PORT}/v1\n  Mode: {'GEM' if USE_GEM_MODE else 'COMPLET'} | Timeout: {TIMEOUT_SECONDS}s\n{'='*60}")
     uvicorn.run(app, host="0.0.0.0", port=PORT, log_level="warning")

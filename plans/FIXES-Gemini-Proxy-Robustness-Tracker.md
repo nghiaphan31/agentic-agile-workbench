@@ -1,10 +1,10 @@
 # Fix Tracker — Gemini Proxy Robustness Improvements
 ## Agentic Agile Workbench
 
-**Source review:** `plans/REVIEW-Gemini-Proxy-Path-Robustness.md` + `plans/REVIEW-Gemini-Proxy-Path-Robustness-Part2.md`  
-**Created:** 2026-03-23  
+**Source review:** `plans/REVIEW-Gemini-Proxy-Path-Robustness.md` + `plans/REVIEW-Gemini-Proxy-Path-Robustness-Part2.md`
+**Created:** 2026-03-23
 **Last updated:** 2026-03-23
-**Status:** 🟡 7/12 fixes applied
+**Status:** 🟡 8/12 fixes applied
 
 ---
 
@@ -184,7 +184,7 @@ This file is the **single source of truth** for tracking the application of all 
 ---
 
 ### FIX-008 — Proxy: add MAX_HISTORY_CHARS truncation
-- **Status:** [ ] PENDING
+- **Status:** [x] DONE
 - **File to change:** `template/proxy.py`
 - **Gap addressed:** GAP-001 (clipboard size explosion on long conversations)
 - **What to do:** Add a `MAX_HISTORY_CHARS` environment variable (default: 40000) and truncate oldest messages in `_format_prompt()` if the total exceeds the limit:
@@ -219,7 +219,7 @@ This file is the **single source of truth** for tracking the application of all 
       return full
   ```
 - **Verification:** Send a conversation with 20+ turns — clipboard content stays under 40,000 chars with truncation notice.
-- **Applied:** [ ] Date: ___________ | Commit: ___________
+- **Applied:** [x] Date: 2026-03-23 | Commit: 2e23b9a
 
 ---
 
@@ -266,9 +266,9 @@ This file is the **single source of truth** for tracking the application of all 
 | Priority | Total | Done | Remaining |
 | :--- | :---: | :---: | :---: |
 | P0 — Blocking | 3 | 3 | 0 |
-| P1 — High | 5 | 4 | 1 |
+| P1 — High | 5 | 5 | 0 |
 | P2 — Medium | 4 | 0 | 4 |
-| **TOTAL** | **12** | **7** | **5** |
+| **TOTAL** | **12** | **8** | **4** |
 
 ---
 
@@ -284,6 +284,7 @@ This file is the **single source of truth** for tracking the application of all 
 | 2026-03-23 | Session 5 | FIX-005 — Compteur de requetes #N dans la console (P-002) | 521baa9 |
 | 2026-03-23 | Session 6 | FIX-006 — Verification longueur minimale contenu colle (GAP-005) | 713403c |
 | 2026-03-23 | Session 7 | FIX-007 — Comportement HTTP 408 documenté dans DOC5 section 9.6 (GAP-004) | 8bfc3d1 |
+| 2026-03-23 | Session 8 | FIX-008 — MAX_HISTORY_CHARS troncature historique dans _format_prompt() (GAP-001) | 2e23b9a |
 
 ---
 
