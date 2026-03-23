@@ -230,7 +230,7 @@ This file is the **single source of truth** for tracking the application of all 
 - **File to change:** `workbench/DOC5-GUIDE-Project-Development-Process.md`
 - **Gap addressed:** GAP-007 (cognitive load fatigue on long tasks)
 - **What to do:** Add a new subsection 9.4.1 "Stratégie de découpage des tâches en Mode Proxy" with guidance on keeping tasks under 10 LLM turns.
-- **Applied:** [x] Date: 2026-03-23 | Commit: 22e51aa
+- **Applied:** [x] Date: 2026-03-23 | Commit: 3a6c694
 
 ---
 
@@ -285,7 +285,7 @@ This file is the **single source of truth** for tracking the application of all 
 | 2026-03-23 | Session 6 | FIX-006 — Verification longueur minimale contenu colle (GAP-005) | 713403c |
 | 2026-03-23 | Session 7 | FIX-007 — Comportement HTTP 408 documenté dans DOC5 section 9.6 (GAP-004) | 8bfc3d1 |
 | 2026-03-23 | Session 8 | FIX-008 — MAX_HISTORY_CHARS troncature historique dans _format_prompt() (GAP-001) | dbd43d7 |
-| 2026-03-23 | Session 9 | FIX-009 — Subsection 9.4.1 découpage tâches Mode Proxy dans DOC5 (GAP-007) | 22e51aa |
+| 2026-03-23 | Session 9 | FIX-009 — Subsection 9.4.1 découpage tâches Mode Proxy dans DOC5 (GAP-007) | 3a6c694 |
 
 ---
 
