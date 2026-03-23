@@ -4,7 +4,7 @@
 **Source review:** `plans/REVIEW-Gemini-Proxy-Path-Robustness.md` + `plans/REVIEW-Gemini-Proxy-Path-Robustness-Part2.md`  
 **Created:** 2026-03-23  
 **Last updated:** 2026-03-23
-**Status:** 🟡 3/12 fixes applied
+**Status:** 🟡 4/12 fixes applied
 
 ---
 
@@ -113,7 +113,7 @@ This file is the **single source of truth** for tracking the application of all 
 ## P1 — High Priority Fixes (apply before regular use)
 
 ### FIX-004 — Proxy: add try/except around `pyperclip.paste()`
-- **Status:** [ ] PENDING
+- **Status:** [x] DONE
 - **File to change:** `template/proxy.py`
 - **Gap addressed:** P-003 (proxy crash if clipboard locked or contains non-text content)
 - **What to do:** In [`_wait_clipboard()`](template/proxy.py) function, wrap `pyperclip.paste()` in try/except:
@@ -125,7 +125,7 @@ This file is the **single source of truth** for tracking the application of all 
       continue
   ```
 - **Verification:** Lock clipboard with another app, confirm proxy prints warning and continues polling instead of crashing.
-- **Applied:** [ ] Date: ___________ | Commit: ___________
+- **Applied:** [x] Date: 2026-03-23 | Commit: 47a4f25
 
 ---
 
@@ -266,9 +266,9 @@ This file is the **single source of truth** for tracking the application of all 
 | Priority | Total | Done | Remaining |
 | :--- | :---: | :---: | :---: |
 | P0 — Blocking | 3 | 3 | 0 |
-| P1 — High | 5 | 0 | 5 |
+| P1 — High | 5 | 1 | 4 |
 | P2 — Medium | 4 | 0 | 4 |
-| **TOTAL** | **12** | **3** | **9** |
+| **TOTAL** | **12** | **4** | **8** |
 
 ---
 
@@ -280,6 +280,7 @@ This file is the **single source of truth** for tracking the application of all 
 | 2026-03-23 | Session 1 | FIX-001 — Console multi-ligne NOUVELLE conversation | fceb6fd |
 | 2026-03-23 | Session 2 | FIX-002 — SP-007 v1.1.0 replace_in_file + list_files | 62ea897 |
 | 2026-03-23 | Session 3 | FIX-003 — Boomerang Tasks limitation documentée (DOC1+DOC2+DOC5) | 51bf71a |
+| 2026-03-23 | Session 4 | FIX-004 — try/except pyperclip.paste() dans _wait_clipboard() | 47a4f25 |
 
 ---
 

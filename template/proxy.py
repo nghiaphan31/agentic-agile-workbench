@@ -6,6 +6,7 @@ Exigences: REQ-2.1.1 a REQ-2.4.4
 Changelog:
   v2.0.0 - 2026-03-23 : Creation initiale (DA-006, DA-007, DA-008, DA-009, DA-014)
   v2.0.1 - 2026-03-23 : FIX-001 — Console multi-ligne avec avertissement NOUVELLE conversation (GAP-006)
+  v2.0.2 - 2026-03-23 : FIX-004 — try/except autour de pyperclip.paste() pour eviter crash si presse-papiers verrouille (P-003)
 """
 import asyncio, hashlib, json, os, time, uuid
 from datetime import datetime
@@ -38,7 +39,7 @@ class ChatRequest(BaseModel):
     max_tokens: Optional[int] = None
     stream: Optional[bool] = False
 
-app = FastAPI(title="le workbench Proxy", version="2.0.1")
+app = FastAPI(title="le workbench Proxy", version="2.0.2")
 
 def _hash(text: str) -> str:
     return hashlib.md5(text.encode("utf-8")).hexdigest()
@@ -109,7 +110,12 @@ async def _wait_clipboard(initial_hash: str, ts: str) -> str:
     start = time.time()
     while True:
         await asyncio.sleep(POLLING_INTERVAL)
-        current = pyperclip.paste()
+        # FIX-004: try/except pour eviter crash si presse-papiers verrouille ou contenu non-texte (P-003)
+        try:
+            current = pyperclip.paste()
+        except Exception as e:
+            print(f"[{ts}] AVERTISSEMENT: Erreur acces presse-papiers: {e}")
+            continue
         if _hash(current) != initial_hash:
             elapsed = time.time() - start
             print(f"[{ts}] REPONSE DETECTEE ! {len(current)} chars en {elapsed:.1f}s")
@@ -149,8 +155,8 @@ async def list_models():
 
 @app.get("/health")
 async def health_check():
-    return {"status": "ok", "proxy": "le workbench", "version": "2.0.1", "gem_mode": USE_GEM_MODE}
+    return {"status": "ok", "proxy": "le workbench", "version": "2.0.2", "gem_mode": USE_GEM_MODE}
 
 if __name__ == "__main__":
-    print(f"{'='*60}\n  le workbench PROXY v2.0.1 | http://localhost:{PORT}/v1\n  Mode: {'GEM' if USE_GEM_MODE else 'COMPLET'} | Timeout: {TIMEOUT_SECONDS}s\n{'='*60}")
+    print(f"{'='*60}\n  le workbench PROXY v2.0.2 | http://localhost:{PORT}/v1\n  Mode: {'GEM' if USE_GEM_MODE else 'COMPLET'} | Timeout: {TIMEOUT_SECONDS}s\n{'='*60}")
     uvicorn.run(app, host="0.0.0.0", port=PORT, log_level="warning")
