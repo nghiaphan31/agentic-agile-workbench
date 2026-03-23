@@ -1,7 +1,7 @@
-# Document 1 : Product Requirements Document (PRD)
-## Unified Agentic Development Framework (UADF)
+﻿# Document 1 : Product Requirements Document (PRD)
+## Agentic Agile Workbench
 
-**Nom du Projet :** Unified Agentic Development Framework (UADF)
+**Nom du Projet :** Agentic Agile Workbench
 **Version :** 2.0 — Refactorisé (exigences atomiques, arbitrages intégrés)
 **Date :** 2026-03-23
 **Auteur :** Architecture Senior — Synthèse mychen76 LAAW + Proxy Gemini Chrome
@@ -150,7 +150,7 @@ Le système doit permettre à Roo Code de se connecter directement à l'API offi
 ### 3.7 Domaine 7 — Registre Central des Prompts Système (REQ-7.x)
 
 #### REQ-7.0 — Registre Centralisé des System Prompts
-Le système doit maintenir un répertoire `prompts/` contenant une version canonique et à jour de chaque system prompt utilisé dans UADF, avec identification précise de sa cible de déploiement.
+Le système doit maintenir un répertoire `prompts/` contenant une version canonique et à jour de chaque system prompt utilisé dans le workbench, avec identification précise de sa cible de déploiement.
 
 | ID | Exigence | Description Détaillée | Critère d'Acceptation |
 | :--- | :--- | :--- | :--- |
@@ -331,22 +331,22 @@ Le système doit fournir un mécanisme automatique de détection des désynchron
 | **HTTP** | HyperText Transfer Protocol | Protocole de communication web. Le proxy écoute sur HTTP (localhost:8000). L'API Anthropic utilise HTTPS. |
 | **HTTPS** | HTTP Secure | Version chiffrée de HTTP. Utilisée pour les connexions à l'API Anthropic et à Gemini Web. |
 | **JSON** | JavaScript Object Notation | Format de données texte structuré. Utilisé pour `.roomodes`, les réponses API OpenAI, et les requêtes du proxy. |
-| **LAAW** | Local Agentic Agile Workflow | Blueprint de développement agentique local créé par mychen76, source d'inspiration principale pour la Memory Bank et les personas Agile de l'UADF. |
+| **LAAW** | Local Agentic Agile Workflow | Blueprint de développement agentique local créé par mychen76, source d'inspiration principale pour la Memory Bank et les personas Agile du workbench. |
 | **LLM** | Large Language Model | Grand modèle de langage. Exemples : Qwen3-32B (local via Ollama), Gemini Pro (cloud Google), Claude Sonnet (cloud Anthropic). |
 | **MD5** | Message Digest 5 | Algorithme de hachage utilisé par le proxy pour détecter les changements dans le presse-papiers (comparaison de hash avant/après). |
 | **MCP** | Model Context Protocol | Protocole d'extension de Roo Code permettant d'intégrer des outils externes. Accessible uniquement au persona Developer. |
 | **NTFS** | New Technology File System | Système de fichiers Windows utilisé pour stocker la Memory Bank et les fichiers de configuration. |
 | **PO** | Product Owner | Persona Agile responsable de la vision produit, des User Stories et du backlog. Correspond au mode `product-owner` dans `.roomodes`. |
-| **PRD** | Product Requirements Document | Document d'exigences produit. Ce document (DOC1) définit toutes les exigences atomiques du système UADF. |
+| **PRD** | Product Requirements Document | Document d'exigences produit. Ce document (DOC1) définit toutes les exigences atomiques du système le workbench. |
 | **RBAC** | Role-Based Access Control | Contrôle d'accès basé sur les rôles. Chaque persona Agile a une matrice de permissions précise définissant ce qu'il peut lire, écrire et exécuter. |
 | **REQ** | Requirement (Exigence) | Identifiant des exigences dans ce PRD (ex: REQ-000, REQ-2.1.4). Format : REQ-{domaine}.{sous-domaine}. |
 | **REST** | Representational State Transfer | Style d'architecture pour les API web. Ollama expose une API REST sur localhost:11434. |
 | **SM** | Scrum Master | Persona Agile facilitateur pur : gère la Memory Bank et les commits Git, mais ne code pas et n'exécute pas de tests. |
 | **SP** | System Prompt | Fichier canonique du registre `template/prompts/` contenant un prompt système avec métadonnées YAML (id, version, cible, changelog). |
 | **SSE** | Server-Sent Events | Protocole de streaming HTTP unidirectionnel (serveur → client). Le proxy retourne les réponses Gemini en SSE quand `stream: true`. |
-| **UADF** | Unified Agentic Development Framework | Nom du système décrit dans ce document. Combine Roo Code, Ollama, le proxy Gemini Chrome et l'API Anthropic dans un environnement de développement agentique unifié. |
+| **le workbench** | Agentic Agile Workbench | Nom du système décrit dans ce document. Combine Roo Code, Ollama, le proxy Gemini Chrome et l'API Anthropic dans un environnement de développement agentique unifié. |
 | **VRAM** | Video Random Access Memory | Mémoire de la carte graphique. Le modèle Qwen3-32B nécessite 8+ Go de VRAM pour une inférence GPU optimale. |
-| **VS Code** | Visual Studio Code | Éditeur de code Microsoft, environnement de développement principal de l'UADF. |
+| **VS Code** | Visual Studio Code | Éditeur de code Microsoft, environnement de développement principal du workbench. |
 | **YAML** | YAML Ain't Markup Language | Format de sérialisation de données lisible par l'humain. Utilisé pour les en-têtes des fichiers SP canoniques. |
 
 ---

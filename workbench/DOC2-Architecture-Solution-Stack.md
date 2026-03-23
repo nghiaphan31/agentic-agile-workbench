@@ -1,7 +1,7 @@
-# Document 2 : Architecture, Solution et Stack Technique
-## Unified Agentic Development Framework (UADF)
+﻿# Document 2 : Architecture, Solution et Stack Technique
+## Agentic Agile Workbench
 
-**Nom du Projet :** Unified Agentic Development Framework (UADF)
+**Nom du Projet :** Agentic Agile Workbench
 **Version :** 2.0 — Refactorisé (arbitrages intégrés, streaming SSE, RBAC précis)
 **Date :** 2026-03-23
 **Référence PRD :** DOC1-PRD-Unified-Agentic-Framework.md v2.0
@@ -288,7 +288,7 @@ Ce principe garantit que :
 | `systemPatterns.md` | Avant modification architecture | Après décision architecture | Structure dossiers, conventions, patterns |
 | `techContext.md` | Avant commande build/test | Après changement dépendance | Stack, versions, commandes, variables d'env |
 | `activeContext.md` | **À chaque démarrage session** | **À chaque fin de tâche** | Tâche en cours, dernier résultat, prochaine action |
-| `progress.md` | **À chaque démarrage session** | **À chaque validation feature** | Checklist phases UADF, features terminées/en cours |
+| `progress.md` | **À chaque démarrage session** | **À chaque validation feature** | Checklist phases le workbench, features terminées/en cours |
 | `decisionLog.md` | Avant décision architecture | Après décision architecture | ADR horodatés avec contexte, décision, conséquences |
 
 **Séquence obligatoire au démarrage de session (DA-002, REQ-4.2) :**
@@ -367,7 +367,7 @@ Si stream=false → JSON : {"id":..., "choices":[{"message":{"content":"..."}}]}
 
 ```python
 """
-UADF Proxy v2.0 — Pont Roo Code <-> Gemini Chrome
+le workbench Proxy v2.0 — Pont Roo Code <-> Gemini Chrome
 Supporte stream=true (SSE) et stream=false (JSON complet).
 Exigences: REQ-2.1.1 a REQ-2.4.4
 """
@@ -402,7 +402,7 @@ class ChatRequest(BaseModel):
     max_tokens: Optional[int] = None
     stream: Optional[bool] = False
 
-app = FastAPI(title="UADF Proxy", version="2.0.0")
+app = FastAPI(title="le workbench Proxy", version="2.0.0")
 
 def _hash(text: str) -> str:
     return hashlib.md5(text.encode("utf-8")).hexdigest()
@@ -505,10 +505,10 @@ async def list_models():
 
 @app.get("/health")
 async def health_check():
-    return {"status": "ok", "proxy": "UADF", "version": "2.0.0", "gem_mode": USE_GEM_MODE}
+    return {"status": "ok", "proxy": "le workbench", "version": "2.0.0", "gem_mode": USE_GEM_MODE}
 
 if __name__ == "__main__":
-    print(f"{'='*60}\n  UADF PROXY v2.0 | http://localhost:{PORT}/v1\n  Mode: {'GEM' if USE_GEM_MODE else 'COMPLET'} | Timeout: {TIMEOUT_SECONDS}s\n{'='*60}")
+    print(f"{'='*60}\n  le workbench PROXY v2.0 | http://localhost:{PORT}/v1\n  Mode: {'GEM' if USE_GEM_MODE else 'COMPLET'} | Timeout: {TIMEOUT_SECONDS}s\n{'='*60}")
     uvicorn.run(app, host="0.0.0.0", port=PORT, log_level="warning")
 ```
 
@@ -586,7 +586,7 @@ RAPPEL : Aucun texte avant la premiere balise XML. Aucun texte apres la derniere
 | **`proxy.py` — Transmission contenu brut** | Proxy Hybride | Contenu Gemini transmis tel quel sans modification | — | REQ-2.4.4 |
 | **`memory-bank/`** | Mémoire | Conteneur mémoire contextuelle, intégré Git | DA-003 | REQ-4.1, REQ-4.5 |
 | **`memory-bank/activeContext.md`** | Mémoire | Mémoire vive de session, lu et écrit à chaque session | DA-002, DA-003 | REQ-4.2, REQ-4.3, REQ-4.4 |
-| **`memory-bank/progress.md`** | Mémoire | Checklist phases UADF et features produit | DA-002, DA-003 | REQ-4.2, REQ-4.3, REQ-4.4 |
+| **`memory-bank/progress.md`** | Mémoire | Checklist phases le workbench et features produit | DA-002, DA-003 | REQ-4.2, REQ-4.3, REQ-4.4 |
 | **`memory-bank/projectBrief.md`** | Mémoire | Vision, objectifs, Non-Goals, contraintes | DA-003 | REQ-4.4 |
 | **`memory-bank/productContext.md`** | Mémoire | User Stories, valeur métier, backlog | DA-003 | REQ-4.4 |
 | **`memory-bank/systemPatterns.md`** | Mémoire | Architecture, conventions, patterns techniques | DA-003 | REQ-4.4 |
@@ -651,19 +651,19 @@ RAPPEL : Aucun texte avant la premiere balise XML. Aucun texte apres la derniere
 | **HTTP** | HyperText Transfer Protocol | Protocole de communication. Le proxy écoute sur HTTP `localhost:8000`. L'API Anthropic utilise HTTPS. |
 | **JSON** | JavaScript Object Notation | Format de données structuré. Utilisé pour `.roomodes`, les réponses API OpenAI et les requêtes du proxy. |
 | **LAAW** | Local Agentic Agile Workflow | Blueprint mychen76 — source d'inspiration pour la Memory Bank segmentée et les personas Agile. |
-| **LLM** | Large Language Model | Grand modèle de langage. Trois instances dans l'UADF : Qwen3-32B (local), Gemini Pro (cloud Google), Claude Sonnet (cloud Anthropic). |
+| **LLM** | Large Language Model | Grand modèle de langage. Trois instances dans le workbench : Qwen3-32B (local), Gemini Pro (cloud Google), Claude Sonnet (cloud Anthropic). |
 | **MCP** | Model Context Protocol | Protocole d'extension Roo Code pour outils externes. Accessible uniquement au persona Developer. |
 | **MD5** | Message Digest 5 | Algorithme de hachage. Utilisé par le proxy pour détecter les changements de presse-papiers (`_hash()` dans `proxy.py`). |
 | **NTFS** | New Technology File System | Système de fichiers Windows. Stocke physiquement la Memory Bank et les fichiers de configuration. |
 | **PO** | Product Owner | Persona Agile — vision produit, User Stories, backlog. Mode `product-owner` dans `.roomodes`. |
-| **PRD** | Product Requirements Document | Document d'exigences produit. DOC1 est le PRD de l'UADF. |
+| **PRD** | Product Requirements Document | Document d'exigences produit. DOC1 est le PRD du workbench. |
 | **RBAC** | Role-Based Access Control | Contrôle d'accès par rôles. Matrice définie en section 5 (Couche A) et dans DOC1 section 4.1. |
 | **REQ** | Requirement (Exigence) | Identifiant des exigences dans DOC1 (ex: REQ-2.1.4). Chaque DA de ce document référence les REQ qu'il adresse. |
 | **REST** | Representational State Transfer | Style d'architecture API web. Ollama expose une API REST sur `localhost:11434`. |
 | **SM** | Scrum Master | Persona Agile facilitateur pur — Memory Bank + Git uniquement, sans code ni tests. |
 | **SP** | System Prompt | Fichier canonique du registre `template/prompts/` avec métadonnées YAML. |
 | **SSE** | Server-Sent Events | Protocole de streaming HTTP serveur→client. Le proxy retourne les réponses Gemini en SSE quand `stream: true` (DA-014). |
-| **UADF** | Unified Agentic Development Framework | Nom du système décrit dans ce document. |
+| **le workbench** | Agentic Agile Workbench | Nom du système décrit dans ce document. |
 | **VRAM** | Video Random Access Memory | Mémoire GPU. Qwen3-32B nécessite 8+ Go de VRAM pour une inférence GPU optimale. |
 | **YAML** | YAML Ain't Markup Language | Format de sérialisation lisible. Utilisé pour les en-têtes des fichiers SP canoniques. |
 
@@ -677,7 +677,7 @@ RAPPEL : Aucun texte avant la premiere balise XML. Aucun texte apres la derniere
 | **Balises XML Roo Code** | Syntaxe d'action de Roo Code : `<write_to_file>`, `<read_file>`, `<execute_command>`, `<attempt_completion>`, etc. Tout LLM connecté doit répondre avec ces balises. |
 | **Boomerang Tasks** | Mécanisme Roo Code de délégation : l'agent 32B crée une sous-tâche pour le modèle 7B, récupère le résultat et l'intègre dans sa boucle (DA-005, REQ-1.4). |
 | **Commutateur LLM** | Paramètre "API Provider" dans les settings Roo Code. Bascule entre Ollama (Mode Local), proxy FastAPI (Mode Proxy) et Anthropic (Mode Cloud) sans modifier Roo Code (DA-007, DA-011). |
-| **Couche** | Niveau d'abstraction dans l'architecture UADF. Six couches : A (Orchestration), B (Memory Bank), C (LLM Local), D (Proxy Gemini), E (Gemini Chrome), F (Registre Prompts). |
+| **Couche** | Niveau d'abstraction dans l'architecture le workbench. Six couches : A (Orchestration), B (Memory Bank), C (LLM Local), D (Proxy Gemini), E (Gemini Chrome), F (Registre Prompts). |
 | **Déterminisme** | Stabilité des réponses LLM. Obtenu via `temperature 0.15`, `min_p 0.03`, `top_p 0.95`, `repeat_penalty 1.1` dans le Modelfile (DA-004, REQ-1.3). |
 | **Fenêtre de contexte** | Capacité maximale de traitement simultané d'un LLM. Fixée à 128K tokens (`num_ctx 131072`) pour charger code + Memory Bank (DA-004, REQ-1.2). |
 | **Fine-tuning** | Entraînement spécialisé d'un LLM. `mychen76/qwen3_cline_roocode:32b` est fine-tuné pour le Tool Calling Roo Code (REQ-1.1). |

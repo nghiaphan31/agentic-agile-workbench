@@ -1,7 +1,7 @@
-# Document 4 : Guide de Déploiement de l'Atelier UADF
+﻿# Document 4 : Guide de Déploiement de l'Atelier
 ## Comment utiliser ce template sur un nouveau projet ou une base de code existante
 
-**Nom du Projet :** Unified Agentic Development Framework (UADF)
+**Nom du Projet :** Agentic Agile Workbench
 **Version :** 1.0
 **Date :** 2026-03-23
 **Références :** DOC1-PRD-Unified-Agentic-Framework.md v2.0, DOC2-Architecture-Solution-Stack.md v2.0, DOC3-Plan-Implementation-COMPLETE.md v3.0
@@ -69,7 +69,7 @@ Ce dépôt évoluera au fil du temps. Vous le mettrez à jour quand :
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    ATELIER UADF (ce dépôt)                      │
+│                    ATELIER le workbench (ce dépôt)                      │
 │                                                                  │
 │  .roomodes  .clinerules  prompts/  proxy.py  scripts/  plans/   │
 │                                                                  │
@@ -99,7 +99,7 @@ Ce dépôt évoluera au fil du temps. Vous le mettrez à jour quand :
 
 ### 3.1 Prérequis
 
-Avant de commencer, l'atelier UADF doit être installé et fonctionnel sur votre machine (phases 0-12 de DOC3). En particulier :
+Avant de commencer, l'atelier doit être installé et fonctionnel sur votre machine (phases 0-12 de DOC3). En particulier :
 - Ollama avec `uadf-agent` disponible (Mode 1) OU proxy.py démarré (Mode 2) OU clé Anthropic configurée (Mode 3)
 - VS Code avec l'extension Roo Code installée
 
@@ -213,7 +213,7 @@ C'est **la seule étape manuelle obligatoire** avant d'ouvrir Roo Code. Ouvrez `
 ```powershell
 cd "$Projet"
 git add .
-git commit -m "chore(init): initialisation projet avec atelier UADF v2.0"
+git commit -m "chore(init): initialisation projet avec atelier v2.0"
 ```
 
 ### 3.8 Étape 7 — Ouvrir dans VS Code et Démarrer
@@ -247,7 +247,7 @@ cd "C:\Projets\mon-projet-legacy"
 # Si Git n'est pas encore initialisé
 git init
 git add .
-git commit -m "chore(init): état initial du code avant refactoring UADF"
+git commit -m "chore(init): état initial du code avant refactoring le workbench"
 ```
 
 > **Commiter l'état initial est critique.** Cela crée un point de retour sûr si le refactoring part dans une mauvaise direction.
@@ -397,7 +397,7 @@ Vous pourriez penser à utiliser des sous-modules Git ou des liens symboliques p
 
 ---
 
-## 7. Cycle de Vie d'un Projet avec l'Atelier UADF
+## 7. Cycle de Vie d'un Projet avec l'Atelier
 
 ```
 PHASE SETUP (une seule fois par projet)
@@ -461,7 +461,7 @@ PHASE MAINTENANCE (continue)
 
 1. Identifiez ce qui a changé dans l'atelier (consultez le `git log` de l'atelier)
 2. Copiez manuellement les fichiers modifiés vers le projet
-3. Commitez dans le projet avec un message explicite : `chore(uadf): mise à jour atelier v[X.Y] — [description du changement]`
+3. Commitez dans le projet avec un message explicite : `chore(workbench): mise à jour atelier v[X.Y] — [description du changement]`
 
 ### Q : Puis-je avoir plusieurs projets ouverts simultanément dans VS Code ?
 
@@ -485,7 +485,7 @@ PHASE MAINTENANCE (continue)
 
 ### Pour une Base de Code Existante
 
-- [ ] État initial commité (`git commit -m "chore(init): état initial avant refactoring UADF"`)
+- [ ] État initial commité (`git commit -m "chore(init): état initial avant refactoring le workbench"`)
 - [ ] Fichiers de l'atelier copiés (identique au cas précédent)
 - [ ] Memory Bank initialisée (7 fichiers créés)
 - [ ] `docs/qa/` créé avec `.gitkeep`
@@ -501,7 +501,7 @@ PHASE MAINTENANCE (continue)
 
 | Réf. | Type | Titre / Identifiant | Description |
 | :--- | :--- | :--- | :--- |
-| [DOC1] | Document interne | `workbench/DOC1-PRD-Unified-Agentic-Framework.md` | Product Requirements Document v2.0 — définit les exigences REQ-xxx du système UADF |
+| [DOC1] | Document interne | `workbench/DOC1-PRD-Unified-Agentic-Framework.md` | Product Requirements Document v2.0 — définit les exigences REQ-xxx du système le workbench |
 | [DOC2] | Document interne | `workbench/DOC2-Architecture-Solution-Stack.md` | Architecture, Solution et Stack Technique v2.0 — justifie les choix techniques |
 | [DOC3] | Document interne | `workbench/DOC3-Plan-Implementation-COMPLETE.md` | Plan d'Implémentation Séquentiel Complet v3.0 — guide d'installation de l'atelier (Phases 0–12) |
 | [DOC4] | Document interne | `workbench/DOC4-Guide-Deploiement-Atelier.md` | Ce document — Guide de Déploiement de l'Atelier sur projets nouveaux et existants |
@@ -526,22 +526,22 @@ PHASE MAINTENANCE (continue)
 | Abréviation | Forme complète | Explication |
 | :--- | :--- | :--- |
 | **ADR** | Architecture Decision Record | Enregistrement horodaté d'une décision d'architecture. Stocké dans `memory-bank/decisionLog.md` du projet. |
-| **API** | Application Programming Interface | Interface de programmation. Trois APIs dans l'UADF : Ollama REST (locale), OpenAI-compatible (proxy), Anthropic HTTPS (cloud). |
+| **API** | Application Programming Interface | Interface de programmation. Trois APIs dans le workbench : Ollama REST (locale), OpenAI-compatible (proxy), Anthropic HTTPS (cloud). |
 | **DA** | Décision d'Architecture | Identifiant des décisions dans DOC2 (DA-001 à DA-014). Référencé dans DOC3 pour justifier les choix. |
 | **GEM** | Gem Gemini | Profil personnalisé Gemini Web avec system prompt permanent. "Roo Code Agent" contient SP-007. |
 | **Git** | — (nom propre) | Système de contrôle de version distribué. Chaque projet déployé doit être un dépôt Git. |
 | **JSON** | JavaScript Object Notation | Format de données structuré. Utilisé pour `.roomodes` (personas Agile). |
-| **LAAW** | Local Agentic Agile Workflow | Blueprint mychen76 — source d'inspiration pour la Memory Bank et les personas Agile de l'UADF. |
-| **LLM** | Large Language Model | Grand modèle de langage. Trois modes dans l'UADF : Qwen3-32B (local), Gemini Pro (cloud Google), Claude Sonnet (cloud Anthropic). |
+| **LAAW** | Local Agentic Agile Workflow | Blueprint mychen76 — source d'inspiration pour la Memory Bank et les personas Agile du workbench. |
+| **LLM** | Large Language Model | Grand modèle de langage. Trois modes dans le workbench : Qwen3-32B (local), Gemini Pro (cloud Google), Claude Sonnet (cloud Anthropic). |
 | **PO** | Product Owner | Persona Agile — vision produit, User Stories, backlog. Mode `product-owner` dans `.roomodes`. |
-| **PRD** | Product Requirements Document | Document d'exigences produit. DOC1 est le PRD de l'UADF. |
+| **PRD** | Product Requirements Document | Document d'exigences produit. DOC1 est le PRD du workbench. |
 | **RBAC** | Role-Based Access Control | Contrôle d'accès par rôles. Chaque persona Agile a une matrice de permissions précise. |
 | **REQ** | Requirement (Exigence) | Identifiant des exigences dans DOC1. |
 | **SM** | Scrum Master | Persona Agile facilitateur pur — Memory Bank + Git uniquement, sans code ni tests. |
 | **SP** | System Prompt | Fichier canonique du registre `template/prompts/` avec métadonnées YAML. |
 | **SSE** | Server-Sent Events | Protocole de streaming HTTP serveur→client. Utilisé par le proxy pour retourner les réponses Gemini. |
-| **UADF** | Unified Agentic Development Framework | Nom du système décrit dans les documents de ce workbench. |
-| **VS Code** | Visual Studio Code | Éditeur de code Microsoft — environnement de développement principal de l'UADF. |
+| **le workbench** | Agentic Agile Workbench | Nom du système décrit dans les documents de ce workbench. |
+| **VS Code** | Visual Studio Code | Éditeur de code Microsoft — environnement de développement principal du workbench. |
 | **YAML** | YAML Ain't Markup Language | Format de sérialisation lisible. Utilisé pour les en-têtes des fichiers SP canoniques. |
 
 ---
@@ -554,7 +554,7 @@ PHASE MAINTENANCE (continue)
 | **Audit de code** | Étape obligatoire lors du déploiement sur une base de code existante. Le Developer lit le code source et remplit la Memory Bank (`systemPatterns.md`, `techContext.md`) avec les patterns, anti-patterns et dettes techniques identifiés. |
 | **Balises XML Roo Code** | Syntaxe d'action de Roo Code : `<write_to_file>`, `<read_file>`, `<execute_command>`, `<attempt_completion>`, etc. Tout LLM connecté doit répondre avec ces balises. |
 | **Code spaghetti** | Code source mal structuré, sans architecture claire, difficile à maintenir. Le déploiement de l'atelier sur un code spaghetti nécessite une étape d'audit préalable avant toute modification. |
-| **Commit initial** | Premier commit Git d'un projet, effectué avant tout déploiement de l'atelier. Pour un projet existant : `git commit -m "chore(init): état initial avant refactoring UADF"`. Crée un point de retour sûr. |
+| **Commit initial** | Premier commit Git d'un projet, effectué avant tout déploiement de l'atelier. Pour un projet existant : `git commit -m "chore(init): état initial avant refactoring le workbench"`. Crée un point de retour sûr. |
 | **Déploiement** | Copie des fichiers de l'atelier (`template/`) dans un projet applicatif. Peut être fait manuellement ou via `deploy-to-project.ps1`. |
 | **deploy-to-project.ps1** | Script PowerShell dans `template/scripts/` qui automatise le déploiement. Paramètres : `-ProjectPath` (obligatoire), `-Update` (mise à jour), `-DryRun` (simulation sans écriture). |
 | **Gem Gemini** | Profil Gemini Web avec system prompt permanent (SP-007). Créé une seule fois dans l'interface Gemini — partagé entre tous les projets utilisant le Mode Proxy. |

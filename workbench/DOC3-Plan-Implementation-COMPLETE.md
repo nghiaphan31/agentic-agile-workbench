@@ -1,7 +1,7 @@
-# Document 3 : Plan d'Implémentation Séquentiel COMPLET
-## Unified Agentic Development Framework (UADF) — Phases 0 à 12
+﻿# Document 3 : Plan d'Implémentation Séquentiel COMPLET
+## Agentic Agile Workbench — Phases 0 à 12
 
-**Nom du Projet :** Unified Agentic Development Framework (UADF)
+**Nom du Projet :** Agentic Agile Workbench
 **Version :** 3.0 — Document unique fusionné (phases 0-12 en continu)
 **Date :** 2026-03-23
 **Plateforme cible :** Windows 10/11 + Visual Studio Code
@@ -32,7 +32,7 @@ PHASE 0  : Base Saine — Nettoyage et Réinstallation VS Code + Roo Code
 PHASE 1  : Infrastructure Système (Ollama + Modèles LLM)
     |
     v
-PHASE 2  : Création du Dépôt Git du Projet UADF
+PHASE 2  : Création du Dépôt Git du Projet le workbench
     |
     v
 PHASE 3  : Modelfile et Modèle Personnalisé Ollama
@@ -240,18 +240,18 @@ Vous devez voir une réponse JSON listant vos modèles. Si erreur de connexion, 
 
 ---
 
-## PHASE 2 : Création du Dépôt Git du Projet UADF
+## PHASE 2 : Création du Dépôt Git du Projet le workbench
 
 **Objectif :** Créer le dépôt Git qui versionnera TOUT : code, scripts, prompts, configurations, Memory Bank.
 **Exigences adressées :** REQ-000, REQ-4.1, REQ-4.5
 
-> **Principe fondamental :** Dans UADF, Git ne versionne pas seulement le code applicatif. Il versionne l'intégralité de l'intelligence du projet : les prompts système (`.clinerules`, `.roomodes`), les scripts (`proxy.py`), la configuration (`Modelfile`), et la mémoire persistante (`memory-bank/`). Chaque modification significative de l'un de ces éléments doit faire l'objet d'un commit Git avec un message descriptif.
+> **Principe fondamental :** Dans le workbench, Git ne versionne pas seulement le code applicatif. Il versionne l'intégralité de l'intelligence du projet : les prompts système (`.clinerules`, `.roomodes`), les scripts (`proxy.py`), la configuration (`Modelfile`), et la mémoire persistante (`memory-bank/`). Chaque modification significative de l'un de ces éléments doit faire l'objet d'un commit Git avec un message descriptif.
 
 ### Étape 2.1 — Créer le Dossier du Projet
 
 ```powershell
-mkdir C:\Users\$env:USERNAME\Projects\mon-projet-uadf
-cd C:\Users\$env:USERNAME\Projects\mon-projet-uadf
+mkdir C:\Users\$env:USERNAME\Projects\mon-projet
+cd C:\Users\$env:USERNAME\Projects\mon-projet
 code .
 ```
 
@@ -329,7 +329,7 @@ mkdir prompts
 
 ```powershell
 git add .gitignore
-git commit -m "chore: initialisation dépôt UADF - squelette projet et .gitignore"
+git commit -m "chore: initialisation dépôt le workbench - squelette projet et .gitignore"
 ```
 
 **Critère de validation :** `git log --oneline` affiche le commit initial.
@@ -518,7 +518,7 @@ New-Item -Path "." -Name ".clinerules" -ItemType File
 Ouvrez `.clinerules` et collez **exactement** ce contenu (source canonique : [`SP-002-clinerules-global.md`](../prompts/SP-002-clinerules-global.md)) :
 
 ```markdown
-# PROTOCOLE UADF — DIRECTIVES IMPERATIVES (TOUTES SESSIONS, TOUS MODES)
+# PROTOCOLE le workbench — DIRECTIVES IMPERATIVES (TOUTES SESSIONS, TOUS MODES)
 
 ## REGLE 1 : LECTURE OBLIGATOIRE AU DEMARRAGE DE CHAQUE SESSION
 Avant toute action, tu DOIS exécuter la séquence suivante dans cet ordre exact :
@@ -640,7 +640,7 @@ tu DOIS verifier si le changement impacte un system prompt dans prompts/.
 # Progression du Projet
 **Derniere mise a jour :** [DATE]
 
-## Infrastructure UADF
+## Infrastructure le workbench
 - [ ] Phase 0 : Base saine VS Code + Roo Code
 - [ ] Phase 1 : Ollama + modeles
 - [ ] Phase 2 : Depot Git initialise
@@ -798,7 +798,7 @@ pytest tests/
 | :--- | :--- | :--- |
 | [package] | [version] | [raison] |
 
-## Configuration des Backends LLM (Commutateur UADF)
+## Configuration des Backends LLM (Commutateur le workbench)
 
 ### Mode 1 : Local Ollama (Souverain et Gratuit)
 - API Provider : Ollama
@@ -834,7 +834,7 @@ Ouvrez `memory-bank/activeContext.md` et collez :
 **Backend LLM actif :** Ollama uadf-agent
 
 ## Tâche en cours
-Initialisation du projet UADF — Configuration de l'environnement de développement.
+Initialisation du projet le workbench — Configuration de l'environnement de développement.
 
 ## Dernier résultat
 Structure initiale du projet créée. Memory Bank initialisée. Dépôt Git initialisé.
@@ -863,7 +863,7 @@ Ouvrez `memory-bank/progress.md` et collez :
 
 **Dernière mise à jour :** 2026-03-23
 
-## Infrastructure UADF
+## Infrastructure le workbench
 
 ### Phase de Setup
 - [x] Phase 0 : Base saine VS Code + Roo Code (réinstallation propre)
@@ -935,7 +935,7 @@ Streaming SSE en un seul chunk pour compatibilité totale avec Roo Code (DA-014)
 
 ---
 
-## ADR-003 : Versionnement Git intégral de tous les artefacts UADF
+## ADR-003 : Versionnement Git intégral de tous les artefacts le workbench
 **Date :** 2026-03-23
 **Statut :** Accepté
 
@@ -972,7 +972,7 @@ New-Item -Path "docs/qa" -Name ".gitkeep" -ItemType File
 
 ```powershell
 git add .clinerules memory-bank/ docs/
-git commit -m "feat(uadf): Memory Bank (7 fichiers) + .clinerules (6 règles VÉRIFIER→CRÉER→LIRE→AGIR)"
+git commit -m "feat(workbench): Memory Bank (7 fichiers) + .clinerules (6 règles VÉRIFIER→CRÉER→LIRE→AGIR)"
 ```
 
 **Critère de validation Phase 5 :**
@@ -1024,7 +1024,7 @@ Créez `proxy.py` à la racine du projet. Source canonique : [`SP-007-gem-gemini
 
 ```python
 """
-UADF Proxy v2.0 — Pont Roo Code <-> Gemini Chrome
+le workbench Proxy v2.0 — Pont Roo Code <-> Gemini Chrome
 Supporte stream=true (SSE) et stream=false (JSON complet).
 Exigences: REQ-2.1.1 a REQ-2.4.4
 """
@@ -1059,7 +1059,7 @@ class ChatRequest(BaseModel):
     max_tokens: Optional[int] = None
     stream: Optional[bool] = False
 
-app = FastAPI(title="UADF Proxy", version="2.0.0")
+app = FastAPI(title="le workbench Proxy", version="2.0.0")
 
 def _hash(text: str) -> str:
     return hashlib.md5(text.encode("utf-8")).hexdigest()
@@ -1162,10 +1162,10 @@ async def list_models():
 
 @app.get("/health")
 async def health_check():
-    return {"status": "ok", "proxy": "UADF", "version": "2.0.0", "gem_mode": USE_GEM_MODE}
+    return {"status": "ok", "proxy": "le workbench", "version": "2.0.0", "gem_mode": USE_GEM_MODE}
 
 if __name__ == "__main__":
-    print(f"{'='*60}\n  UADF PROXY v2.0 | http://localhost:{PORT}/v1\n  Mode: {'GEM' if USE_GEM_MODE else 'COMPLET'} | Timeout: {TIMEOUT_SECONDS}s\n{'='*60}")
+    print(f"{'='*60}\n  le workbench PROXY v2.0 | http://localhost:{PORT}/v1\n  Mode: {'GEM' if USE_GEM_MODE else 'COMPLET'} | Timeout: {TIMEOUT_SECONDS}s\n{'='*60}")
     uvicorn.run(app, host="0.0.0.0", port=PORT, log_level="warning")
 ```
 
@@ -1186,11 +1186,11 @@ New-Item -Path "." -Name "scripts" -ItemType Directory
 Créez `scripts/start-proxy.ps1` :
 
 ```powershell
-# UADF Proxy — Script de démarrage
+# le workbench Proxy — Script de démarrage
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
 Set-Location $ProjectRoot
 & ".\venv\Scripts\Activate.ps1"
-Write-Host "Démarrage UADF Proxy v2.0..." -ForegroundColor Green
+Write-Host "Démarrage le workbench Proxy v2.0..." -ForegroundColor Green
 Write-Host "URL : http://localhost:8000/v1" -ForegroundColor Cyan
 python proxy.py
 ```
@@ -1208,7 +1208,7 @@ python proxy.py
 Sortie attendue :
 ```
 ============================================================
-  UADF PROXY v2.0 | http://localhost:8000/v1
+  le workbench PROXY v2.0 | http://localhost:8000/v1
   Mode: GEM | Timeout: 300s
 ============================================================
 ```
@@ -1217,7 +1217,7 @@ Sortie attendue :
 ```powershell
 Invoke-RestMethod -Uri "http://localhost:8000/health" -Method Get
 ```
-Réponse attendue : `{"status": "ok", "proxy": "UADF", "version": "2.0.0", "gem_mode": true}`
+Réponse attendue : `{"status": "ok", "proxy": "le workbench", "version": "2.0.0", "gem_mode": true}`
 
 **Terminal 2 — Tester `/v1/models` :**
 ```powershell
@@ -1308,14 +1308,14 @@ REGLES IMPORTANTES :
 6. Si une tache est ambigue, demander une clarification avant d'agir
 
 CONTEXTE DU PROJET :
-Tu travailles sur un projet utilisant le framework UADF (Unified Agentic Development Framework).
+Tu travailles sur un projet utilisant le framework le workbench (Agentic Agile Workbench).
 Le projet utilise une equipe Agile virtuelle avec 4 personas : Product Owner, Scrum Master, Developer, QA Engineer.
 La memoire persistante est stockee dans le dossier memory-bank/ (7 fichiers Markdown).
 ```
 
 8. Cliquez sur **"Save"**
 
-> **IMPORTANT — Déploiement manuel obligatoire :** Ce prompt est le seul du registre UADF qui ne peut pas être déployé automatiquement via Git. Toute modification future de ce Gem doit être accompagnée d'un commit Git avec la mention : `"DEPLOIEMENT MANUEL REQUIS : mettre a jour le Gem Gemini avec SP-007"` (voir REGLE 6.2 de `.clinerules`).
+> **IMPORTANT — Déploiement manuel obligatoire :** Ce prompt est le seul du registre le workbench qui ne peut pas être déployé automatiquement via Git. Toute modification future de ce Gem doit être accompagnée d'un commit Git avec la mention : `"DEPLOIEMENT MANUEL REQUIS : mettre a jour le Gem Gemini avec SP-007"` (voir REGLE 6.2 de `.clinerules`).
 
 ---
 
@@ -1434,7 +1434,7 @@ git commit -m "docs(memory): techContext.md mis à jour avec configuration commu
 
 **Scénario de test :**
 1. Sélectionnez le mode **"Developer"** dans Roo Code
-2. Envoyez : `Crée un fichier src/hello.py avec une fonction hello() qui retourne "Hello UADF"`
+2. Envoyez : `Crée un fichier src/hello.py avec une fonction hello() qui retourne "Hello le workbench"`
 3. **Comportement attendu :**
    - L'agent lit `memory-bank/activeContext.md` et `memory-bank/progress.md` (REGLE 1 — séquence VÉRIFIER→CRÉER→LIRE→AGIR)
    - L'agent crée `src/hello.py`
@@ -1515,7 +1515,7 @@ git commit -m "test(e2e): validation complète 3 modes LLM + RBAC + Memory Bank"
 1. Allez sur **https://console.anthropic.com**
 2. Créez un compte ou connectez-vous
 3. Dans **"API Keys"**, cliquez sur **"Create Key"**
-4. Donnez un nom : `uadf-roo-code`
+4. Donnez un nom : `roo-code-agent`
 5. Copiez la clé (`sk-ant-api03-...`) — **elle ne sera affichée qu'une seule fois**
 
 > **SÉCURITÉ ABSOLUE :** Ne jamais stocker cette clé dans un fichier du projet. Ne jamais la commiter dans Git. VS Code SecretStorage est le seul endroit autorisé (DA-011, REQ-6.4).
@@ -1703,7 +1703,7 @@ Créez `scripts/check-prompts-sync.ps1` et collez **exactement** ce code :
 ```powershell
 <#
 .SYNOPSIS
-    UADF — Vérification de cohérence des system prompts canoniques vs artefacts déployés.
+    le workbench — Vérification de cohérence des system prompts canoniques vs artefacts déployés.
     REQ-8.1, REQ-8.3, REQ-8.4 | DA-013
 
 .DESCRIPTION
@@ -1763,7 +1763,7 @@ function Show-Diff {
 
 Write-Host ""
 Write-Host "=" * 60
-Write-Host "  UADF — Vérification Cohérence Prompts" -ForegroundColor Cyan
+Write-Host "  le workbench — Vérification Cohérence Prompts" -ForegroundColor Cyan
 Write-Host "=" * 60
 
 # --- SP-001 : Modelfile ---
@@ -1882,8 +1882,8 @@ if ($FailCount -gt 0) {
 # Créer le fichier hook pre-commit
 $hookContent = @'
 #!/bin/sh
-# UADF — Hook pre-commit : vérification cohérence prompts (REQ-8.2, DA-013)
-echo "UADF pre-commit : vérification cohérence prompts..."
+# le workbench — Hook pre-commit : vérification cohérence prompts (REQ-8.2, DA-013)
+echo "le workbench pre-commit : vérification cohérence prompts..."
 powershell.exe -ExecutionPolicy Bypass -File "scripts/check-prompts-sync.ps1"
 if [ $? -ne 0 ]; then
     echo "COMMIT BLOQUÉ : Désynchronisation détectée dans les prompts."
@@ -1912,7 +1912,7 @@ powershell.exe -ExecutionPolicy Bypass -File "scripts/check-prompts-sync.ps1"
 **Sortie attendue (tout synchronisé) :**
 ```
 ============================================================
-  UADF — Vérification Cohérence Prompts
+  le workbench — Vérification Cohérence Prompts
 ============================================================
 
 [SP-001] Modelfile bloc SYSTEM... PASS
@@ -1972,7 +1972,7 @@ git commit -m "feat(prompts): check-prompts-sync.ps1 + hook pre-commit — véri
 
 ---
 
-## Récapitulatif Final — Système UADF Complet
+## Récapitulatif Final — Système le workbench Complet
 
 ### Arborescence du Projet après les 13 Phases
 
@@ -1991,7 +1991,7 @@ git commit -m "feat(prompts): check-prompts-sync.ps1 + hook pre-commit — véri
 │   ├── activeContext.md     # Tâche en cours, dernier résultat, prochaine action
 │   ├── decisionLog.md       # ADR horodatés
 │   ├── productContext.md    # User Stories, backlog
-│   ├── progress.md          # Checklist phases UADF + features
+│   ├── progress.md          # Checklist phases le workbench + features
 │   ├── projectBrief.md      # Vision, objectifs, Non-Goals
 │   ├── systemPatterns.md    # Architecture, conventions, patterns
 │   └── techContext.md       # Stack, commandes, config backends LLM
@@ -2042,7 +2042,7 @@ git commit -m "feat(prompts): check-prompts-sync.ps1 + hook pre-commit — véri
 - [ ] Phase 11 : Registre `prompts/` initialisé (7 SP canoniques)
 - [ ] Phase 12 : `check-prompts-sync.ps1` → 6 PASS | 0 FAIL, hook pre-commit actif
 
-**Le système UADF est opérationnel quand toutes les cases sont cochées.**
+**Le système le workbench est opérationnel quand toutes les cases sont cochées.**
 
 ---
 
@@ -2079,7 +2079,7 @@ git commit -m "feat(prompts): check-prompts-sync.ps1 + hook pre-commit — véri
 | Abréviation | Forme complète | Explication |
 | :--- | :--- | :--- |
 | **ADR** | Architecture Decision Record | Enregistrement horodaté d'une décision d'architecture. Stocké dans `memory-bank/decisionLog.md`. |
-| **API** | Application Programming Interface | Interface de programmation. Trois APIs dans l'UADF : Ollama REST (locale), OpenAI-compatible (proxy), Anthropic HTTPS (cloud). |
+| **API** | Application Programming Interface | Interface de programmation. Trois APIs dans le workbench : Ollama REST (locale), OpenAI-compatible (proxy), Anthropic HTTPS (cloud). |
 | **ASGI** | Asynchronous Server Gateway Interface | Standard Python pour serveurs web asynchrones. FastAPI + Uvicorn = pile ASGI du proxy (Phase 6). |
 | **DA** | Décision d'Architecture | Identifiant des décisions dans DOC2 (DA-001 à DA-014). Référencé dans les phases pour justifier les choix. |
 | **GEM** | Gem Gemini | Profil personnalisé Gemini Web avec system prompt permanent. Créé en Phase 7 avec SP-007. |
@@ -2087,17 +2087,17 @@ git commit -m "feat(prompts): check-prompts-sync.ps1 + hook pre-commit — véri
 | **HTTP** | HyperText Transfer Protocol | Protocole de communication. Le proxy écoute sur HTTP `localhost:8000` (Phase 6). |
 | **JSON** | JavaScript Object Notation | Format de données structuré. Utilisé pour `.roomodes` (Phase 4) et les réponses API. |
 | **LAAW** | Local Agentic Agile Workflow | Blueprint mychen76 — source d'inspiration pour la Memory Bank et les personas Agile. |
-| **LLM** | Large Language Model | Grand modèle de langage. Trois modes dans l'UADF : Qwen3-32B, Gemini Pro, Claude Sonnet. |
+| **LLM** | Large Language Model | Grand modèle de langage. Trois modes dans le workbench : Qwen3-32B, Gemini Pro, Claude Sonnet. |
 | **MCP** | Model Context Protocol | Protocole d'extension Roo Code. Accessible uniquement au persona Developer. |
 | **MD5** | Message Digest 5 | Algorithme de hachage. Utilisé par le proxy pour détecter les changements de presse-papiers (Phase 6). |
 | **PO** | Product Owner | Persona Agile — vision produit, User Stories, backlog. Mode `product-owner` dans `.roomodes`. |
-| **PRD** | Product Requirements Document | Document d'exigences produit. DOC1 est le PRD de l'UADF. |
+| **PRD** | Product Requirements Document | Document d'exigences produit. DOC1 est le PRD du workbench. |
 | **RBAC** | Role-Based Access Control | Contrôle d'accès par rôles. Matrice définie en Phase 4 et dans DOC1 section 4.1. |
 | **REQ** | Requirement (Exigence) | Identifiant des exigences dans DOC1. Chaque phase de ce document référence les REQ qu'elle implémente. |
 | **SM** | Scrum Master | Persona Agile facilitateur pur — Memory Bank + Git uniquement, sans code ni tests. |
 | **SP** | System Prompt | Fichier canonique du registre `template/prompts/` avec métadonnées YAML. |
 | **SSE** | Server-Sent Events | Protocole de streaming HTTP serveur→client. Implémenté dans `proxy.py` v2.0 (Phase 6). |
-| **UADF** | Unified Agentic Development Framework | Nom du système décrit dans ce document. |
+| **le workbench** | Agentic Agile Workbench | Nom du système décrit dans ce document. |
 | **VRAM** | Video Random Access Memory | Mémoire GPU. Qwen3-32B nécessite 8+ Go de VRAM (Phase 1, prérequis). |
 | **YAML** | YAML Ain't Markup Language | Format de sérialisation lisible. Utilisé pour les en-têtes des fichiers SP (Phase 11). |
 
