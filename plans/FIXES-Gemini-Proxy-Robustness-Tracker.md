@@ -317,7 +317,7 @@ This file is the **single source of truth** for tracking the application of all 
   5. **MANUALLY deploy to Gemini Web** (gemini.google.com > Gems > "Roo Code Agent" > Edit > paste new instructions > Save)
   6. Commit with message: `chore(prompts): SP-007 v1.4.0 - add exact replace_in_file diff format - DEPLOIEMENT MANUEL REQUIS`
 - **Verification:** In Gemini Gem, send "Modifie la ligne 5 du fichier src/app.py pour changer 'old' en 'new'" — Gemini should respond with `<replace_in_file>` using the SEARCH/REPLACE marker format, NOT unified diff (`-`/`+`).
-- **Applied:** [x] Date: 2026-03-23 | Commit: —
+- **Applied:** [x] Date: 2026-03-23 | Commit: 9cd8707
 
 ---
 
@@ -404,7 +404,7 @@ This file is the **single source of truth** for tracking the application of all 
 | Date | Session | Fix Applied | Commit |
 | :--- | :--- | :--- | :--- |
 | 2026-03-23 | Review 2 | REVIEW2 written - 3 regressions + 6 new gaps identified (FIX-013 to FIX-019 added) | -- |
-| 2026-03-23 | Session 13 | FIX-013 — SP-007 v1.4.0 format exact diff SEARCH/REPLACE pour replace_in_file + Regle 10 — DEPLOIEMENT MANUEL REQUIS | — |
+| 2026-03-23 | Session 13 | FIX-013 — SP-007 v1.4.0 format exact diff SEARCH/REPLACE pour replace_in_file + Regle 10 — DEPLOIEMENT MANUEL REQUIS | 9cd8707 |
 
 ---
 
