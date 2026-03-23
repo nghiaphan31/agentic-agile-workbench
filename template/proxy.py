@@ -13,6 +13,7 @@ Changelog:
   v2.0.6 - 2026-03-23 : FIX-014 — Verification longueur minimale BLOQUANTE (seuil 100 chars) pour eviter injection de contenu parasite (REG-001)
   v2.0.7 - 2026-03-23 : FIX-015 — Garde runtime <new_task> dans _wait_clipboard() pour eviter deadlock (GAP R1-003)
   v2.0.8 - 2026-03-23 : FIX-016 — Fallback troncature dans _format_prompt() quand un seul message depasse MAX_HISTORY_CHARS (REG-002)
+  v2.0.9 - 2026-03-23 : FIX-017 — asyncio.Lock() pour serialisation du presse-papiers (GAP R1-004)
 """
 import asyncio, hashlib, json, os, time, uuid
 from datetime import datetime
@@ -33,6 +34,11 @@ MAX_HISTORY_CHARS = int(os.getenv("MAX_HISTORY_CHARS", "40000"))
 # FIX-005: Compteur de requetes pour distinguer les requetes concurrentes dans la console (P-002)
 _request_counter = 0
 
+# FIX-017: Verrou asyncio pour serialiser l'acces au presse-papiers (GAP R1-004)
+# Deux requetes concurrentes partagent le meme presse-papiers — sans verrou, les deux polleraient
+# simultanement et retourneraient la meme reponse. Le verrou force la mise en file d'attente.
+_clipboard_lock = asyncio.Lock()
+
 ROO_XML_TAGS = [
     "<write_to_file>", "<read_file>", "<execute_command>",
     "<attempt_completion>", "<ask_followup_question>", "<replace_in_file>",
@@ -50,7 +56,7 @@ class ChatRequest(BaseModel):
     max_tokens: Optional[int] = None
     stream: Optional[bool] = False
 
-app = FastAPI(title="le workbench Proxy", version="2.0.8")
+app = FastAPI(title="le workbench Proxy", version="2.0.9")
 
 def _hash(text: str) -> str:
     return hashlib.md5(text.encode("utf-8")).hexdigest()
@@ -185,21 +191,28 @@ async def chat_completions(request: ChatRequest):
     req_num = _request_counter
     ts = datetime.now().strftime("%H:%M:%S")
     print(f"\n{'='*60}\n[{ts}] REQUETE #{req_num} | modele: {request.model} | stream: {request.stream}")
-    formatted = _format_prompt(request.messages)
-    pyperclip.copy(formatted)
-    initial_hash = _hash(formatted)
-    print(f"[{ts}] {'GEM MODE' if USE_GEM_MODE else 'MODE COMPLET'} | {len(formatted)} chars")
-    # FIX-001: Multi-line console with explicit NOUVELLE conversation warning (GAP-006)
-    print(f"[{ts}] ══════════════════════════════════════════════════")
-    print(f"[{ts}] PROMPT COPIE ({len(formatted)} chars) — ACTIONS REQUISES :")
-    print(f"         1. Chrome → gemini.google.com → Gem 'Roo Code Agent'")
-    print(f"         2. ⚠️  NOUVELLE conversation (ou effacer l'historique existant)")
-    print(f"         3. Ctrl+V pour coller le prompt")
-    print(f"         4. Attendre la fin de la reponse Gemini")
-    print(f"         5. Ctrl+A puis Ctrl+C pour copier TOUTE la reponse")
-    print(f"         ⚠️  Ne pas utiliser le presse-papiers pour autre chose !")
-    print(f"         Timeout dans {TIMEOUT_SECONDS}s...")
-    response_text = await _wait_clipboard(initial_hash, ts)
+    # FIX-017: Serialisation du presse-papiers via asyncio.Lock() (GAP R1-004)
+    # Si le verrou est deja pris par une autre requete, on attend et on avertit l'utilisateur.
+    if _clipboard_lock.locked():
+        print(f"[{ts}] ⏳ REQUETE #{req_num} EN ATTENTE — Le presse-papiers est occupe par une autre requete.")
+        print(f"[{ts}]    Cette requete sera traitee automatiquement des que la precedente sera terminee.")
+    async with _clipboard_lock:
+        ts = datetime.now().strftime("%H:%M:%S")
+        formatted = _format_prompt(request.messages)
+        pyperclip.copy(formatted)
+        initial_hash = _hash(formatted)
+        print(f"[{ts}] {'GEM MODE' if USE_GEM_MODE else 'MODE COMPLET'} | {len(formatted)} chars")
+        # FIX-001: Multi-line console with explicit NOUVELLE conversation warning (GAP-006)
+        print(f"[{ts}] ══════════════════════════════════════════════════")
+        print(f"[{ts}] PROMPT COPIE ({len(formatted)} chars) — ACTIONS REQUISES :")
+        print(f"         1. Chrome → gemini.google.com → Gem 'Roo Code Agent'")
+        print(f"         2. ⚠️  NOUVELLE conversation (ou effacer l'historique existant)")
+        print(f"         3. Ctrl+V pour coller le prompt")
+        print(f"         4. Attendre la fin de la reponse Gemini")
+        print(f"         5. Ctrl+A puis Ctrl+C pour copier TOUTE la reponse")
+        print(f"         ⚠️  Ne pas utiliser le presse-papiers pour autre chose !")
+        print(f"         Timeout dans {TIMEOUT_SECONDS}s...")
+        response_text = await _wait_clipboard(initial_hash, ts)
     if request.stream:
         return StreamingResponse(_stream_response(response_text, request.model), media_type="text/event-stream")
     return JSONResponse(content=_build_json_response(response_text, request.model), status_code=200)
@@ -210,8 +223,8 @@ async def list_models():
 
 @app.get("/health")
 async def health_check():
-    return {"status": "ok", "proxy": "le workbench", "version": "2.0.8", "gem_mode": USE_GEM_MODE}
+    return {"status": "ok", "proxy": "le workbench", "version": "2.0.9", "gem_mode": USE_GEM_MODE}
 
 if __name__ == "__main__":
-    print(f"{'='*60}\n  le workbench PROXY v2.0.8 | http://localhost:{PORT}/v1\n  Mode: {'GEM' if USE_GEM_MODE else 'COMPLET'} | Timeout: {TIMEOUT_SECONDS}s\n{'='*60}")
+    print(f"{'='*60}\n  le workbench PROXY v2.0.9 | http://localhost:{PORT}/v1\n  Mode: {'GEM' if USE_GEM_MODE else 'COMPLET'} | Timeout: {TIMEOUT_SECONDS}s\n{'='*60}")
     uvicorn.run(app, host="0.0.0.0", port=PORT, log_level="warning")

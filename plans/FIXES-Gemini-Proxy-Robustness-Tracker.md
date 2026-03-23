@@ -7,7 +7,7 @@
 
 **Created:** 2026-03-23
 **Last updated:** 2026-03-23
-**Status:** ✅ 12/12 fixes from Review 1 applied | ⚠️ 4 new fixes from Review 2 pending (0 blocking)
+**Status:** ✅ 12/12 fixes from Review 1 applied | ⚠️ 3 new fixes from Review 2 pending (0 blocking)
 
 ---
 
@@ -356,12 +356,12 @@ This file is the **single source of truth** for tracking the application of all 
 ## P2 — Medium Priority (Review 2)
 
 ### FIX-017 — Proxy: add `asyncio.Lock()` for clipboard serialization
-- **Status:** [ ] PENDING
+- **Status:** [x] DONE
 - **File to change:** `template/proxy.py`
 - **Gap addressed:** GAP R1-004 (request counter not thread-safe — two concurrent requests both poll the clipboard and both return the same response)
 - **What to do:** Add a module-level `_clipboard_lock = asyncio.Lock()`. In `chat_completions()`, wrap the `pyperclip.copy()` + `_wait_clipboard()` block with `async with _clipboard_lock:`. Add a console warning when a request is queued waiting for the lock.
 - **Verification:** Send two simultaneous requests — second request should queue and wait, not race with the first.
-- **Applied:** [ ] Date: — | Commit: —
+- **Applied:** [x] Date: 2026-03-23 | Commit: a13daea
 
 ---
 
@@ -394,8 +394,8 @@ This file is the **single source of truth** for tracking the application of all 
 | **Review 1 — P2 Medium** | 4 | 4 | 0 |
 | **Review 2 - P0 Blocking** | 2 | 2 | **0** |
 | **Review 2 - P1 High** | 2 | 2 | **0** |
-| **Review 2 - P2 Medium** | 3 | 0 | **3** |
-| **TOTAL** | **19** | **16** | **3** |
+| **Review 2 - P2 Medium** | 3 | 1 | **2** |
+| **TOTAL** | **19** | **17** | **2** |
 
 ---
 
@@ -408,6 +408,7 @@ This file is the **single source of truth** for tracking the application of all 
 | 2026-03-23 | Session 14 | FIX-014 — Verification longueur minimale BLOQUANTE (seuil 100 chars) dans _wait_clipboard() — proxy v2.0.6 (REG-001) | 411bce3 |
 | 2026-03-23 | Session 15 | FIX-015 — Garde runtime <new_task> bloquant dans _wait_clipboard() — proxy v2.0.7 (GAP R1-003) | 20e1485 |
 | 2026-03-23 | Session 16 | FIX-016 — Fallback troncature _format_prompt() pour message unique > MAX_HISTORY_CHARS — proxy v2.0.8 (REG-002) | 2542856 |
+| 2026-03-23 | Session 17 | FIX-017 — asyncio.Lock() serialisation presse-papiers + avertissement file d'attente — proxy v2.0.9 (GAP R1-004) | a13daea |
 
 ---
 
