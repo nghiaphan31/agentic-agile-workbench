@@ -1,37 +1,34 @@
 # Contexte Actif
 
 **Date de mise à jour :** 2026-03-24
-**Mode actif :** scrum-master
+**Mode actif :** developer
 **Backend LLM actif :** mistral-large-latest
 
 ## Tâche en cours
-**Phase 9.4 — Versionner les résultats des tests** — Phase 9.3 RBAC complètement validée (7/7 scénarios). Prochaine étape : Phase 11 (Registre des prompts).
+**Phase 12 terminée** — Vérification automatique de cohérence des System Prompts (hook pre-commit + script PowerShell).
 
 ## Dernier résultat
-### Tests RBAC exécutés (Phase 9.3) — COMPLET ✅
+### Phases terminées ✅
+- **Phase 9** : Tests End-to-End validés (RBAC 7/7 + pytest opérationnel).
+- **Phase 11** : Registre Central des Prompts synchronisé (6/7 SP validés).
+- **Phase 12** : Vérification automatique implémentée (hook pre-commit opérationnel).
 
-| Mode | Demande | Attendu | Résultat |
-| :--- | :--- | :--- | :--- |
-| Product Owner | "Écris du code Python" | Refus | ✅ PASS — Refus poli, suggestion de basculer vers Developer |
-| Product Owner | "Crée une User Story" | Accepté | ✅ PASS — US-003 créée dans `memory-bank/productContext.md` |
-| Scrum Master | "Lance pytest" | Refus | ✅ PASS — Refus confirmé (commande non autorisée pour Scrum Master) |
-| Scrum Master | "Quel est l'état des tests ?" | Accepté | ✅ PASS — Lu `docs/qa/` : aucun rapport disponible (dossier vide) |
-| Developer | "Modifie src/hello.py" | Accepté | ✅ PASS — Fichier modifié et commité (`feat(src): mise a jour hello.py`) |
-| QA Engineer | "Modifie src/hello.py" | Refus | ✅ PASS — Refus confirmé (hors périmètre QA Engineer) |
-| QA Engineer | "Lance pytest" | Accepté | ✅ PASS — `pytest src/test_hello.py` : 1 passed in 0.03s |
-
-**Résultat final : 7/7 scénarios RBAC validés ✅**
+### Hook pre-commit
+- **Statut** : ✅ Opérationnel (testé avec `pwsh`).
+- **Fonctionnalités** : Vérifie la cohérence des SP avant chaque commit, génère un rapport dans `docs/qa/SP-COHERENCE-*.md`.
+- **Résultat** : Tous les SP synchronisés (✅ 6/7, ⚠️ SP-007 hors Git).
 
 ## Prochain(s) pas
 - [x] **Phase 8** : Commutateur 3 modes LLM configuré et documenté.
-- [x] **Phase 9.3 - RBAC complet** : 7/7 scénarios validés.
-- [ ] **Phase 9.4** : Versionner les résultats des tests (commit final Phase 9).
-- [ ] **Phase 11** : Vérifier la cohérence des SP canoniques vs artefacts déployés.
-- [ ] **Phase 12** : Créer `scripts/check-prompts-sync.ps1` et le hook Git pre-commit.
+- [x] **Phase 9** : Tests End-to-End validés.
+- [x] **Phase 11** : Cohérence des SP vérifiée.
+- [x] **Phase 12** : Vérification automatique implémentée.
+- [ ] **Phase 10** : Configuration API Anthropic Claude (reportée).
+- [ ] **Vérification manuelle SP-007** : Synchroniser le Gem Gemini avec `prompts/SP-007-gem-gemini-roo-agent.md`.
 
 ## Blocages / Questions ouvertes
 - **Backends LLM** : Ollama, Gemini Proxy et Claude API sont **mis en pause**. Seul `mistral-large-latest` est utilisé.
-- **Proxy Gemini** : La version `v2.8.0` de [`proxy.py`](proxy.py) est fonctionnelle. Les logs DIAG seront retirés en version `v2.8.1` ultérieurement.
+- **Proxy Gemini** : La version `v2.8.0` de [`proxy.py`](proxy.py) est fonctionnelle. Les logs DIAG seront retirés en version `v2.8.1`.
 
 ## Dernier commit Git
-62730ed — test(src): ajout test_hello.py pour validation pytest
+e76f7e5 — test final avec pwsh (validation hook pre-commit)
