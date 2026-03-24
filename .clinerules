@@ -1,17 +1,17 @@
-# PROTOCOLE UADF — DIRECTIVES IMPERATIVES (TOUTES SESSIONS, TOUS MODES)
+# PROTOCOLE le workbench — DIRECTIVES IMPERATIVES (TOUTES SESSIONS, TOUS MODES)
 
 ## REGLE 1 : LECTURE OBLIGATOIRE AU DEMARRAGE DE CHAQUE SESSION
-Avant toute action, tu DOIS executer la sequence suivante dans cet ordre exact :
+Avant toute action, tu DOIS exécuter la séquence suivante dans cet ordre exact :
 
-1. VERIFIER : Est-ce que memory-bank/activeContext.md existe ?
-   - Si NON -> passer a l'etape CREER
-   - Si OUI -> passer a l'etape LIRE
-2. CREER (si absent) : Creer immediatement memory-bank/activeContext.md ET memory-bank/progress.md
-   en utilisant les templates definis en bas de ce fichier.
+1. VÉRIFIER : Est-ce que memory-bank/activeContext.md existe ?
+   - Si NON → passer à l'étape CRÉER
+   - Si OUI → passer à l'étape LIRE
+2. CRÉER (si absent) : Créer immédiatement memory-bank/activeContext.md ET memory-bank/progress.md
+   en utilisant les templates définis en bas de ce fichier.
 3. LIRE : Lire memory-bank/activeContext.md puis memory-bank/progress.md
 4. AGIR : Traiter la demande de l'utilisateur
 
-Cette sequence VERIFIER->CREER->LIRE->AGIR est NON NEGOCIABLE et s'applique a TOUTES les sessions.
+Cette séquence VÉRIFIER→CRÉER→LIRE→AGIR est NON NÉGOCIABLE et s'applique à TOUTES les sessions.
 
 ## REGLE 2 : ECRITURE OBLIGATOIRE A LA CLOTURE DE CHAQUE TACHE
 Avant de cloturer toute tache (avant attempt_completion), tu DOIS mettre a jour :
@@ -39,7 +39,7 @@ TOUT doit etre versionne sous Git, sans exception :
 - Les fichiers de configuration (Modelfile, .roomodes, .clinerules, requirements.txt)
 - La Memory Bank (memory-bank/*.md)
 - Les prompts systeme (prompts/SP-*.md et prompts/README.md)
-- Les documents de plans et d'architecture (plans/*.md)
+- Les documents de plans et d'architecture (workbench/*.md)
 - Les rapports QA (docs/qa/*.md)
 
 ### 5.2 — Quand commiter
@@ -120,7 +120,7 @@ tu DOIS verifier si le changement impacte un system prompt dans prompts/.
 # Progression du Projet
 **Derniere mise a jour :** [DATE]
 
-## Infrastructure UADF
+## Infrastructure le workbench
 - [ ] Phase 0 : Base saine VS Code + Roo Code
 - [ ] Phase 1 : Ollama + modeles
 - [ ] Phase 2 : Depot Git initialise
@@ -143,3 +143,6 @@ tu DOIS verifier si le changement impacte un system prompt dans prompts/.
 ## Legende
 - [ ] A faire  |  [-] En cours  |  [x] Termine
 ---
+
+## Notes
+> **Pourquoi VÉRIFIER→CRÉER→LIRE→AGIR ?** Sans la vérification préalable, l'agent tenterait de lire un fichier inexistant et échouerait silencieusement. La séquence garantit que la Memory Bank est toujours initialisée avant d'être lue.
