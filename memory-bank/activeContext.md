@@ -24,5 +24,5 @@
 - **LLM backends**: Ollama, Gemini Proxy and Claude API are paused except Claude Sonnet API (active mode)
 
 ## Last Git commit
-(to be updated after commit)
+d7d3f2d — chore(i18n): translate workbench/DOC1 and DOC2 to English
 ---
