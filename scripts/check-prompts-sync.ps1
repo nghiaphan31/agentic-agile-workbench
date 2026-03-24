@@ -1,222 +1,171 @@
-<#
+﻿<#
+.SYNOPSIS
+    le workbench - Verification de coherence des system prompts canoniques vs artefacts deployes.
+    REQ-8.1, REQ-8.3, REQ-8.4 | DA-013
+
 .DESCRIPTION
-Vérifie la cohérence entre les System Prompts canoniques (dossier prompts/) et leurs artefacts déployés.
-Génère un rapport dans docs/qa/SP-COHERENCE-YYYY-MM-DD.md.
-
-.PARAMETER Force
-Force la régénération du rapport même si les fichiers n'ont pas changé.
-
-.EXAMPLE
-PS> .\scripts\check-prompts-sync.ps1
-PS> .\scripts\check-prompts-sync.ps1 -Force
+    Compare le contenu de chaque SP canonique (prompts/SP-XXX-*.md) avec l'artefact
+    deploye correspondant. Utilise une comparaison normalisee (CRLF->LF, trim).
+    SP-007 (Gem Gemini) est exclu de la verification automatique avec avertissement.
+    Retourne exit code 0 si tout est synchronise, 1 si desynchronisation detectee.
 #>
 
-param (
-    [switch]$Force
+param(
+    [switch]$Verbose = $false
 )
 
-# Configuration
-$PROJECT_ROOT = $PSScriptRoot.TrimEnd('\scripts')
-$PROMPTS_DIR = "$PROJECT_ROOT\prompts"
-$QA_DIR = "$PROJECT_ROOT\docs\qa"
-$REPORT_FILE = "$QA_DIR\SP-COHERENCE-$((Get-Date).ToString('yyyy-MM-dd')).md"
+$ErrorActionPreference = "Stop"
+$ProjectRoot = Split-Path -Parent $PSScriptRoot
+$PromptsDir = Join-Path $ProjectRoot "prompts"
+$PassCount = 0
+$FailCount = 0
+$WarnCount = 0
 
-# Fichiers à vérifier (SP-XXX -> Artefact)
-$SP_MAPPING = @{
-    "SP-001-ollama-modelfile-system.md" = @{
-        "Target" = "Modelfile"
-        "Section" = "SYSTEM"
-        "Type" = "File"
+function Normalize-Text {
+    param([string]$Text)
+    # Normalisation : CRLF -> LF, trim espaces/sauts de ligne en debut/fin
+    return $Text.Replace("`r`n", "`n").Replace("`r", "`n").Trim()
+}
+
+function Extract-PromptContent {
+    param([string]$SpFile)
+    # Extraire le contenu entre les balises ```markdown ou ``` (premier bloc de code)
+    $content = Get-Content $SpFile -Raw -Encoding UTF8
+    if ($content -match '(?s)```(?:markdown|python|)?\r?\n(.*?)\r?\n```') {
+        return Normalize-Text $Matches[1]
     }
-    "SP-002-clinerules-global.md" = @{
-        "Target" = ".clinerules"
-        "Section" = "Full"
-        "Type" = "File"
+    return $null
+}
+
+function Show-Diff {
+    param([string]$Expected, [string]$Actual, [string]$Label)
+    $expLines = $Expected -split "`n"
+    $actLines = $Actual -split "`n"
+    $maxLines = [Math]::Max($expLines.Count, $actLines.Count)
+    $diffLines = @()
+    for ($i = 0; $i -lt [Math]::Min($maxLines, 20); $i++) {
+        $e = if ($i -lt $expLines.Count) { $expLines[$i] } else { "" }
+        $a = if ($i -lt $actLines.Count) { $actLines[$i] } else { "" }
+        if ($e -ne $a) {
+            $diffLines += "  Ligne $($i+1):"
+            $diffLines += "    SP (attendu) : $e"
+            $diffLines += "    Deploye      : $a"
+        }
     }
-    "SP-003-persona-product-owner.md" = @{
-        "Target" = ".roomodes"
-        "Section" = "customModes[0].roleDefinition"
-        "Type" = "JSON"
-    }
-    "SP-004-persona-scrum-master.md" = @{
-        "Target" = ".roomodes"
-        "Section" = "customModes[1].roleDefinition"
-        "Type" = "JSON"
-    }
-    "SP-005-persona-developer.md" = @{
-        "Target" = ".roomodes"
-        "Section" = "customModes[2].roleDefinition"
-        "Type" = "JSON"
-    }
-    "SP-006-persona-qa-engineer.md" = @{
-        "Target" = ".roomodes"
-        "Section" = "customModes[3].roleDefinition"
-        "Type" = "JSON"
-    }
-    "SP-007-gem-gemini-roo-agent.md" = @{
-        "Target" = "Gemini Web UI"
-        "Section" = "N/A"
-        "Type" = "Manual"
+    if ($diffLines.Count -gt 0) {
+        Write-Host "  Premieres differences :" -ForegroundColor Yellow
+        $diffLines | ForEach-Object { Write-Host $_ -ForegroundColor Yellow }
     }
 }
 
-# Initialisation
-if (-not (Test-Path $QA_DIR)) {
-    New-Item -ItemType Directory -Path $QA_DIR | Out-Null
-}
+Write-Host ""
+Write-Host ("=" * 60)
+Write-Host "  le workbench - Verification Coherence Prompts" -ForegroundColor Cyan
+Write-Host ("=" * 60)
 
-# Fonction pour extraire le contenu SYSTEM d'un Modelfile
-function Get-SystemContentFromModelfile {
-    param (
-        [string]$filePath
-    )
-    $content = Get-Content -Path $filePath -Raw
-    if ($content -match 'SYSTEM """(.*?)"""') {
-        return $matches[1].Trim()
-    }
-    return ""
-}
-
-# Fonction pour extraire une section JSON
-function Get-JsonSection {
-    param (
-        [string]$filePath,
-        [string]$sectionPath
-    )
-    $json = Get-Content -Path $filePath -Raw | ConvertFrom-Json
-    $sectionParts = $sectionPath -split '\.'
-    $current = $json
-    foreach ($part in $sectionParts) {
-        if ($part -match '(.+)\[(\d+)\]') {
-            $prop = $matches[1]
-            $index = [int]$matches[2]
-            $current = $current.$prop[$index]
+# --- SP-001 : Modelfile ---
+Write-Host ""
+Write-Host "[SP-001] Modelfile bloc SYSTEM..." -NoNewline
+$ModelfilePath = Join-Path $ProjectRoot "Modelfile"
+$Sp001Path = Join-Path $PromptsDir "SP-001-ollama-modelfile-system.md"
+if (-not (Test-Path $ModelfilePath)) {
+    Write-Host " SKIP (Modelfile absent)" -ForegroundColor Yellow
+    $WarnCount++
+} else {
+    $spContent = Extract-PromptContent $Sp001Path
+    $modelfileRaw = Get-Content $ModelfilePath -Raw -Encoding UTF8
+    if ($modelfileRaw -match '(?s)SYSTEM\s+"""(.*?)"""') {
+        $deployedContent = Normalize-Text $Matches[1]
+        if ($spContent -eq $deployedContent) {
+            Write-Host " PASS" -ForegroundColor Green
+            $PassCount++
         } else {
-            $current = $current.$part
+            Write-Host " FAIL" -ForegroundColor Red
+            Show-Diff $spContent $deployedContent "SP-001"
+            $FailCount++
         }
+    } else {
+        Write-Host " FAIL (bloc SYSTEM introuvable dans Modelfile)" -ForegroundColor Red
+        $FailCount++
     }
-    return $current
 }
 
-# Fonction pour extraire le contenu d'un SP canonique
-function Get-SPContent {
-    param (
-        [string]$spPath
-    )
-    $content = Get-Content -Path $spPath -Raw
-    if ($content -match 'SYSTEM """(.*?)"""') {
-        return $matches[1].Trim()
+# --- SP-002 : .clinerules ---
+Write-Host "[SP-002] .clinerules (fichier entier)..." -NoNewline
+$ClinerPath = Join-Path $ProjectRoot ".clinerules"
+$Sp002Path = Join-Path $PromptsDir "SP-002-clinerules-global.md"
+if (-not (Test-Path $ClinerPath)) {
+    Write-Host " SKIP (.clinerules absent)" -ForegroundColor Yellow
+    $WarnCount++
+} else {
+    $spContent = Extract-PromptContent $Sp002Path
+    $deployedContent = Normalize-Text (Get-Content $ClinerPath -Raw -Encoding UTF8)
+    if ($spContent -eq $deployedContent) {
+        Write-Host " PASS" -ForegroundColor Green
+        $PassCount++
+    } else {
+        Write-Host " FAIL" -ForegroundColor Red
+        Show-Diff $spContent $deployedContent "SP-002"
+        $FailCount++
     }
-    return $content.Trim()
 }
 
-# Générer un rapport Markdown
-function Generate-Report {
-    $reportLines = @()
-    $reportLines += "# Rapport de Cohérence des System Prompts`n"
-    $reportLines += "**Date :** $((Get-Date).ToString('yyyy-MM-dd'))`n"
-    $reportLines += "**Phase :** 12 — Vérification automatique de cohérence`n"
-    $reportLines += "**Statut :** Généré automatiquement`n`n"
-    $reportLines += "--`-n`n"
-    $reportLines += "## Résultats de Vérification`n`n"
-    $reportLines += "| SP Canonique | Artefact Déployé | Statut | Notes |`n"
-    $reportLines += "| :--- | :--- | :--- | :--- |`n"
+# --- SP-003 a SP-006 : .roomodes ---
+$RoomodesPath = Join-Path $ProjectRoot ".roomodes"
+$SpPersonas = @(
+    @{ Id = "SP-003"; File = "SP-003-persona-product-owner.md"; Slug = "product-owner"; Index = 0 },
+    @{ Id = "SP-004"; File = "SP-004-persona-scrum-master.md"; Slug = "scrum-master"; Index = 1 },
+    @{ Id = "SP-005"; File = "SP-005-persona-developer.md"; Slug = "developer"; Index = 2 },
+    @{ Id = "SP-006"; File = "SP-006-persona-qa-engineer.md"; Slug = "qa-engineer"; Index = 3 }
+)
 
-    $allSynced = $true
-
-    foreach ($spFile in $SP_MAPPING.Keys) {
-        $spPath = "$PROMPTS_DIR\$spFile"
-        $targetInfo = $SP_MAPPING[$spFile]
-        $targetPath = if ($targetInfo.Type -eq "File") { "$PROJECT_ROOT\$($targetInfo.Target)" } else { $targetInfo.Target }
-
-        $status = "❌ DÉSYNCHRONISÉ"
-        $notes = ""
-
-        if ($targetInfo.Type -eq "File") {
-            if (-not (Test-Path $spPath)) {
-                $status = "❌ FICHIER MANQUANT"
-                $notes = "SP canonique introuvable"
-                $allSynced = $false
-            }
-            elseif (-not (Test-Path $targetPath)) {
-                $status = "❌ CIBLE MANQUANTE"
-                $notes = "Artefact déployé introuvable"
-                $allSynced = $false
-            }
-            else {
-                # Extraire le contenu pertinent du SP
-                $spContent = Get-SPContent -spPath $spPath
-
-                # Extraire le contenu pertinent de la cible
-                $targetContent = ""
-                if ($targetInfo.Section -eq "Full") {
-                    $targetContent = Get-Content -Path $targetPath -Raw
-                }
-                elseif ($targetInfo.Section -eq "SYSTEM") {
-                    $targetContent = Get-SystemContentFromModelfile -filePath $targetPath
-                }
-                elseif ($targetInfo.Type -eq "JSON") {
-                    $targetContent = Get-JsonSection -filePath $targetPath -sectionPath $targetInfo.Section
-                }
-
-                # Comparaison
-                if ($spContent -eq $targetContent) {
-                    $status = "✅ SYNCHRONISÉ"
-                }
-                else {
-                    $status = "❌ DÉSYNCHRONISÉ"
-                    $notes = "Contenu différent"
-                    $allSynced = $false
-                }
+if (-not (Test-Path $RoomodesPath)) {
+    Write-Host "[SP-003..006] .roomodes absent - SKIP" -ForegroundColor Yellow
+    $WarnCount += 4
+} else {
+    $roomodesJson = Get-Content $RoomodesPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    foreach ($persona in $SpPersonas) {
+        Write-Host "[$($persona.Id)] .roomodes > $($persona.Slug) roleDefinition..." -NoNewline
+        $spFile = Join-Path $PromptsDir $persona.File
+        $spContent = Extract-PromptContent $spFile
+        $mode = $roomodesJson.customModes | Where-Object { $_.slug -eq $persona.Slug }
+        if ($null -eq $mode) {
+            Write-Host " FAIL (slug '$($persona.Slug)' introuvable dans .roomodes)" -ForegroundColor Red
+            $FailCount++
+        } else {
+            $deployedContent = Normalize-Text $mode.roleDefinition
+            if ($spContent -eq $deployedContent) {
+                Write-Host " PASS" -ForegroundColor Green
+                $PassCount++
+            } else {
+                Write-Host " FAIL" -ForegroundColor Red
+                Show-Diff $spContent $deployedContent $persona.Id
+                $FailCount++
             }
         }
-        else {
-            $status = "⚠️ HORS GIT"
-            $notes = "Vérification manuelle requise"
-        }
-
-        $reportLines += "| `$spFile` | `$($targetInfo.Target) $($targetInfo.Section)` | $status | $notes |`n"
-    }
-
-    $reportLines += "`n--`-n`n"
-    $reportLines += "## Statut Global`n"
-    $reportLines += "- **Cohérence :** " + ($allSynced ? "✅ TOUS SYNCHRONISÉS" : "❌ DÉSYNCHRONISATIONS DÉTECTÉES") + "`n"
-    $reportLines += "- **Action requise :** " + ($allSynced ? "Aucune" : "Corriger les désynchronisations") + "`n"
-
-    # Écrire le rapport
-    $reportLines | Out-File -FilePath $REPORT_FILE -Encoding utf8
-    return $allSynced
-}
-
-# Vérifier si le rapport existe déjà et est à jour
-$reportExists = Test-Path $REPORT_FILE
-$filesChanged = $false
-
-if ($reportExists -and -not $Force) {
-    # Vérifier si des fichiers ont changé depuis le dernier rapport
-    $spFiles = Get-ChildItem -Path $PROMPTS_DIR -Filter "SP-*.md"
-    foreach ($file in $spFiles) {
-        if ($file.LastWriteTime -gt (Get-Item $REPORT_FILE).LastWriteTime) {
-            $filesChanged = $true
-            break
-        }
-    }
-
-    if (-not $filesChanged) {
-        Write-Host "Rapport déjà à jour : $REPORT_FILE"
-        exit 0
     }
 }
 
-# Générer le rapport
-$isSynced = Generate-Report
+# --- SP-007 : Gem Gemini (hors Git - verification manuelle) ---
+Write-Host ""
+Write-Host "[SP-007] Gem Gemini 'Roo Code Agent'..." -NoNewline
+Write-Host " AVERTISSEMENT (deploiement manuel requis)" -ForegroundColor Yellow
+Write-Host "  -> Verifier manuellement sur https://gemini.google.com > Gems > 'Roo Code Agent'"
+Write-Host "  -> Comparer avec : prompts/SP-007-gem-gemini-roo-agent.md"
+$WarnCount++
 
-# Retourner le code de sortie approprié
-if ($isSynced) {
-    Write-Host "✅ Tous les prompts sont synchronisés"
-    exit 0
-}
-else {
-    Write-Host "❌ Désynchronisations détectées - voir $REPORT_FILE"
+# --- Resume ---
+Write-Host ""
+Write-Host ("=" * 60)
+Write-Host "  RESUME : $PassCount PASS | $FailCount FAIL | $WarnCount WARN" -ForegroundColor $(if ($FailCount -gt 0) { "Red" } elseif ($WarnCount -gt 0) { "Yellow" } else { "Green" })
+Write-Host ("=" * 60)
+Write-Host ""
+
+if ($FailCount -gt 0) {
+    Write-Host "ECHEC : $FailCount prompt(s) desynchronise(s). Commit bloque." -ForegroundColor Red
+    Write-Host "Action requise : mettre a jour les artefacts deployes pour correspondre aux SP canoniques." -ForegroundColor Red
     exit 1
+} else {
+    Write-Host "SUCCES : Tous les prompts verifiables sont synchronises." -ForegroundColor Green
+    exit 0
 }

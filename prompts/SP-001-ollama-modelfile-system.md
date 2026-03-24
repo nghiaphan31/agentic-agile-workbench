@@ -4,6 +4,7 @@ name: System Prompt Ollama Modelfile (uadf-agent)
 version: 1.0.0
 last_updated: 2026-03-23
 status: active
+hors_git: false
 
 target_type: ollama_modelfile
 target_file: Modelfile

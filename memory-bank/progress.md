@@ -1,6 +1,6 @@
 # Progression du Projet
 
-**Dernière mise à jour :** 2026-03-23
+**Dernière mise à jour :** 2026-03-24
 
 ## Infrastructure le workbench
 
@@ -14,10 +14,10 @@
 - [x] Phase 6 : proxy.py v2.1.1 (serveur Gemini Chrome, SSE)
 - [x] Phase 7 : Gem Gemini Chrome configuré
 - [x] Phase 8 : Roo Code commutateur 3 modes LLM — terminé
-- [ ] Phase 9 : Tests end-to-end validés
-- [ ] Phase 10 : API Anthropic Claude Sonnet configuré
-- [ ] Phase 11 : Registre prompts/ initialisé
-- [ ] Phase 12 : check-prompts-sync.ps1 + hook pre-commit
+- [x] Phase 9 : Tests end-to-end validés
+- [ ] Phase 10 : API Anthropic Claude Sonnet configuré (reportée)
+- [x] Phase 11 : Registre prompts/ synchronisé (SP-001..006 PASS, SP-007 WARN manuel)
+- [x] Phase 12 : check-prompts-sync.ps1 v2 + hook pre-commit opérationnel
 
 ## Features Produit
 

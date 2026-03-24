@@ -32,12 +32,12 @@
 
 ```
 Dernière mise à jour  : 2026-03-24
-Dernière session      : Session 5 — 2026-03-24
-Phase en cours        : Phase 9 — Tests End-to-End (9.3 terminée, 9.4 à faire)
-Dernière étape faite  : 9.3 terminée — RBAC complet validé (7/7 scénarios)
-Prochaine action      : **Phase 9.4 — Versionner les résultats des tests**
-Blocages actifs       : Backends LLM (Ollama, Gemini Proxy, Claude API) mis en pause — mistral-large-latest uniquement
-Dernier commit Git    : 75c01da — docs(memory): activeContext.md — Phase 9.3 RBAC complet valide (7/7 scenarios)
+Dernière session      : Session 6 — 2026-03-24
+Phase en cours        : Phase 12 terminée — Vérification automatique de cohérence
+Dernière étape faite  : Phase 12 terminée — Hook pre-commit opérationnel + script check-prompts-sync.ps1
+Prochaine action      : **Vérification manuelle SP-007 (Gem Gemini)**
+Blocages actifs       : Aucun
+Dernier commit Git    : 6cffce4 — docs(memory): mise à jour activeContext.md — Phases 9, 11, 12 terminées
 Backend LLM actif     : mistral-large-latest (décision stratégique — autres backends reportés)
 Projet cible          : C:\Users\nghia\AGENTIC_DEVELOPMENT_PROJECTS\agentic-agile-workbench
 ```
