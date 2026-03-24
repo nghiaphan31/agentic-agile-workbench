@@ -1,36 +1,28 @@
-# Contexte Actif
+# Active Context
 
-**Date de mise à jour :** 2026-03-24
-**Mode actif :** code (Claude Sonnet)
-**Backend LLM actif :** Claude Sonnet API
+**Last updated:** 2026-03-24
+**Active mode:** code (Claude Sonnet)
+**Active LLM backend:** Claude Sonnet API
 
-## Tâche en cours
-**Phase 11+12 terminées** — Synchronisation des SP canoniques + script de vérification v2 opérationnel.
+## Current task
+**i18n Batch 1 completed** — Translation of `.clinerules` and `prompts/SP-002-clinerules-global.md` from French to English.
 
-## Dernier résultat
-### Phase 11 — SP canoniques synchronisés ✅
-- SP-001 à SP-006 : `hors_git: false` ajouté au front matter YAML
-- SP-002 à SP-006 : contenu mis à jour pour correspondre aux artefacts déployés (accents français)
-- SP-007 : `hors_git: true` vérifié, contenu non modifié
+## Last result
+### Batch 1 — .clinerules + SP-002 translated to English ✅
+- `.clinerules`: all French prose translated to English; technical identifiers, commit prefixes, and Git commands unchanged
+- `prompts/SP-002-clinerules-global.md`: YAML front matter, section headings, deployment notes, and impact section translated; content block is byte-for-byte identical to `.clinerules`
+- Pre-commit hook ran `check-prompts-sync.ps1`: **6 PASS | 0 FAIL | 1 WARN** (SP-007 manual warning as expected)
+- Commit: `509790d — chore(i18n): translate .clinerules and SP-002 to English`
 
-### Phase 12 — Script de vérification v2 ✅
-- `scripts/check-prompts-sync.ps1` : version template corrigée (fix regex triple-backtick PS5.1)
-- `.git/hooks/pre-commit` : créé et actif
-- Artefacts obsolètes supprimés : `check-prompts-sync-fixed.ps1`, `check-prompts-sync-final.ps1`
+## Next step(s)
+- [ ] i18n Batch 2: translate remaining prompts (SP-001, SP-003..SP-007, prompts/README.md)
+- [ ] i18n Batch 3: translate memory-bank/*.md files
+- [ ] i18n Batch 4: translate workbench/*.md and other documentation
+- [ ] Manual verification SP-007: sync the Gem Gemini with `prompts/SP-007-gem-gemini-roo-agent.md`
 
-### Résultat du script
-```
-RESUME : 6 PASS | 0 FAIL | 1 WARN
-SUCCES : Tous les prompts verifiables sont synchronises.
-```
+## Blockers / Open questions
+- **SP-007**: Manual deployment required on https://gemini.google.com > Gems > "Roo Code Agent"
+- **LLM backends**: Ollama, Gemini Proxy and Claude API are paused except Claude Sonnet API (active mode)
 
-## Prochain(s) pas
-- [ ] Vérification manuelle SP-007 : synchroniser le Gem Gemini avec `prompts/SP-007-gem-gemini-roo-agent.md`
-- [ ] Phase 10 : Configuration API Anthropic Claude (reportée)
-
-## Blocages / Questions ouvertes
-- **SP-007** : Déploiement manuel requis sur https://gemini.google.com > Gems > "Roo Code Agent"
-- **Backends LLM** : Ollama, Gemini Proxy et Claude API sont mis en pause sauf Claude Sonnet API (mode actif)
-
-## Dernier commit Git
-375978f — feat(prompts): Phase 11+12 — SP-001..006 synced with deployed artifacts + hors_git field + check-prompts-sync.ps1 v2 + pre-commit hook
+## Last Git commit
+509790d — chore(i18n): translate .clinerules and SP-002 to English
