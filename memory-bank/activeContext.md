@@ -23,5 +23,5 @@
 - **LLM backends**: Ollama, Gemini Proxy and Claude API are paused except Claude Sonnet API (active mode)
 
 ## Last Git commit
-(pending — chore(i18n): translate Modelfile SYSTEM block to English + sync SP-001)
+b6ebe98 — chore(i18n): translate Modelfile SYSTEM block to English + sync SP-001
 ---
