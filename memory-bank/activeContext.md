@@ -1,6 +1,6 @@
 # Contexte Actif
 
-**Date de mise à jour :** 2026-03-23
+**Date de mise à jour :** 2026-03-24
 **Mode actif :** developer
 **Backend LLM actif :** Claude Sonnet API (claude-sonnet-4-6)
 
@@ -8,13 +8,16 @@
 Phase 8 — Configuration du commutateur 3 modes LLM dans Roo Code.
 
 ## Dernier résultat
-FIX-024 appliqué : proxy.py v2.5.0
+FIX-025 appliqué : proxy.py v2.5.1
 
-**Problème diagnostiqué :** FIX-023 (regex strip) ne fonctionnait pas correctement — le bloc `<environment_details>` était partiellement supprimé mais le contenu après `</environment_details>` (bloc `====\n\nREMINDERS...`) restait. De plus, le texte utilisateur réel ("Dis bonjour en une seule phrase.") apparaît **avant** le premier tag injecté, pas après.
+**Problème diagnostiqué :** La structure réelle d'un message Roo Code contient un tag `<user_message>` qui encapsule le contexte de conversation précédent, **avant** `<environment_details>`. FIX-024 coupait à `<environment_details>` mais pas à `<user_message>`, donc le contenu de la conversation précédente passait quand même.
 
 **Structure réelle d'un message Roo Code :**
 ```
-Dis bonjour en une seule phrase.
+Dis moi bonjour en une seule phrase
+<user_message>
+...contexte conversation precedente...
+</user_message>
 <environment_details>
 ...
 </environment_details>
@@ -24,13 +27,11 @@ REMINDERS
 ...
 ```
 
-**Correction FIX-024 :** Remplacement de l'approche "strip regex" par une approche "extraction avant le premier tag injecté" :
-- `_extract_user_text()` trouve la position du premier tag d'injection (`<environment_details`, `<SYSTEM>`, `<task>`, `<feedback>`) et retourne uniquement le texte qui précède.
-- Résultat : Gemini reçoit uniquement `[USER]\nDis bonjour en une seule phrase.`
+**Correction FIX-025 :** Ajout de `<user_message>` dans `_ROO_INJECTION_START_TAGS`. Le proxy coupe maintenant au premier tag parmi : `<environment_details`, `<user_message>`, `<SYSTEM>`, `<task>`, `<feedback>`.
 
 ## Prochain(s) pas
-- [ ] Redémarrer le proxy (proxy.py v2.5.0)
-- [ ] Tester : envoyer "Dis bonjour en une seule phrase." → Gemini doit recevoir `[USER]\nDis bonjour en une seule phrase.`
+- [ ] Redémarrer le proxy (proxy.py v2.5.1)
+- [ ] Tester : envoyer "Dis moi bonjour en une seule phrase." → Gemini doit recevoir `[USER]\nDis moi bonjour en une seule phrase.`
 - [ ] Créer profil "ollama_local" dans Roo Code Settings > Providers
 - [ ] Créer profil "gemini_proxy" dans Roo Code Settings > Providers
 - [ ] Tester Mode 1 Ollama
@@ -41,4 +42,4 @@ REMINDERS
 Aucun blocage actif.
 
 ## Dernier commit Git
-7856592 — fix(proxy): correction SyntaxWarning invalid escape sequence \\< dans docstrings
+38659b9 — fix(proxy): v2.5.1 FIX-025 — ajout <user_message> dans _ROO_INJECTION_START_TAGS pour couper avant contexte conversation precedent
