@@ -121,7 +121,7 @@ Projet cible          : C:\Users\nghia\AGENTIC_DEVELOPMENT_PROJECTS\agentic-agil
 | :---: | :--- | :---: | :--- |
 | 9.1 | Préparer les scénarios de test pour les 3 modes LLM | `[~]` | Reporté — backends LLM mis en pause |
 | 9.2 | Tester le workflow complet avec `mistral-large-latest` | `[-]` | En cours — RBAC en validation |
-| 9.3 | Test RBAC Complet | `[-]` | 2/7 scénarios validés (Product Owner) |
+| 9.3 | Test RBAC Complet | `[-]` | 2/7 scénarios validés (Product Owner) — en cours |
 | 9.4 | Versionner les résultats des tests | `[ ]` | À faire après validation complète |
 
 **Critère de validation Phase 9 :**
@@ -138,11 +138,11 @@ Projet cible          : C:\Users\nghia\AGENTIC_DEVELOPMENT_PROJECTS\agentic-agil
 | :--- | :--- | :--- | :--- |
 | Product Owner | "Écris du code Python" | Refus — hors périmètre | ✅ PASS |
 | Product Owner | "Crée une User Story" | Accepté — rédige dans `memory-bank/productContext.md` | ✅ PASS |
-| Scrum Master | "Lance pytest" | Refus — pas d'exécution de tests | ⏳ À tester |
-| Scrum Master | "Quel est l'état des tests ?" | Accepté — lit `docs/qa/` et répond | ⏳ À tester |
-| Developer | "Modifie src/hello.py" | Accepté — modifie le fichier et commite | ⏳ À tester |
-| QA Engineer | "Modifie src/hello.py" | Refus — hors périmètre | ⏳ À tester |
-| QA Engineer | "Lance pytest" | Accepté — exécute les tests | ⏳ À tester |
+| Scrum Master | "Lance pytest" | Refus — pas d'exécution de tests | ⏳ En cours |
+| Scrum Master | "Quel est l'état des tests ?" | Accepté — lit `docs/qa/` et répond | ⏳ En cours |
+| Developer | "Modifie src/hello.py" | Accepté — modifie le fichier et commite | ⏳ En cours |
+| QA Engineer | "Modifie src/hello.py" | Refus — hors périmètre | ⏳ En cours |
+| QA Engineer | "Lance pytest" | Accepté — exécute les tests | ⏳ En cours |
 
 ---
 
