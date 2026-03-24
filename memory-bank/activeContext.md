@@ -33,4 +33,4 @@ SUCCES : Tous les prompts verifiables sont synchronises.
 - **Backends LLM** : Ollama, Gemini Proxy et Claude API sont mis en pause sauf Claude Sonnet API (mode actif)
 
 ## Dernier commit Git
-(à mettre à jour après le commit de cette session)
+375978f — feat(prompts): Phase 11+12 — SP-001..006 synced with deployed artifacts + hors_git field + check-prompts-sync.ps1 v2 + pre-commit hook
