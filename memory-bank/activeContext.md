@@ -1,32 +1,26 @@
 ---
 # Active Context
 **Last updated:** 2026-03-24
-**Active mode:** code (Claude Sonnet)
+**Active mode:** 💻 Code
 **Active LLM backend:** Claude Sonnet API
 
 ## Current task
-**i18n workbench/ Sub-batch D (DOC4 + DOC5) completed** — Translated `workbench/DOC4-GUIDE-Workbench-Deployment-Howto.md` (449 lines) and `workbench/DOC5-GUIDE-Project-Development-Process.md` (1521 lines) to English.
+Added RULE 7 (large file generation — mandatory chunking protocol) to `.clinerules` and synced all copies.
 
 ## Last result
-### workbench/ Sub-batch D translation ✅
-- `workbench/DOC4-GUIDE-Workbench-Deployment-Howto.md`: 449 lines — all French text translated to English
-  - Sections 1–9 + Appendices A/B/C fully translated
-  - Technical identifiers kept unchanged (file paths, commands, model names, hostnames, port numbers, URLs, REQ-xxx, DA-xxx)
-- `workbench/DOC5-GUIDE-Project-Development-Process.md`: 1521 lines — all French text translated to English
-  - Sections 1–10 + Appendices A/B/C fully translated
-  - Assembly method: 3-part approach via PowerShell `[System.IO.File]::WriteAllLines` with UTF-8 NoBOM encoding
-  - All 10 sections verified present exactly once; appendices at lines 1995/2014/2036
-- Pre-commit hook: **6 PASS | 0 FAIL | 1 WARN** (SP-007 manual — expected)
-- Final verification: **6 PASS | 0 FAIL | 1 WARN** ✅
+Successfully added RULE 7 to all 4 files:
+- `.clinerules` — RULE 7 inserted before MEMORY BANK FILE TEMPLATES section
+- `prompts/SP-002-clinerules-global.md` — content block updated, version bumped to 2.2.0
+- `template/.clinerules` — identical to `.clinerules`
+- `template/prompts/SP-002-clinerules-global.md` — identical to `prompts/SP-002-clinerules-global.md`
+
+Pre-commit hook result: 6 PASS | 0 FAIL | 1 WARN (SP-007 manual deployment, unrelated to this task)
 
 ## Next step(s)
-- [ ] Manual verification SP-007: sync the Gem Gemini with `prompts/SP-007-gem-gemini-roo-agent.md`
-- [ ] All workbench/ documents (DOC1–DOC5) are now translated to English — i18n complete
+- [ ] No immediate next action
 
 ## Blockers / Open questions
-- **SP-007**: Manual deployment required on https://gemini.google.com > Gems > "Roo Code Agent"
-- **LLM backends**: Ollama, Gemini Proxy and Claude API are paused except Claude Sonnet API (active mode)
+None
 
 ## Last Git commit
-194cc59 — chore(i18n): translate workbench/DOC4 and DOC5 to English
----
+2011499 feat(clinerules): add RULE 7 — large file chunking protocol (SP-002 v2.2.0)
