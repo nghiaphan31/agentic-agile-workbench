@@ -27,4 +27,4 @@
 - **LLM backends**: Ollama, Gemini Proxy and Claude API are paused except Claude Sonnet API (active mode)
 
 ## Last Git commit
-[to be updated after commit]
+aeddca8 — chore(i18n): translate .roomodes and SP-003..006 to English
