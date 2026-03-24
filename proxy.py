@@ -18,7 +18,7 @@ Changelog:
   v2.1.0 - 2026-03-23 : FIX-018 — Suppression "ou effacer l'historique existant" — TOUJOURS NOUVELLE conversation (GAP R1-001)
   v2.1.1 - 2026-03-23 : FIX-019 — Force UTF-8 stdout sur Windows pour eviter UnicodeEncodeError cp1252
   v2.2.0 - 2026-03-23 : FIX-020 — Validation XML bloquante (Gemini texte libre bloque comme <new_task>) (GAP R2-001)
-                         FIX-021 — Detection balises XML echappees markdown (\<read_file\>) avec message specifique (GAP R2-002)
+                         FIX-021 — Detection balises XML echappees markdown (\\<read_file\\>) avec message specifique (GAP R2-002)
   v2.3.0 - 2026-03-23 : FIX-022 — GEM MODE n'envoie que le dernier message [USER] (pas l'historique) pour eviter contamination de contexte (GAP R2-003)
   v2.4.0 - 2026-03-23 : FIX-023 — Suppression des blocs <environment_details>, <SYSTEM>, <task>, <feedback> injectes par Roo Code (GAP R2-004)
   v2.5.0 - 2026-03-23 : FIX-024 — Extraction du texte utilisateur pur avant le premier bloc injecte par Roo Code (GAP R2-005)
@@ -183,7 +183,7 @@ def _validate_response(text: str) -> bool:
     return any(tag in text for tag in ROO_XML_TAGS)
 
 def _has_escaped_xml(text: str) -> bool:
-    """Detecte les balises XML echappees markdown (ex: \<read_file\>). FIX-021"""
+    """Detecte les balises XML echappees markdown (ex: \\<read_file\\>). FIX-021"""
     return any(tag in text for tag in ROO_XML_TAGS_ESCAPED)
 
 def _build_json_response(content: str, model: str) -> dict:
