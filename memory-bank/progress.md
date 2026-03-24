@@ -13,7 +13,7 @@
 - [x] Phase 5 : Memory Bank (7 fichiers) + .clinerules (6 règles)
 - [x] Phase 6 : proxy.py v2.1.1 (serveur Gemini Chrome, SSE)
 - [x] Phase 7 : Gem Gemini Chrome configuré
-- [-] Phase 8 : Roo Code commutateur 3 modes LLM — en cours
+- [x] Phase 8 : Roo Code commutateur 3 modes LLM — terminé
 - [ ] Phase 9 : Tests end-to-end validés
 - [ ] Phase 10 : API Anthropic Claude Sonnet configuré
 - [ ] Phase 11 : Registre prompts/ initialisé

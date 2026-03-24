@@ -29,8 +29,8 @@ Décision stratégique : tous les backends LLM (Ollama, Gemini Proxy, Claude API
 - [x] **Phase 8 - Étape 8.4** : Configuration documentée dans [`memory-bank/techContext.md`](memory-bank/techContext.md).
 - [x] **Phase 9.3 - RBAC Product Owner** : 2 scénarios validés (refus code + création US).
 - [x] **Phase 9.3 - RBAC Scrum Master** : 2 scénarios validés (refus pytest + lecture état tests).
-- [ ] **Phase 9.3 - RBAC Developer** : Tester "Modifie src/hello.py" (accepté).
-- [ ] **Phase 9.3 - RBAC QA Engineer** : Tester "Modifie src/hello.py" (refus) et "Lance pytest" (accepté).
+- [x] **Phase 9.3 - RBAC Developer** : Tester "Modifie src/hello.py" (accepté).
+- [x] **Phase 9.3 - RBAC QA Engineer** : Tester "Modifie src/hello.py" (refus) et "Lance pytest" (accepté).
 - [ ] **Phase 11** : Vérifier la cohérence des SP canoniques vs artefacts déployés.
 - [ ] **Phase 12** : Créer `scripts/check-prompts-sync.ps1` et le hook Git pre-commit.
 
