@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-le workbench Proxy v2.5.0 — Pont Roo Code <-> Gemini Chrome
+le workbench Proxy v2.5.1 — Pont Roo Code <-> Gemini Chrome
 Supporte stream=true (SSE) et stream=false (JSON complet).
 Exigences: REQ-2.1.1 a REQ-2.4.4
 
@@ -23,6 +23,7 @@ Changelog:
   v2.4.0 - 2026-03-23 : FIX-023 — Suppression des blocs <environment_details>, <SYSTEM>, <task>, <feedback> injectes par Roo Code (GAP R2-004)
   v2.5.0 - 2026-03-23 : FIX-024 — Extraction du texte utilisateur pur avant le premier bloc injecte par Roo Code (GAP R2-005)
                          Remplace l'approche regex strip par une extraction "avant le premier tag injecte"
+  v2.5.1 - 2026-03-24 : FIX-025 — Ajout <user_message> dans _ROO_INJECTION_START_TAGS (Roo Code encapsule contexte precedent dans ce tag) (GAP R2-006)
 """
 import asyncio, hashlib, json, os, re, sys, time, uuid
 from datetime import datetime
@@ -69,14 +70,16 @@ class ChatRequest(BaseModel):
     max_tokens: Optional[int] = None
     stream: Optional[bool] = False
 
-app = FastAPI(title="le workbench Proxy", version="2.5.0")
+app = FastAPI(title="le workbench Proxy", version="2.5.1")
 
 # FIX-024: Balises d'injection Roo Code — tout ce qui suit le premier de ces tags est du contexte interne (GAP R2-005)
 # Structure reelle d'un message Roo Code :
-#   "Texte utilisateur reel\n<environment_details>\n...\n</environment_details>\n====\n\nREMINDERS\n..."
+#   "Texte utilisateur reel\n<user_message>\n...\n</user_message>\n<environment_details>\n...\n</environment_details>\n====\n\nREMINDERS\n..."
 # Le texte utilisateur est TOUJOURS avant le premier tag d'injection.
+# FIX-025: Ajout de <user_message> — Roo Code encapsule le contexte de conversation precedent dans ce tag (GAP R2-006)
 _ROO_INJECTION_START_TAGS = [
     "<environment_details",  # Contexte VSCode (fichiers, onglets, heure, cout, mode)
+    "<user_message>",        # FIX-025: Contexte de conversation precedent encapsule par Roo Code
     "<SYSTEM>",              # System prompt injecte dans les messages user
     "<task>",                # Description de tache injectee
     "<feedback>",            # Feedback utilisateur injecte
@@ -304,8 +307,8 @@ async def list_models():
 
 @app.get("/health")
 async def health_check():
-    return {"status": "ok", "proxy": "le workbench", "version": "2.5.0", "gem_mode": USE_GEM_MODE}
+    return {"status": "ok", "proxy": "le workbench", "version": "2.5.1", "gem_mode": USE_GEM_MODE}
 
 if __name__ == "__main__":
-    print(f"{'='*60}\n  le workbench PROXY v2.5.0 | http://localhost:{PORT}/v1\n  Mode: {'GEM' if USE_GEM_MODE else 'COMPLET'} | Timeout: {TIMEOUT_SECONDS}s\n{'='*60}")
+    print(f"{'='*60}\n  le workbench PROXY v2.5.1 | http://localhost:{PORT}/v1\n  Mode: {'GEM' if USE_GEM_MODE else 'COMPLET'} | Timeout: {TIMEOUT_SECONDS}s\n{'='*60}")
     uvicorn.run(app, host="0.0.0.0", port=PORT, log_level="warning")
