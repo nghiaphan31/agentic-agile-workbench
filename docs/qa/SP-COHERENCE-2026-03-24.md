@@ -16,12 +16,12 @@
 
 | SP Canonique | Artefact Déployé | Statut | Notes |
 | :--- | :--- | :--- | :--- |
-| `SP-001` | `Modelfile` bloc SYSTEM | ⏳ À vérifier | Contenu du bloc SYSTEM vs SP-001 |
-| `SP-002` | `.clinerules` | ⏳ À vérifier | Contenu complet vs SP-002 |
-| `SP-003` | `.roomodes` > `customModes[0].roleDefinition` | ⏳ À vérifier | Product Owner |
-| `SP-004` | `.roomodes` > `customModes[1].roleDefinition` | ⏳ À vérifier | Scrum Master |
-| `SP-005` | `.roomodes` > `customModes[2].roleDefinition` | ⏳ À vérifier | Developer |
-| `SP-006` | `.roomodes` > `customModes[3].roleDefinition` | ⏳ À vérifier | QA Engineer |
+| `SP-001` | `Modelfile` bloc SYSTEM | ✅ SYNCHRONISÉ | Contenu identique |
+| `SP-002` | `.clinerules` | ✅ SYNCHRONISÉ | Fichier créé à partir de SP-002 |
+| `SP-003` | `.roomodes` > `customModes[0].roleDefinition` | ✅ SYNCHRONISÉ | Product Owner synchronisé |
+| `SP-004` | `.roomodes` > `customModes[1].roleDefinition` | ✅ SYNCHRONISÉ | Scrum Master synchronisé |
+| `SP-005` | `.roomodes` > `customModes[2].roleDefinition` | ✅ SYNCHRONISÉ | Developer synchronisé |
+| `SP-006` | `.roomodes` > `customModes[3].roleDefinition` | ✅ SYNCHRONISÉ | QA Engineer synchronisé |
 | `SP-007` | Gem Gemini "Roo Code Agent" | ⚠️ Hors Git | Vérification manuelle requise |
 
 ---
