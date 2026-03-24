@@ -1,1 +1,4 @@
-"# Hello World\n\ndef hello():\n    return \"Hello, World!\"\n" 
+# Hello le workbench
+
+def hello():
+    return "Hello, le workbench!"
