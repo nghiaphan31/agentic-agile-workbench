@@ -34,4 +34,4 @@ FIX-025 avait ajouté `<user_message>` dans `_ROO_INJECTION_START_TAGS`, ce qui 
 Aucun blocage actif.
 
 ## Dernier commit Git
-(à mettre à jour après commit)
+4e5e163 — fix(proxy): v2.6.0 FIX-026 — correction structure reelle messages Roo Code (GAP R2-007)
