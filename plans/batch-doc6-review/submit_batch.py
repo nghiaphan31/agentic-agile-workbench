@@ -168,9 +168,9 @@ REVIEWS = [
 requests = []
 for review in REVIEWS:
     requests.append(
-        anthropic.types.message_create_params.Request(
+        anthropic.types.messages.batch_create_params.Request(
             custom_id=review["custom_id"],
-            params=anthropic.types.MessageCreateParamsNonStreaming(
+            params=anthropic.types.messages.batch_create_params.MessageCreateParamsNonStreaming(
                 model=MODEL,
                 max_tokens=MAX_TOKENS,
                 system=review["system"],
