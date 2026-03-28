@@ -82,7 +82,7 @@
 - [x] Fix orchestrator_phase3.py MAX_TOKENS 4096→8192 (commit 1e982a8 — fix included batch_artifacts/.gitignore)
 - [x] Fix SP-002 check script regex / content corruption (KI-001) — em-dash, BOM, embedded template fixed in commits a65cd10/a7ac4f0/d0c0dcd; 6 PASS | 0 FAIL confirmed
 - [x] Add `batch_artifacts/` to .gitignore (commit 1e982a8)
-- [ ] DOC6 revision: fix P0 issues (conversational framing, PRD naming, systemPatterns.md genesis, glossary)
+- [x] DOC6 revision: CLOSED — DOC6 is a conversation log (docs/conversations/2026-03-27-gemini-doc6-architecture.md); per RULE 8.3 conversation files are never edited after creation; P0 issues were addressed to source conversation, not a canonical spec; no action needed
 
 ## Legend
 - [ ] To do  |  [-] In progress  |  [x] Done
