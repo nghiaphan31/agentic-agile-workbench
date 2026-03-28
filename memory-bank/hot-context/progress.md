@@ -59,10 +59,10 @@
 - [x] EXECUTION-TRACKER-v2.0.md created with post-release steps
 
 ## Post-Release Manual Steps (v2.0)
-- [ ] POST-1: Install Chroma on Calypso (`pip install chromadb && chroma run --host 0.0.0.0 --port 8002 --path /data/chroma`)
-- [ ] POST-2: Index cold archive (`python src/calypso/librarian_agent.py --index`)
-- [ ] POST-3: Verify SP-007 Gem Gemini (https://gemini.google.com > Gems > "Roo Code Agent" v1.7.0)
-- [ ] POST-4: Live Calypso pipeline end-to-end test (PRD → final_backlog.json)
+- [x] POST-1: Install Chroma on Calypso — `chromadb-1.5.5` in venv, server running at `calypso:8002`, data at `/home/nghia-phan/chroma-data`
+- [x] POST-2: Index cold archive — 1 file indexed (`productContext_Master.md`), Global Brain operational
+- [ ] POST-3: Verify SP-007 Gem Gemini (https://gemini.google.com > Gems > "Roo Code Agent" v1.7.0) — BROWSER REQUIRED
+- [-] POST-4: Live Calypso pipeline — Phase 2 batch submitted `msgbatch_01KnxYigTwD5fzspGvvFRA7m`, polling in background
 
 ## v2.1 Backlog
 - [ ] KI-001: Fix SP-002 check script regex (nested code blocks false positive)
