@@ -1,7 +1,7 @@
 ---
 # Active Context
 
-**Last updated:** 2026-03-28T22:00:00Z
+**Last updated:** 2026-03-28T22:22:00Z
 **Active mode:** Code
 **Active LLM backend:** MinMax M2.7 via OpenRouter (minimax/minimax-m2.7)
 **LLM Backend:** `minimax` (default via OpenRouter)
@@ -16,22 +16,21 @@
 - `origin/develop`: does not exist yet — needs push
 
 ## Current task
-ADR-006 Phase 1 implementation — branch renamed, RULE 10 updated in 3 files
+Full Coherence Audit via Anthropic Batch API — batch infrastructure created
 
 ## Last result
-- `release/v2.3` renamed to `develop` (ADR-006)
-- RULE 10 updated in `.clinerules`, `template/.clinerules`, `prompts/SP-002-clinerules-global.md`
-- ADR-006 appended to `memory-bank/hot-context/decisionLog.md`
+- Created `plans/batch-full-audit/` with 3 batch scripts + plan + runbook
+- 3 submit scripts (governance, crossdocs, template) — ALL PASS syntax check
+- 3 retrieve scripts — ALL PASS syntax check
+- PLAN-full-coherence-audit.md and RUNBOOK.md created
 
 ## Next step(s)
-- [ ] Git commit all ADR-006 changes
-- [ ] `git push origin develop`
-- [ ] `git push origin master` + `git push origin v2.2.0`
-- [ ] Next: triage IDEAS-BACKLOG for v2.3 scope
+- [ ] Git commit batch-full-audit/ directory
+- [ ] Submit 3 batches when ready (python submit_batch{1,2,3}_*.py)
+- [ ] Wait 1-4 hours, then retrieve results
 
 ## Blockers / Open questions
-- `origin/master` not yet pushed with v2.2.0 tag
-- `origin/develop` not yet created
+- None — infrastructure ready
 
 ## Last Git commit
 `f0826b0` docs(release): add v2.2 canonical docs

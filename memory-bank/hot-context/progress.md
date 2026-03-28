@@ -92,6 +92,21 @@
 - [ ] Triage IDEAS-BACKLOG.md for next release scope
 - [ ] Create `docs/releases/v2.3/` folder at next release planning
 
+### Coherence Audit Infrastructure
+- [x] Batch full audit infrastructure created (`plans/batch-full-audit/`)
+- [x] submit_batch1_governance.py — 4 requests (SP vs .clinerules/.roomodes/README/template)
+- [x] submit_batch2_crossdocs.py — 4 requests (DOC-1..5 intra-release + version drift + pointers)
+- [x] submit_batch3_template.py — 6 requests (template sync + implementation vs docs)
+- [x] retrieve_batch1/2/3.py — results retrieval scripts
+- [x] PLAN-full-coherence-audit.md — architecture plan
+- [x] RUNBOOK.md — execution guide
+- [ ] Submit all 3 batches to Anthropic Batch API
+- [ ] Wait 1-4 hours for processing
+- [ ] Retrieve and review BATCH1-GOVERNANCE-REPORT.md
+- [ ] Retrieve and review BATCH2-CROSSDOCS-REPORT.md
+- [ ] Retrieve and review BATCH3-TEMPLATE-REPORT.md
+- [ ] Consolidate findings into docs/qa/v2.3/COHERENCE-AUDIT-v2.3.md
+
 ## GitFlow Migration (ADR-006)
 - [x] ADR-006 drafted and approved: 3-branch model (main + develop + develop-vX.Y)
 - [x] `release/v2.3` renamed to `develop` (wild mainline)
