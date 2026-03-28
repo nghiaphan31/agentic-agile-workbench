@@ -5,43 +5,36 @@
 **Active LLM backend:** Claude Sonnet API (claude-sonnet-4-6)
 
 ## Current task
-PHASE-E: v2.0 release finalization — COMPLETE. All 5 canonical docs frozen, DOC-4 and DOC-5 written, DOC-N-CURRENT.md pointers updated, QA pass done (28/28 tests PASS), QA report written. Final commit and v2.0.0 tag pending.
+POST-RELEASE: Documenting and tracking the 4 manual post-release steps for v2.0.0. Created `docs/releases/v2.0/EXECUTION-TRACKER-v2.0.md` with full step-by-step instructions for POST-1..4.
 
 ## Last result
-### PHASE-E: v2.0 Release Finalization (Session 2026-03-28)
+### Session 13: Post-Release Tracking (2026-03-28)
 
-All PHASE-E steps complete:
+- Created `docs/releases/v2.0/EXECUTION-TRACKER-v2.0.md` (full v2.0 tracker with all phases + post-release steps)
+- Documented 4 post-release manual steps with commands, validation criteria, and notes:
+  - **POST-1**: Install Chroma on Calypso — `pip install chromadb && chroma run --host 0.0.0.0 --port 8002 --path /data/chroma`
+  - **POST-2**: Index cold archive — `python src/calypso/librarian_agent.py --index`
+  - **POST-3**: Verify SP-007 Gem Gemini at `https://gemini.google.com` > Gems > "Roo Code Agent"
+  - **POST-4**: Live Calypso pipeline end-to-end test (PRD → `final_backlog.json`)
 
-- **E.1**: DOC-1, DOC-2, DOC-3 frozen (status: Frozen, date_frozen: 2026-03-28). DOC-1 body text fixed (DRAFT → FROZEN).
-- **E.2**: `docs/releases/v2.0/DOC-4-v2.0-Operations-Guide.md` written (882 lines, chunked protocol)
-  - Sections: Overview, Deployment, Calypso Pipeline, FastMCP Server, Memory Operations, Hot/Cold Architecture, Troubleshooting, Reference, Checklist
-- **E.3**: `docs/releases/v2.0/DOC-5-v2.0-Release-Notes.md` written
-  - Sections: Summary, What v2.0 Delivers (PHASE-0..D), New Dependencies, New SPs, New Rules, Known Gaps, Migration Guide, v3.0 Preview
-- **E.4**: All 5 `docs/DOC-N-CURRENT.md` pointers updated to v2.0 (with previous release links)
-- **E.5**: QA pass complete
-  - 28/28 unit tests PASS (test_orchestrator.py + test_triage.py)
-  - check-prompts-sync.ps1: 5 PASS, 1 FAIL (SP-002 known false positive), 1 WARN (SP-007 manual)
-  - QA report: `docs/qa/v2.0/QA-REPORT-v2.0-2026-03-28.md`
-  - Verdict: RELEASE APPROVED
-
-### Previous sessions:
-- PHASE-D commit ba61920: Global Brain / Librarian Agent
-- PHASE-C commit 2220121: Calypso orchestration scripts
-- PHASE-B commit 137e977: Template folder enrichment
-- PHASE-A commit bd1bf7d: Hot/Cold memory restructure
-- PHASE-0 commit 905d418: Release governance
+### Previous: PHASE-E: v2.0 Release Finalization (Session 2026-03-28)
+- E.1: DOC-1, DOC-2, DOC-3 frozen (status: Frozen, date_frozen: 2026-03-28)
+- E.2: `docs/releases/v2.0/DOC-4-v2.0-Operations-Guide.md` written (882 lines, chunked protocol)
+- E.3: `docs/releases/v2.0/DOC-5-v2.0-Release-Notes.md` written
+- E.4: All 5 `docs/DOC-N-CURRENT.md` pointers updated to v2.0
+- E.5: QA pass — 28/28 PASS, QA report: `docs/qa/v2.0/QA-REPORT-v2.0-2026-03-28.md`
+- Git tag `v2.0.0` pushed to origin (commit `ed253a1`)
 
 ## Next step(s)
-- [x] Final commit: ed253a1
-- [x] Tag: v2.0.0 pushed to origin
-- [ ] Post-release: Install Chroma on Calypso (manual step)
-- [ ] Post-release: Run live Calypso pipeline end-to-end test
-- [ ] v2.1 planning: fix SP-002 check script regex (KI-001)
+- [ ] **POST-1** (manual — SSH to Calypso): `pip install chromadb && chroma run --host 0.0.0.0 --port 8002 --path /data/chroma`
+- [ ] **POST-2** (manual — after POST-1): `python src/calypso/librarian_agent.py --index`
+- [ ] **POST-3** (manual — browser): Verify SP-007 Gem Gemini at https://gemini.google.com > Gems > "Roo Code Agent" (v1.7.0 English)
+- [ ] **POST-4** (manual — after POST-1+2): Live Calypso pipeline PRD → `final_backlog.json` end-to-end test
+- [ ] **v2.1 planning**: Fix SP-002 check script regex (KI-001)
 
 ## Blockers / Open questions
-- SP-002 check script regex issue (nested code blocks) — low priority, non-blocking, fix in v2.1
-- PHASE-D.1: Chroma installation on Calypso — manual step, requires SSH access
-- PHASE-D.5: Live end-to-end test deferred until Chroma is running on Calypso
+- POST-1..4 require SSH access to Calypso and/or browser action — cannot be automated
+- KI-001: SP-002 check script false positive (nested code blocks) — low priority, fix in v2.1
 
 ## Last Git commit
 ed253a1 docs(release): v2.0 release finalization -- freeze docs, QA pass, release notes

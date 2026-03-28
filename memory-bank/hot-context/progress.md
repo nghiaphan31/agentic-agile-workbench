@@ -56,6 +56,17 @@
 - [x] docs/DOC-N-CURRENT.md pointers → v2.0
 - [x] QA report: docs/qa/v2.0/QA-REPORT-v2.0-2026-03-28.md (28/28 PASS)
 - [x] Git tag v2.0.0 pushed to origin (commit ed253a1)
+- [x] EXECUTION-TRACKER-v2.0.md created with post-release steps
+
+## Post-Release Manual Steps (v2.0)
+- [ ] POST-1: Install Chroma on Calypso (`pip install chromadb && chroma run --host 0.0.0.0 --port 8002 --path /data/chroma`)
+- [ ] POST-2: Index cold archive (`python src/calypso/librarian_agent.py --index`)
+- [ ] POST-3: Verify SP-007 Gem Gemini (https://gemini.google.com > Gems > "Roo Code Agent" v1.7.0)
+- [ ] POST-4: Live Calypso pipeline end-to-end test (PRD → final_backlog.json)
+
+## v2.1 Backlog
+- [ ] KI-001: Fix SP-002 check script regex (nested code blocks false positive)
+- [ ] DOC6 revision: fix P0 issues
 
 ## Legend
 - [ ] To do  |  [-] In progress  |  [x] Done
