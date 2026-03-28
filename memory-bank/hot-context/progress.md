@@ -1,6 +1,6 @@
 # Project Progress
 
-**Last updated:** 2026-03-28
+**Last updated:** 2026-03-28T20:37:00Z
 
 ## le workbench Infrastructure
 
@@ -64,7 +64,7 @@
 - [x] POST-3: Verify SP-007 Gem Gemini (https://gemini.google.com > Gems > "Roo Code Agent" v1.7.0) ✅
 - [x] POST-4: Live Calypso pipeline — Phase 2 (4 expert reports ✅), Phase 3 (20 backlog items ✅), Phase 4 (20/20 items ✅ — 12 GREEN, 8 ORANGE)
 
-## v2.1 Planning
+## v2.1 Release Status
 
 ### New Branch Structure (ADR-005)
 - [x] `release/v2.1` created from master (c3f4458)
@@ -73,12 +73,16 @@
 - [x] ADR-005 captured in decisionLog.md
 - [x] RULE 10 (GitFlow Enforcement) added to .clinerules
 - [x] IDEA-008: OpenRouter MinMax M2.7 as default LLM with Claude fallback — IMPLEMENTED, merged to release/v2.1 via PR #1 (squash)
+- [x] SP-002 coherence FIXED — 6 PASS | 0 FAIL (em-dash corruption, incomplete embedded template, BOM, CRLF normalization)
+- [x] `release/v2.1` merged to master (8218a14, --no-ff)
+- [x] Tag v2.1.0 created on master
+- [x] `release/v2.2` created as active development branch
 
 ## v2.1 Backlog
-- [ ] Fix orchestrator_phase3.py MAX_TOKENS 4096→8192 (done on Calypso, pending local commit)
-- [ ] Fix SP-002 check script regex (nested code blocks false positive, KI-001)
-- [ ] DOC6 revision: fix P0 issues
-- [ ] Add `batch_artifacts/` to .gitignore (done)
+- [x] Fix orchestrator_phase3.py MAX_TOKENS 4096→8192 (commit 1e982a8 — fix included batch_artifacts/.gitignore)
+- [x] Fix SP-002 check script regex / content corruption (KI-001) — em-dash, BOM, embedded template fixed in commits a65cd10/a7ac4f0/d0c0dcd; 6 PASS | 0 FAIL confirmed
+- [x] Add `batch_artifacts/` to .gitignore (commit 1e982a8)
+- [x] DOC6 revision: CLOSED — DOC6 is a conversation log (docs/conversations/2026-03-27-gemini-doc6-architecture.md); per RULE 8.3 conversation files are never edited after creation; P0 issues were addressed to source conversation, not a canonical spec; no action needed
 
 ## Legend
 - [ ] To do  |  [-] In progress  |  [x] Done
