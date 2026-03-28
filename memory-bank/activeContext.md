@@ -1,51 +1,54 @@
 ---
 # Active Context
 **Last updated:** 2026-03-28
-**Active mode:** Architect / Code
+**Active mode:** Code
 **Active LLM backend:** Claude Sonnet API (claude-sonnet-4-6)
 
 ## Current task
-Release governance model fully designed and documented in `plans/governance/PLAN-release-governance.md`.
+PHASE-0 of the release governance restructure — COMPLETE.
 
 ## Last result
-### Governance Model Design (Session 2026-03-28)
-Designed a universal release governance model applicable to both the workbench project and all
-application projects built with it. Key decisions made:
+### PHASE-0 Execution (Session 2026-03-28)
+All 13 steps of PHASE-0 executed successfully on `release/v2.0` branch:
 
-- **Universal docs/ structure**: 5 canonical docs (DOC-1..5) per release, versioned in `docs/releases/vX.Y/`
-- **Two separate spaces**: `docs/` (human-authored specs, stable) vs `memory-bank/` (agent runtime, volatile)
-- **Idea lifecycle**: IDEAS-BACKLOG.md + IDEA-NNN.md files with 6 statuses ([IDEA] -> [ACCEPTED] -> [IMPLEMENTED] / [DEFERRED] / [REJECTED] / [SUPERSEDED])
-- **Conversation log**: `docs/conversations/` with README.md triage index
-- **Release = Git tag**: captures everything atomically (code + docs + config + memory bank + QA)
-- **Three execution tracking files**: DOC-3 (plan) + EXECUTION-TRACKER-vX.Y.md (log) + memory-bank/progress.md (live state)
-- **Unambiguous numbering**: DOC-N.S.SS for sections, PHASE-N.S for steps
-- **Migration strategy (Option C)**: baseline tag v1.0.0-baseline on master now, then PHASE-0 of v2.0 restructures docs/ retroactively and tags v1.0.0 properly
-- **workbench/ folder eliminated**: contents redistributed into docs/releases/v1.0/, docs/conversations/, docs/qa/v1.0/
-- **RULE 8 to add to .clinerules**: Documentation Discipline (read-only frozen docs, idea capture mandate, conversation log mandate)
+- **PHASE-0.1**: Tagged `v1.0.0-baseline` on master ✓
+- **PHASE-0.2**: Created `release/v2.0` branch from `experiment/architecture-v2` ✓
+- **PHASE-0.3**: Created `docs/` folder structure (releases/v1.0, v2.0, qa/v1.0, ideas/, conversations/) ✓
+- **PHASE-0.4**: Moved + renamed workbench/ docs to `docs/releases/v1.0/` via `git mv` ✓
+  - DOC1→DOC-1-v1.0-PRD.md, DOC2→DOC-2-v1.0-Architecture.md, DOC3→DOC-3-v1.0-Implementation-Plan.md
+  - DOC4+DOC5 merged → DOC-4-v1.0-Operations-Guide.md (107KB)
+  - EXECUTION-TRACKER.md → EXECUTION-TRACKER-v1.0.md, RESUME-GUIDE.md → RESUME-GUIDE-v1.0.md
+- **PHASE-0.5**: Created `docs/releases/v1.0/DOC-5-v1.0-Release-Notes.md` ✓
+- **PHASE-0.6**: Moved QA reports to `docs/qa/v1.0/` ✓
+- **PHASE-0.7**: Moved Gemini conversations to `docs/conversations/` + created README.md ✓
+- **PHASE-0.8**: Created `docs/ideas/` with IDEAS-BACKLOG.md + IDEA-001..003 ✓
+- **PHASE-0.9**: Created `docs/DOC-1..5-CURRENT.md` pointer stubs ✓
+- **PHASE-0.10**: Deleted empty `workbench/` folder ✓
+- **PHASE-0.11**: Added RULE 8 (Documentation Discipline) to `.clinerules` ✓
+  - Synced to `template/.clinerules`
+  - Bumped SP-002 to v2.3.0 in `prompts/` and `template/prompts/`
+- **PHASE-0.12**: Tagged `v1.0.0` on `release/v2.0` branch, pushed to origin ✓
+- **PHASE-0.13**: Created `template/docs/` structure (DOC-1..5-CURRENT.md, releases/.gitkeep, qa/.gitkeep, ideas/IDEAS-BACKLOG.md, conversations/README.md) ✓
 
-### Plan document written
-- `plans/governance/PLAN-release-governance.md` — 931 lines, 15 sections
-  - Sections 1-5: Purpose, Core Principles, Two Spaces, docs/ Structure, 5 Canonical Docs
-  - Sections 6-8: Numbering Convention, Idea Lifecycle, Conversation Log
-  - Sections 9-11: Release Lifecycle, Three Tracking Files, Git Branching
-  - Sections 12-15: Agent Rules (RULE 8), Migration Plan (PHASE-0.1..0.13), Application Projects, Implementation Steps
+**Commit**: 905d418 — feat(governance): PHASE-0 complete
+**Tag**: v1.0.0 pushed to origin
+
+### Known issue
+- `check-prompts-sync.ps1` reports SP-002 FAIL due to nested code blocks (```powershell inside ```markdown) breaking the regex. Pre-existing issue, not introduced by this session. Commit went through (hook is non-blocking).
 
 ## Next step(s)
-- [ ] Human reviews `plans/governance/PLAN-release-governance.md` and approves
-- [ ] PHASE-0.1: `git tag v1.0.0-baseline` on master
-- [ ] PHASE-0.2: Create `release/v2.0` branch from `experiment/architecture-v2`
-- [ ] PHASE-0.3..0.13: Full governance restructure (docs/ folder, v1.0 retroactive docs, ideas/, conversations/, RULE 8, tag v1.0.0)
-- [ ] Draft v2.0 canonical docs (DOC-1..3 for v2.0) before starting PHASE-A
-- [ ] PHASE-A: Hot/Cold memory restructure
+- [ ] Draft v2.0 canonical docs (DOC-1-v2.0-PRD.md, DOC-2-v2.0-Architecture.md, DOC-3-v2.0-Implementation-Plan.md)
+- [ ] PHASE-A: Hot/Cold memory restructure (IDEA-001)
 - [ ] PHASE-B: Template folder enrichment
-- [ ] PHASE-C: Calypso orchestration scripts
+- [ ] PHASE-C: Calypso orchestration scripts (IDEA-002)
 - [ ] PHASE-D: Global Brain (Chroma/Mem0, Librarian Agent)
+- [ ] Fix SP-002 check script regex to handle nested code blocks
 - [ ] Manual update of Gem Gemini "Roo Code Agent" with SP-007 v1.7.0 (English)
 
 ## Blockers / Open questions
-- Human approval of PLAN-release-governance.md required before implementation starts
 - P0 unresolved in DOC6: systemPatterns.md genesis, PRD naming collision, conversational framing, missing glossary (to be fixed in v2.0 DOC-1/DOC-2)
+- SP-002 check script regex issue (nested code blocks) — low priority, non-blocking
 
 ## Last Git commit
-1bde967 docs(plans): add PLAN-release-governance.md — universal release governance model
+905d418 feat(governance): PHASE-0 complete — docs/ restructure, RULE 8, SP-002 v2.3.0, template/docs/
 ---

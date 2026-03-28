@@ -10,7 +10,7 @@
 - [x] Phase 2: Git repository initialized with complete .gitignore
 - [x] Phase 3: Custom Modelfile (uadf-agent, T=0.15, ctx=131072, base 14b)
 - [x] Phase 4: .roomodes (4 Agile personas with Git rules)
-- [x] Phase 5: Memory Bank (7 files) + .clinerules (6 rules)
+- [x] Phase 5: Memory Bank (7 files) + .clinerules (8 rules)
 - [x] Phase 6: proxy.py v2.1.1 (Gemini Chrome server, SSE)
 - [x] Phase 7: Gem Gemini Chrome configured
 - [x] Phase 8: Roo Code 3-mode LLM switcher — completed
@@ -24,12 +24,25 @@
 ### Epic 0: Release Governance Model
 - [x] Governance model designed (universal: workbench + application projects)
 - [x] PLAN-release-governance.md written (931 lines, 15 sections)
-- [ ] Human approval of plan
-- [ ] PHASE-0: Governance restructure (docs/ folder, v1.0 retroactive, ideas/, conversations/, RULE 8, tag v1.0.0)
+- [x] Human approval of plan
+- [x] PHASE-0: Governance restructure — ALL 13 STEPS COMPLETE
+  - [x] PHASE-0.1: git tag v1.0.0-baseline on master
+  - [x] PHASE-0.2: Created release/v2.0 branch
+  - [x] PHASE-0.3: Created docs/ folder structure
+  - [x] PHASE-0.4: Moved + renamed workbench/ docs to docs/releases/v1.0/
+  - [x] PHASE-0.5: Created DOC-5-v1.0-Release-Notes.md
+  - [x] PHASE-0.6: Moved QA reports to docs/qa/v1.0/
+  - [x] PHASE-0.7: Moved Gemini conversations to docs/conversations/ + README.md
+  - [x] PHASE-0.8: Created docs/ideas/ with IDEAS-BACKLOG.md + IDEA-001..003
+  - [x] PHASE-0.9: Created docs/DOC-1..5-CURRENT.md pointer stubs
+  - [x] PHASE-0.10: Deleted workbench/ folder
+  - [x] PHASE-0.11: Added RULE 8 to .clinerules + SP-002 bumped to v2.3.0 (synced to all 4 copies)
+  - [x] PHASE-0.12: Tagged v1.0.0 + pushed to origin
+  - [x] PHASE-0.13: Created template/docs/ structure
 - [ ] Draft v2.0 canonical docs (DOC-1..3-v2.0)
-- [ ] PHASE-A: Hot/Cold memory restructure
+- [ ] PHASE-A: Hot/Cold memory restructure (IDEA-001)
 - [ ] PHASE-B: Template folder enrichment
-- [ ] PHASE-C: Calypso orchestration scripts
+- [ ] PHASE-C: Calypso orchestration scripts (IDEA-002)
 - [ ] PHASE-D: Global Brain (Chroma/Mem0, Librarian Agent)
 
 ### Epic 1: Agentic Agile Workbench Architecture (DOC6)

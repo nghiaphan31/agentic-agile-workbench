@@ -368,4 +368,36 @@ Target project        : C:\Users\nghia\AGENTIC_DEVELOPMENT_PROJECTS\agentic-agil
 
 ---
 
+## SESSION LOG
+
+### Session 10 — 2026-03-28 (Governance PHASE-0 Execution)
+**Mode:** Code | **LLM:** Claude Sonnet API (claude-sonnet-4-6)
+**Branch:** release/v2.0
+**Commits:** 905d418
+
+**Work completed:**
+- Resumed from conversation summary (PHASE-0 steps 0.10–0.13 pending)
+- PHASE-0.10: Verified workbench/ was empty (all files moved via git mv in prior session); removed empty directory
+- Created missing DOC-4-v1.0-Operations-Guide.md by merging DOC4+DOC5 from git history (107KB)
+- PHASE-0.11: Inserted RULE 8 (Documentation Discipline) into .clinerules using Python script
+  - Synced RULE 8 to template/.clinerules
+  - Bumped SP-002 from v2.2.0 to v2.3.0 in prompts/ and template/prompts/
+- PHASE-0.12: Tagged v1.0.0 on release/v2.0 branch, pushed to origin
+- PHASE-0.13: Created template/docs/ structure:
+  - DOC-1..5-CURRENT.md pointer stubs
+  - releases/.gitkeep, qa/.gitkeep
+  - ideas/IDEAS-BACKLOG.md blank template
+  - conversations/README.md blank template
+- Updated memory-bank/activeContext.md and memory-bank/progress.md
+- Updated EXECUTION-TRACKER-v1.0.md (this entry)
+
+**Known issues:**
+- check-prompts-sync.ps1 reports SP-002 FAIL due to nested ```powershell blocks inside ```markdown block breaking the regex. Pre-existing issue, non-blocking.
+
+**Next session:**
+- Draft v2.0 canonical docs (DOC-1..3-v2.0)
+- Begin PHASE-A: Hot/Cold memory restructure
+
+---
+
 *End of file EXECUTION-TRACKER.md — Version 1.0.0*
