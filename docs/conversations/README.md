@@ -1,0 +1,28 @@
+# Conversation Log Index
+
+This folder contains AI conversation logs that informed the project design.
+These files are **read-only after creation** — they are historical records, not canonical docs.
+
+## How to Use
+
+1. When saving a new AI conversation, add an entry to this table.
+2. Set triage status to `Not yet triaged`.
+3. Mine the conversation for ideas and create `IDEA-NNN.md` entries in `docs/ideas/`.
+4. Update triage status to `Fully triaged` when all findings are captured.
+
+## Triage Status Values
+
+- `Not yet triaged` — conversation saved but not yet mined for ideas
+- `Partially triaged` — some findings captured, review incomplete
+- `Fully triaged` — all significant findings captured as IDEA-NNN entries or explicitly dismissed
+
+---
+
+## Conversation Registry
+
+| Date | Source | File | Ideas Generated | Triage Status |
+|---|---|---|---|---|
+| 2026-03-27 | Gemini | [2026-03-27-gemini-doc6-architecture.md](2026-03-27-gemini-doc6-architecture.md) | IDEA-001, IDEA-002, IDEA-004 | Fully triaged |
+| 2026-03-28 | Gemini | [2026-03-28-gemini-workbench-explained.md](2026-03-28-gemini-workbench-explained.md) | IDEA-001 (enriched), IDEA-002 (enriched), IDEA-005 | Fully triaged |
+| 2026-03-28 | Claude Batch | [../../plans/batch-doc6-review/DOC6-REVIEW-RESULTS.md](../../plans/batch-doc6-review/DOC6-REVIEW-RESULTS.md) | IDEA-001, IDEA-002, IDEA-004 | Fully triaged |
+| 2026-03-28 | Claude Batch | [../../plans/batch-doc6-review/DOC6-REVIEW-RESULTS2.md](../../plans/batch-doc6-review/DOC6-REVIEW-RESULTS2.md) | IDEA-001, IDEA-002, IDEA-003 | Fully triaged |
