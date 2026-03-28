@@ -5,45 +5,55 @@
 **Active LLM backend:** Claude Sonnet API (claude-sonnet-4-6)
 
 ## Current task
-v2.0 canonical docs drafted. Ready to execute PHASE-A (Hot/Cold memory restructure).
+PHASE-B: Template folder enrichment — complete. Ready to commit and proceed to PHASE-C.
 
 ## Last result
-### v2.0 Canonical Docs Drafted (Session 2026-03-28)
+### PHASE-A: Hot/Cold Memory Architecture (Session 2026-03-28)
 
-Three v2.0 canonical docs created on `release/v2.0` branch (commit fc211cb):
+Completed on `release/v2.0` branch (commit bd1bf7d):
 
-- **[`docs/releases/v2.0/DOC-1-v2.0-PRD.md`](docs/releases/v2.0/DOC-1-v2.0-PRD.md)** (246 lines, Draft)
-  - Product vision: semi-autonomous asynchronous factory
-  - 5 requirements: REQ-2.1..2.5 (governance, hot/cold memory, template, calypso, global brain)
-  - Detailed acceptance criteria per requirement
-  - Glossary of v2.0 terms
+- **`memory-bank/hot-context/`** created with 5 migrated files (git mv)
+- **`memory-bank/archive-cold/`** created with sprint-logs/, completed-tickets/, productContext_Master.md
+- **RULE 9** (Cold Zone Firewall) added to `.clinerules` and `template/.clinerules`
+- **RULE 1** updated to reference `hot-context/` paths
+- **`scripts/memory-archive.ps1`** created (sprint archival script)
+- **SP-002** bumped to v2.4.0
 
-- **[`docs/releases/v2.0/DOC-2-v2.0-Architecture.md`](docs/releases/v2.0/DOC-2-v2.0-Architecture.md)** (340 lines, Draft)
-  - 3-tier architecture: Tier 1 (Roo Code), Tier 2 (Calypso), Tier 3 (Cloud APIs)
-  - Hot/Cold memory architecture with Cold Zone Firewall
-  - Calypso orchestration layer: 7 scripts + FastMCP server
-  - Global Brain: Chroma vector DB + Librarian Agent
-  - v2.0 directory structure + SP registry additions (SP-008, SP-009, SP-010)
+### PHASE-B: Template Folder Enrichment (Session 2026-03-28)
 
-- **[`docs/releases/v2.0/DOC-3-v2.0-Implementation-Plan.md`](docs/releases/v2.0/DOC-3-v2.0-Implementation-Plan.md)** (862 lines, Draft)
-  - PHASE-0: COMPLETE
-  - PHASE-A: Hot/Cold memory (steps A.1..A.7)
-  - PHASE-B: Template enrichment (steps B.1..B.4)
-  - PHASE-C: Calypso scripts (steps C.1..C.11)
-  - PHASE-D: Global Brain (steps D.1..D.8)
-  - PHASE-E: v2.0 release finalization
+All deliverables created (pending commit):
+
+- **`template/memory-bank/hot-context/`** — 5 blank stubs:
+  - `activeContext.md` (from prior session)
+  - `progress.md`
+  - `decisionLog.md`
+  - `systemPatterns.md`
+  - `productContext.md`
+- **`template/memory-bank/archive-cold/`** — directory structure:
+  - `sprint-logs/.gitkeep`
+  - `completed-tickets/.gitkeep`
+  - `productContext_Master.md` (blank stub)
+- **`template/mcp.json`** — Calypso FastMCP server config template
+- **`deploy-workbench-to-project.ps1`** — updated:
+  - Added `mcp.json` to `$FilesToCopy`
+  - Added `docs`, `memory-bank` to `$FoldersToCopy`
+  - Replaced old 7-file Memory Bank creation block with new Hot/Cold-aware block
+  - Updated "Next steps" to reference `hot-context/productContext.md`
 
 ## Next step(s)
-- [ ] PHASE-A: Hot/Cold memory restructure
-  - A.1: Create memory-bank/hot-context/ and archive-cold/ directories
-  - A.2: git mv 5 files to hot-context/
-  - A.3: Add RULE 9 (Cold Zone Firewall) to .clinerules
-  - A.4: Update RULE 1 to reference hot-context/ paths
-  - A.5: Create scripts/memory-archive.ps1
-  - A.6: Update memory bank templates in .clinerules
-  - A.7: Commit and push
-- [ ] PHASE-B: Template folder enrichment
+- [ ] PHASE-B.4: Commit and push (feat(template): PHASE-B complete)
 - [ ] PHASE-C: Calypso orchestration scripts
+  - C.1: Create src/calypso/ directory structure
+  - C.2: Write orchestrator_phase2.py
+  - C.3: Write check_batch_status.py
+  - C.4: Write orchestrator_phase3.py
+  - C.5: Write orchestrator_phase4.py
+  - C.6: Write triage_dashboard.py
+  - C.7: Write apply_triage.py
+  - C.8: Write fastmcp_server.py
+  - C.9: Write SP-008 (Synthesizer Agent)
+  - C.10: Write SP-009 (Devil's Advocate Agent)
+  - C.11: End-to-end test
 - [ ] PHASE-D: Global Brain / Librarian Agent
 - [ ] PHASE-E: v2.0 release finalization
 
@@ -53,5 +63,5 @@ Three v2.0 canonical docs created on `release/v2.0` branch (commit fc211cb):
 - SP-008, SP-009, SP-010 system prompts to be written during PHASE-C and PHASE-D
 
 ## Last Git commit
-fc211cb docs(v2.0): draft DOC-1, DOC-2, DOC-3 for v2.0 release
+bd1bf7d feat(memory): PHASE-A complete -- Hot/Cold memory architecture
 ---

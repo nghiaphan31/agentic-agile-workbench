@@ -65,11 +65,14 @@ $FilesToCopy = @(
     ".workbench-version",
     "Modelfile",
     "proxy.py",
-    "requirements.txt"
+    "requirements.txt",
+    "mcp.json"
 )
 $FoldersToCopy = @(
     "prompts",
-    "scripts"
+    "scripts",
+    "docs",
+    "memory-bank"
 )
 
 # --- Validation ---
@@ -175,23 +178,18 @@ if (-not $DryRun) {
     Set-Content $versionDst $WorkbenchVersion -Encoding UTF8
 }
 
-# --- Create Memory Bank if absent ---
+# --- Create root-level Memory Bank stubs if absent ---
+# memory-bank/ folder is copied from template/ above (hot-context/ + archive-cold/)
+# projectBrief.md and techContext.md live at memory-bank/ root (not in hot-context/)
 $MemoryBankPath = Join-Path $ProjectPath "memory-bank"
-if (-not (Test-Path $MemoryBankPath)) {
-    Write-Host ""
-    Write-Host "Creating Memory Bank (7 files)..." -ForegroundColor Cyan
-    $mbFiles = @("projectBrief.md", "productContext.md", "systemPatterns.md",
-                 "techContext.md", "activeContext.md", "progress.md", "decisionLog.md")
-    if (-not $DryRun) {
-        New-Item -Path $MemoryBankPath -ItemType Directory | Out-Null
-        foreach ($f in $mbFiles) {
-            New-Item -Path $MemoryBankPath -Name $f -ItemType File | Out-Null
-            Write-Host "  [NEW] memory-bank/$f" -ForegroundColor Green
+$RootMbFiles = @("projectBrief.md", "techContext.md")
+foreach ($f in $RootMbFiles) {
+    $dst = Join-Path $MemoryBankPath $f
+    if (-not (Test-Path $dst)) {
+        if (-not $DryRun) {
+            New-Item -Path $dst -ItemType File | Out-Null
         }
-    } else {
-        foreach ($f in $mbFiles) {
-            Write-Host "  [NEW] memory-bank/$f" -ForegroundColor Green
-        }
+        Write-Host "  [NEW] memory-bank/$f" -ForegroundColor Green
     }
 }
 
@@ -224,14 +222,16 @@ Write-Host ""
 if (-not $DryRun) {
     Write-Host "Next steps:" -ForegroundColor Cyan
     Write-Host "  1. Fill in memory-bank/projectBrief.md with the project vision"
-    Write-Host "  2. Open the project in VS Code: code '$ProjectPath'"
-    Write-Host "  3. Commit the workbench files:"
+    Write-Host "  2. Fill in memory-bank/techContext.md with the tech stack details"
+    Write-Host "  3. Fill in memory-bank/hot-context/productContext.md with the first sprint goal"
+    Write-Host "  4. Open the project in VS Code: code '$ProjectPath'"
+    Write-Host "  5. Commit the workbench files:"
     Write-Host "     cd '$ProjectPath'"
     Write-Host "     git add ."
     Write-Host "     git commit -m `"chore(workbench): deploy agentic-agile-workbench v$WorkbenchVersion`""
     Write-Host ""
     if ($Update) {
-        Write-Host "  4. [UPDATE] Review changes with: git diff" -ForegroundColor Yellow
+        Write-Host "  6. [UPDATE] Review changes with: git diff" -ForegroundColor Yellow
         Write-Host "     Consult the workbench CHANGELOG.md for details of the changes" -ForegroundColor Yellow
     }
 }

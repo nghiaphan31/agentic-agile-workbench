@@ -10,7 +10,7 @@
 - [x] Phase 2: Git repository initialized with complete .gitignore
 - [x] Phase 3: Custom Modelfile (uadf-agent, T=0.15, ctx=131072, base 14b)
 - [x] Phase 4: .roomodes (4 Agile personas with Git rules)
-- [x] Phase 5: Memory Bank (7 files) + .clinerules (8 rules)
+- [x] Phase 5: Memory Bank (7 files) + .clinerules (9 rules)
 - [x] Phase 6: proxy.py v2.1.1 (Gemini Chrome server, SSE)
 - [x] Phase 7: Gem Gemini Chrome configured
 - [x] Phase 8: Roo Code 3-mode LLM switcher — completed
@@ -27,8 +27,8 @@
 - [x] Human approval of plan
 - [x] PHASE-0: Governance restructure — ALL 13 STEPS COMPLETE (commit 905d418)
 - [x] Draft v2.0 canonical docs (DOC-1..3-v2.0) — commit fc211cb
-- [ ] PHASE-A: Hot/Cold memory restructure (IDEA-001)
-- [ ] PHASE-B: Template folder enrichment (IDEA-006)
+- [x] PHASE-A: Hot/Cold memory restructure (IDEA-001) — commit bd1bf7d
+- [-] PHASE-B: Template folder enrichment (IDEA-006) — pending commit
 - [ ] PHASE-C: Calypso orchestration scripts (IDEA-002)
 - [ ] PHASE-D: Global Brain (Chroma/Mem0, Librarian Agent) (IDEA-007)
 - [ ] PHASE-E: v2.0 release finalization (DOC-4, DOC-5, tag v2.0.0)
