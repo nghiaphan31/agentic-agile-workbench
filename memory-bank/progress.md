@@ -21,6 +21,17 @@
 
 ## Product Features
 
+### Epic 0: Release Governance Model
+- [x] Governance model designed (universal: workbench + application projects)
+- [x] PLAN-release-governance.md written (931 lines, 15 sections)
+- [ ] Human approval of plan
+- [ ] PHASE-0: Governance restructure (docs/ folder, v1.0 retroactive, ideas/, conversations/, RULE 8, tag v1.0.0)
+- [ ] Draft v2.0 canonical docs (DOC-1..3-v2.0)
+- [ ] PHASE-A: Hot/Cold memory restructure
+- [ ] PHASE-B: Template folder enrichment
+- [ ] PHASE-C: Calypso orchestration scripts
+- [ ] PHASE-D: Global Brain (Chroma/Mem0, Librarian Agent)
+
 ### Epic 1: Agentic Agile Workbench Architecture (DOC6)
 - [x] DOC6-PRD-AGENTIC-AGILE-PROCESS.md drafted (first Gemini conversation)
 - [x] _Agentic Workbench Architecture Explained .md drafted (second Gemini conversation — Global Brain, Librarian Agent, Hot/Cold memory, Calypso scripts, taxonomy matrix)
