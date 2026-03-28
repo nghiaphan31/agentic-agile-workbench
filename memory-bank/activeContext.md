@@ -47,5 +47,5 @@ application projects built with it. Key decisions made:
 - P0 unresolved in DOC6: systemPatterns.md genesis, PRD naming collision, conversational framing, missing glossary (to be fixed in v2.0 DOC-1/DOC-2)
 
 ## Last Git commit
-78295f5 docs(memory): update activeContext with commit hash 9e934e5 after second-pass batch push
+1bde967 docs(plans): add PLAN-release-governance.md — universal release governance model
 ---
