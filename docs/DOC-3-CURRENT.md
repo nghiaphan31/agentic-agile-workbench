@@ -1,11 +1,11 @@
 # DOC-3 — Implementation Plan (Current)
 
-**Current release:** v2.0
-**File:** [docs/releases/v2.0/DOC-3-v2.0-Implementation-Plan.md](releases/v2.0/DOC-3-v2.0-Implementation-Plan.md)
+**Current release:** v2.1
+**File:** [docs/releases/v2.1/DOC-3-v2.1-Implementation-Plan.md](releases/v2.1/DOC-3-v2.1-Implementation-Plan.md)
 **Status:** Frozen
-**Git tag:** `v2.0.0`
+**Git tag:** `v2.1.0`
 
-**Previous release:** [docs/releases/v1.0/DOC-3-v1.0-Implementation-Plan.md](releases/v1.0/DOC-3-v1.0-Implementation-Plan.md) (`v1.0.0`)
+**Previous release:** [docs/releases/v2.0/DOC-3-v2.0-Implementation-Plan.md](releases/v2.0/DOC-3-v2.0-Implementation-Plan.md) (`v2.0.0`)
 
 ---
 

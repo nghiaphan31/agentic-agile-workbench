@@ -78,11 +78,16 @@
 - [x] Tag v2.1.0 created on master
 - [x] `release/v2.2` created as active development branch
 
-## v2.1 Backlog
-- [x] Fix orchestrator_phase3.py MAX_TOKENS 4096→8192 (commit 1e982a8 — fix included batch_artifacts/.gitignore)
-- [x] Fix SP-002 check script regex / content corruption (KI-001) — em-dash, BOM, embedded template fixed in commits a65cd10/a7ac4f0/d0c0dcd; 6 PASS | 0 FAIL confirmed
-- [x] Add `batch_artifacts/` to .gitignore (commit 1e982a8)
-- [x] DOC6 revision: CLOSED — DOC6 is a conversation log (docs/conversations/2026-03-27-gemini-doc6-architecture.md); per RULE 8.3 conversation files are never edited after creation; P0 issues were addressed to source conversation, not a canonical spec; no action needed
+## v2.1 Release — COMPLETE
+- [x] All v2.1 scope implemented and pushed (IDEA-008, SP-002 coherence, ADR-005 GitFlow)
+- [x] `docs/releases/v2.1/` canonical docs created (retroactive — hotfix bypassed formal process)
+- [x] DOC-N-CURRENT.md pointers updated to v2.1
+
+## v2.2 Release (Active Development)
+
+### Scope: TBD — Ideas Backlog Triage Needed
+- [ ] Triage IDEAS-BACKLOG.md for v3.0 scope candidates
+- [ ] Create `docs/releases/v2.2/` folder at next release planning
 
 ## Legend
 - [ ] To do  |  [-] In progress  |  [x] Done
