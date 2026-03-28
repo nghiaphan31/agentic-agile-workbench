@@ -3,7 +3,10 @@
 
 **Last updated:** 2026-03-28
 **Active mode:** Developer
-**Active LLM backend:** Claude Sonnet API (claude-sonnet-4-6)
+**Active LLM backend:** MinMax M2.7 via OpenRouter (minimax/minimax-m2.7)
+**LLM Backend:** `minimax` (default via OpenRouter)
+**Consecutive Errors:** `0`
+**Fallback State:** Not triggered
 
 ## Git state
 - `origin/master`: at tag v2.0.0 (frozen)
