@@ -30,7 +30,7 @@
 - [x] PHASE-A: Hot/Cold memory restructure (IDEA-001) — commit bd1bf7d
 - [x] PHASE-B: Template folder enrichment — commit 137e977
 - [x] PHASE-C: Calypso orchestration scripts (IDEA-002) — commit 2220121
-- [x] PHASE-D: Global Brain (Chroma/Mem0, Librarian Agent) — commit ba61920
+- [x] PHASE-D: Global Brain (Chroma/Librarian Agent) — commit ba61920
 - [x] PHASE-E: v2.0 release finalization — DOC-4, DOC-5, QA pass, tag v2.0.0
 
 ### Epic 1: Agentic Agile Workbench Architecture (DOC6)
@@ -59,14 +59,16 @@
 - [x] EXECUTION-TRACKER-v2.0.md created with post-release steps
 
 ## Post-Release Manual Steps (v2.0)
-- [x] POST-1: Install Chroma on Calypso — `chromadb-1.5.5` in venv, server running at `calypso:8002`, data at `/home/nghia-phan/chroma-data`
-- [x] POST-2: Index cold archive — 1 file indexed (`productContext_Master.md`), Global Brain operational
+- [x] POST-1: Install Chroma on Calypso — `chromadb-1.5.5` in venv, server at `calypso:8002`, data at `/home/nghia-phan/chroma-data`
+- [x] POST-2: Index cold archive — 1 file indexed, Global Brain operational
 - [ ] POST-3: Verify SP-007 Gem Gemini (https://gemini.google.com > Gems > "Roo Code Agent" v1.7.0) — BROWSER REQUIRED
-- [-] POST-4: Live Calypso pipeline — Phase 2 batch submitted `msgbatch_01KnxYigTwD5fzspGvvFRA7m`, polling in background
+- [-] POST-4: Live Calypso pipeline — Phase 2 (4 expert reports ✅), Phase 3 (20 backlog items ✅), Phase 4 (API credits depleted at 12/20 items — blocked)
 
 ## v2.1 Backlog
-- [ ] KI-001: Fix SP-002 check script regex (nested code blocks false positive)
+- [ ] Fix orchestrator_phase3.py MAX_TOKENS 4096→8192 (done on Calypso, pending local commit)
+- [ ] Fix SP-002 check script regex (nested code blocks false positive, KI-001)
 - [ ] DOC6 revision: fix P0 issues
+- [ ] Add `batch_artifacts/` to .gitignore (done)
 
 ## Legend
 - [ ] To do  |  [-] In progress  |  [x] Done

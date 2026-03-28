@@ -37,3 +37,6 @@ Desktop.ini
 # requirements.txt -> Versionné (dépendances Python)
 # prompts/         -> Versionné (registre central des prompts)
 # scripts/         -> Versionné (scripts PowerShell)
+
+# Artefacts de pipeline Calypso (batch运转, non versionnable)
+batch_artifacts/

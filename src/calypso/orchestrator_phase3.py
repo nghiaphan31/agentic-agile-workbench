@@ -28,7 +28,7 @@ import jsonschema
 # ---------------------------------------------------------------------------
 
 MODEL = "claude-sonnet-4-5"          # Synthesizer needs stronger reasoning
-MAX_TOKENS = 4096
+MAX_TOKENS = 8192
 DEFAULT_EXPERT_REPORTS_DIR = "batch_artifacts/expert_reports"
 DEFAULT_PRD_PATH = "docs/releases/v2.0/DOC-1-v2.0-PRD.md"
 DEFAULT_OUTPUT_PATH = "batch_artifacts/draft_backlog.json"
