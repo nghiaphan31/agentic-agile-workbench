@@ -6,7 +6,7 @@
 **Active LLM backend:** Claude Sonnet API (claude-sonnet-4-6)
 
 ## Current task
-All post-release steps (POST-1, POST-2, POST-4 Phase 2+3) completed. Remaining: POST-4 Phase 4 (credits), POST-3 (browser).
+All post-release steps (POST-1, POST-2, POST-3, POST-4 Phases 2+3+4) completed.
 
 ## Last result
 ### Session 14+15: POST-RELEASE execution via SSH to Calypso (2026-03-28)
@@ -33,11 +33,11 @@ All post-release steps (POST-1, POST-2, POST-4 Phase 2+3) completed. Remaining: 
   - Both branches now at `afd3eee` on origin
 
 ## Next step(s)
-- [ ] **POST-4 Phase 4 completion**: After credits top-up at https://console.anthropic.com, re-run Phase 4 from BL-012 onwards:
+- [ ] None — all POST-release steps complete
   - `ssh calypso "cd /home/nghia-phan/AGENTIC_DEVELOPMENT_PROJECTS/agentic-agile-workbench && set -a && source .env && set +a && venv/bin/python src/calypso/orchestrator_phase4.py --draft-backlog batch_artifacts/draft_backlog.json"`
 
 ## Blockers / Open questions
-- **POST-4 Phase 4**: API credits depleted. Human must top up at https://console.anthropic.com
+None — all POST-release steps complete
 
 ## Last Git commit
 adb983e docs(tracker): Session 14+15 -- POST-1+2+4(P2+P3) complete, Step 8 done, Phase 4 partial
