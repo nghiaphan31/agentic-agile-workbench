@@ -1,7 +1,7 @@
 ---
 # Active Context
 
-**Last updated:** 2026-03-28
+**Last updated:** 2026-03-28T20:47:00Z
 **Active mode:** Developer
 **Active LLM backend:** MinMax M2.7 via OpenRouter (minimax/minimax-m2.7)
 **LLM Backend:** `minimax` (default via OpenRouter)
@@ -9,36 +9,26 @@
 **Fallback State:** Not triggered
 
 ## Git state
-- Branch: `release/v2.2` (NEW — active development per ADR-005 GitFlow)
+- Branch: `release/v2.2` (active development per ADR-005 GitFlow)
 - Base: `master` at v2.1.0 (8218a14)
-- `origin/master`: at tag v2.0.0 (frozen — 12 commits behind local master)
-- `origin/release/v2.1`: at v2.1.0 (d0c0dcd — closed per ADR-005)
-- `origin/release/v2.2`: does not exist yet (needs push)
+- Last local commit: `ba0f2a5` — close DOC6 backlog item (release/v2.2)
 
 ## Current task
-Release v2.1.0 completion — merge release/v2.1 → master, tag v2.1.0, close release/v2.1, create release/v2.2
+v2.1 backlog review — COMPLETE
 
 ## Last result
-### Release v2.1.0 Merge (Session 17, 2026-03-28)
-All steps completed locally:
-- [x] `git checkout master` — switched from release/v2.1
-- [x] `git merge release/v2.1 --no-ff` — merged 12 commits (IDEA-008 + SP-002 coherence + GitFlow enforcement)
-- [x] `git tag -a v2.1.0` — tagged release on master (8218a14)
-- [x] `git checkout -b release/v2.2` — created new active development branch
-- [x] Temp Python scripts cleaned (_replace_template.py etc.)
-
-Pending (blocked by VS Code security prompt):
-- [ ] `git push origin master` — 12 commits + v2.1.0 tag to push
-- [ ] `git push origin release/v2.2` — new branch to create
+All v2.1 backlog items verified/closed:
+- orchestrator_phase3 MAX_TOKENS 4096→8192: FIXED (commit 1e982a8 on Calypso)
+- SP-002 KI-001 false positive: FIXED (commits a65cd10/a7ac4f0/d0c0dcd); 6 PASS confirmed
+- batch_artifacts/.gitignore: FIXED (commit 1e982a8)
+- DOC6 revision: CLOSED — docs/conversations/2026-03-27-gemini-doc6-architecture.md is a conversation log; RULE 8.3 prohibits editing logs; P0 issues addressed to source conversation, not a canonical spec
 
 ## Next step(s)
-- [ ] User approves VS Code security prompt OR manually runs:
-  - `git push origin master`
-  - `git push origin v2.1.0`
-  - `git push origin release/v2.2`
+- [ ] v2.1 backlog fully resolved — no pending items
+- [ ] Consider: push release/v2.2 to origin when ready
 
 ## Blockers / Open questions
-- **Git push**: All `git push` commands blocked by VS Code security prompt (×5). User must approve the prompt in VS Code terminal OR push manually via GitHub web UI.
+None — all v2.1 backlog items resolved.
 
 ## Last Git commit
-`8218a14` Merge release/v2.1 -- v2.1.0 release (IDEA-008, SP-002 coherence fixes)
+`ba0f2a5` docs(memory): close DOC6 revision backlog item -- conversation log, RULE 8.3 prohibits editing
