@@ -64,7 +64,7 @@
 - [x] POST-3: Verify SP-007 Gem Gemini (https://gemini.google.com > Gems > "Roo Code Agent" v1.7.0) ✅
 - [x] POST-4: Live Calypso pipeline — Phase 2 (4 expert reports ✅), Phase 3 (20 backlog items ✅), Phase 4 (20/20 items ✅ — 12 GREEN, 8 ORANGE)
 
-## v2.1 Planning
+## v2.1 Release Status
 
 ### New Branch Structure (ADR-005)
 - [x] `release/v2.1` created from master (c3f4458)
@@ -73,6 +73,10 @@
 - [x] ADR-005 captured in decisionLog.md
 - [x] RULE 10 (GitFlow Enforcement) added to .clinerules
 - [x] IDEA-008: OpenRouter MinMax M2.7 as default LLM with Claude fallback — IMPLEMENTED, merged to release/v2.1 via PR #1 (squash)
+- [x] SP-002 coherence FIXED — 6 PASS | 0 FAIL (em-dash corruption, incomplete embedded template, BOM, CRLF normalization)
+- [x] `release/v2.1` merged to master (8218a14, --no-ff)
+- [x] Tag v2.1.0 created on master
+- [x] `release/v2.2` created as active development branch
 
 ## v2.1 Backlog
 - [ ] Fix orchestrator_phase3.py MAX_TOKENS 4096→8192 (done on Calypso, pending local commit)
