@@ -55,7 +55,7 @@
 - [x] DOC-5-v2.0-Release-Notes.md — Frozen (2026-03-28)
 - [x] docs/DOC-N-CURRENT.md pointers → v2.0
 - [x] QA report: docs/qa/v2.0/QA-REPORT-v2.0-2026-03-28.md (28/28 PASS)
-- [ ] Git tag v2.0.0 pushed
+- [x] Git tag v2.0.0 pushed to origin (commit ed253a1)
 
 ## Legend
 - [ ] To do  |  [-] In progress  |  [x] Done

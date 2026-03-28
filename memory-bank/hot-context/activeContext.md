@@ -32,11 +32,11 @@ All PHASE-E steps complete:
 - PHASE-0 commit 905d418: Release governance
 
 ## Next step(s)
-- [ ] Final commit: `docs(release): v2.0 release finalization -- freeze docs, QA pass, release notes`
-- [ ] Tag: `git tag -a v2.0.0 -m "Release v2.0.0 -- Agentic Agile Workbench"`
-- [ ] Push: `git push origin release/v2.0 && git push origin v2.0.0`
+- [x] Final commit: ed253a1
+- [x] Tag: v2.0.0 pushed to origin
 - [ ] Post-release: Install Chroma on Calypso (manual step)
 - [ ] Post-release: Run live Calypso pipeline end-to-end test
+- [ ] v2.1 planning: fix SP-002 check script regex (KI-001)
 
 ## Blockers / Open questions
 - SP-002 check script regex issue (nested code blocks) — low priority, non-blocking, fix in v2.1
@@ -44,5 +44,6 @@ All PHASE-E steps complete:
 - PHASE-D.5: Live end-to-end test deferred until Chroma is running on Calypso
 
 ## Last Git commit
-ba61920 feat(global-brain): PHASE-D complete -- Global Brain / Librarian Agent
+ed253a1 docs(release): v2.0 release finalization -- freeze docs, QA pass, release notes
+Tag: v2.0.0 pushed to origin
 ---
