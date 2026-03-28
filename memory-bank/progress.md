@@ -1,6 +1,6 @@
 # Project Progress
 
-**Last updated:** 2026-03-24
+**Last updated:** 2026-03-28
 
 ## le workbench Infrastructure
 
@@ -15,14 +15,33 @@
 - [x] Phase 7: Gem Gemini Chrome configured
 - [x] Phase 8: Roo Code 3-mode LLM switcher — completed
 - [x] Phase 9: End-to-end tests validated
-- [ ] Phase 10: Anthropic Claude Sonnet API configured (deferred)
+- [x] Phase 10: Anthropic Claude Sonnet API configured (operational — used for Batch API reviews)
 - [x] Phase 11: prompts/ registry synchronized (SP-001..006 PASS, SP-007 WARN manual)
 - [x] Phase 12: check-prompts-sync.ps1 v2 + pre-commit hook operational
 
 ## Product Features
 
-### Epic 1: [To be defined]
-- [ ] [Feature to be defined]
+### Epic 1: Agentic Agile Workbench Architecture (DOC6)
+- [x] DOC6-PRD-AGENTIC-AGILE-PROCESS.md drafted (first Gemini conversation)
+- [x] _Agentic Workbench Architecture Explained .md drafted (second Gemini conversation — Global Brain, Librarian Agent, Hot/Cold memory, Calypso scripts, taxonomy matrix)
+- [x] Batch 1 — DOC6 Expert Review submitted (msgbatch_01QkGMqo8AXmRcSvqccVzX3G)
+  - submit_batch.py, retrieve_batch.py, batch_id.txt
+  - 3 expert reviews: Coherence & Clarity, Architectural Analysis, Implementation Feasibility
+  - 23,502 input / 12,288 output tokens
+- [x] Batch 1 results retrieved → DOC6-REVIEW-RESULTS.md
+- [x] Batch 2 — Second-Pass Vision Analysis submitted (msgbatch_01X6jHRi8tHAh3fadCpsZq1s)
+  - submit_batch2.py, retrieve_batch2.py, batch_id2.txt
+  - 3 analyses: Vision Coherence, Core Workbench vs. Template Taxonomy, Migration Plan
+  - 217,032 input / 12,288 output tokens (10× larger context)
+- [x] Batch 2 results retrieved → DOC6-REVIEW-RESULTS2.md
+- [ ] DOC6 revision: fix P0 issues (conversational framing, PRD naming, systemPatterns.md genesis, glossary)
+- [ ] Migration Phase A: restructure memory-bank/ into Hot/Cold architecture
+- [ ] Migration Phase B: enrich template/ folder (memory-bank/ subdirs, mcp.json, updated .clinerules)
+- [ ] Migration Phase C: build Calypso orchestration scripts (orchestrator_phase2..4.py, FastMCP server)
+- [ ] Migration Phase D: Global Brain (Chroma/Mem0 vector DB, Librarian Agent)
+- [ ] SP-008 Lead PM Agent system prompt
+- [ ] SP-009 Analyst Agent system prompt (Brownfield)
+- [ ] SP-010 Librarian Agent system prompt (Retrospective)
 
 ## Legend
 - [ ] To do  |  [-] In progress  |  [x] Done
