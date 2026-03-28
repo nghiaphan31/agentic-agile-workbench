@@ -5,6 +5,12 @@
 **Active mode:** Developer
 **Active LLM backend:** Claude Sonnet API (claude-sonnet-4-6)
 
+## Git state
+- `origin/master`: at tag v2.0.0 (frozen)
+- `origin/release/v2.0`: closed after merge to master
+- `release/v2.1`: ACTIVE — all new development here (IDEA-008 OpenRouter MinMax default LLM)
+- Last commit: c3f4458 (IDEA-008 captured)
+
 ## Current task
 All post-release steps (POST-1, POST-2, POST-3, POST-4 Phases 2+3+4) completed.
 
