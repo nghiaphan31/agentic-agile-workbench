@@ -97,17 +97,21 @@ custom_ids = [
     "impl-memory",
 ]
 
+errors = {}
+
 for result in results:
     custom_id = result.custom_id
     print(f"\nProcessing result: {custom_id}")
     
-    if result.type == "error":
+    if result.result.type == "errored":
+        error = result.result.error
+        errors[custom_id] = f"Error type: {error.type}"
         report += f"""## Result: {custom_id}
 
 **Status:** ERROR
 
 ```
-{result.error}
+Error type: {error.type}
 ```
 
 ---
@@ -115,12 +119,31 @@ for result in results:
 """
         continue
     
-    # Get the response text
-    response_text = result.content[0].text
-    
-    report += f"""## Result: {custom_id}
+    if result.result.type == "succeeded":
+        message = result.result.message
+        text_content = ""
+        for content_block in message.content:
+            if hasattr(content_block, 'text'):
+                text_content += content_block.text
+        print(f"  ✅ {custom_id}: {message.usage.input_tokens} in / {message.usage.output_tokens} out tokens")
+        
+        report += f"""## Result: {custom_id}
 
-{response_text}
+{text_content}
+
+---
+
+"""
+    else:
+        errors[custom_id] = f"Unexpected result type: {result.result.type}"
+        print(f"  ⚠️  {custom_id}: unexpected result type {result.result.type}")
+        report += f"""## Result: {custom_id}
+
+**Status:** UNEXPECTED
+
+```
+Result type: {result.result.type}
+```
 
 ---
 
@@ -134,3 +157,8 @@ OUTPUT_FILE.write_text(report, encoding="utf-8")
 
 print(f"\n[OK] Results written to: {OUTPUT_FILE}")
 print(f"     Total report size: {len(report):,} characters")
+
+if errors:
+    print(f"\n⚠️  Errors encountered:")
+    for cid, err in errors.items():
+        print(f"  - {cid}: {err}")
