@@ -1,51 +1,48 @@
 ---
 # Active Context
 
-**Last updated:** 2026-03-29T08:10:00Z
+**Last updated:** 2026-03-29T08:50:00Z
 **Active mode:** Developer
 **Active LLM backend:** MinMax M2.7 via OpenRouter (minimax/minimax-m2.7)
-**LLM Backend:** `minimax` (default via OpenRouter)
+**LLM Backend:** `minmax` (default via OpenRouter)
 **Consecutive Errors:** `0`
 **Fallback State:** Not triggered
 
 ## Git state
-- Branch: `feature/IDEA-009-batch-toolkit` (from `develop`)
-- Canonical source: `scripts/batch/` (8 modules + 2 templates)
-- Template bundle: `template/scripts/batch/` (7 modules + 2 templates)
-- `develop`: commit e6a0d6b (IDEA-009 + IDEA-011 committed)
-- `feature/IDEA-009-batch-toolkit`: same as develop after final commit
+- Branch: `develop`
+- `develop`: commit b3f237c (v2.3.0 release)
+- `feature/IDEA-009-batch-toolkit`: DELETED (merged via squash to develop)
+- `fix/IDEA-011-sp002-coherence`: branch exists, IDEA-011 fixes merged to develop
 
 ## Current task
-IDEA-009: Generic Anthropic Batch API Toolkit — IMPLEMENTED (pending merge)
-IDEA-011: SP-002 Coherence Fix — CAPTURED (pending branch)
+v2.3.0 Release — COMPLETE
+- IDEA-009: Batch API toolkit merged to develop (commit 9abbf83)
+- IDEA-011: SP-002 coherence fixed — 6 PASS | 0 FAIL | 1 WARN
+- DOC-1..DOC-5: Frozen for v2.3.0
+- Tag v2.3.0 created on develop (b3f237c)
 
 ## Last result
-- IDEA-009: All 12 Python files implemented, syntax checked, CLI tested
-- IDEA-011: IDEA document created, added to IDEAS-BACKLOG.md
-- ADR-010: Finalized with two governance paths and three release tiers
+- SP-002 coherence check: 6 PASS | 0 FAIL | 1 WARN (SP-007 manual deployment required)
+- All v2.3.0 scope delivered and tagged
 
 ## Next step(s)
-- [x] DOC-1..DOC-5 created for v2.3 (Draft)
-- [x] DOC-1..DOC-5 pointers updated to v2.3
-- [ ] Merge feature/IDEA-009-batch-toolkit to develop via PR
-- [ ] Create `fix/IDEA-011-sp002-coherence` branch to debug SP-002 encoding issues
-- [ ] Freeze DOC-1..DOC-5 when ready for v2.3.0 tag
+- [ ] Push `develop` to origin (push was denied during session — user must push manually)
+- [ ] Merge develop to main (GitFlow release)
+- [ ] Delete `fix/IDEA-011-sp002-coherence` branch after push
+- [ ] IDEA-011 v2.3.1 release (pending): implement remaining IDEA-011 items on develop
 
 ## Blockers / Open questions
-- SP-002 coherence check FAILS on every commit (BOM, mojibake, literal \n)
-- ADR-010 requires all 5 canonical docs updated for every idea (structured or ad-hoc)
-- Minor release formalization: tag v2.3.1 after DOC-1..5 updates
+- Git push to origin requires user action (denied during session)
+- SP-007 Gem Gemini requires manual deployment at https://gemini.google.com > Gems
 
-## Governance Notes (ADR-010)
-- Path 1 [STRUCTURED]: Full DOC-1→DOC-2→DOC-3→Calypso→QA→release
-- Path 2 [AD-HOC]: Lightweight with mandatory release tier
-  - Minor: dev-tooling, skip Calypso, lightweight docs, unit+integration tests
-  - Medium: new features, partial Calypso
-  - Major: architectural changes, full process
-- All 5 canonical docs (DOC-1..DOC-5) non-negotiable regardless of tier
-- GitFlow always enforced
-- ADR mandatory for every ad-hoc idea
-- **DOC-1 and DOC-2 coherency non-negotiable**: no blind spots in requirements or architecture
+## Coherence Status (IDEA-011)
+- SP-001 (Modelfile): PASS
+- SP-002 (.clinerules): PASS (FIXED — BOM removed, mojibake fixed, literal \\n fixed)
+- SP-003 (.roomodes product-owner): PASS
+- SP-004 (.roomodes scrum-master): PASS
+- SP-005 (.roomodes developer): PASS
+- SP-006 (.roomodes qa-engineer): PASS
+- SP-007 (Gem Gemini): WARN (manual deployment required)
 
 ## Last Git commit
-`6854381` docs(memory): sync decisionLog with ADR-010 DOC-1 DOC-2 coherency requirement
+`b3f237c` release(v2.3): finalize v2.3.0 -- IDEA-011 SP-002 coherence fix and DOC freeze
