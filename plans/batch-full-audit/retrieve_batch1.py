@@ -53,7 +53,7 @@ if not api_key:
 client = anthropic.Anthropic(api_key=api_key)
 
 print(f"\nRetrieving batch status...")
-batch = client.messages.batches.retrieve(batch_id=batch_id)
+batch = client.messages.batches.retrieve(id=batch_id)
 
 print(f"   Batch ID  : {batch.id}")
 print(f"   Status    : {batch.processing_status}")
