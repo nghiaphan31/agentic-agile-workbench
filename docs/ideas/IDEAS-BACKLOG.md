@@ -34,3 +34,4 @@
 | IDEA-006 | Template enrichment (memory-bank/ subdirs, mcp.json, .clinerules Hot/Cold) | Batch review 2 | 2026-03-28 | [ACCEPTED] | v2.0 | Planned for PHASE-B |
 | IDEA-007 | Global Brain / Librarian Agent (Chroma/Mem0, cross-project memory) | Batch review 2 | 2026-03-28 | [IMPLEMENTED] | v2.0 | Implemented in PHASE-D, commit ba61920 |
 | IDEA-008 | OpenRouter MinMax M2.7 as default LLM with Claude fallback on consecutive errors | Human | 2026-03-28 | [IMPLEMENTED] | v2.1 | Merged to release/v2.1 via PR #1 (squash), feature branch deleted |
+| IDEA-009 | Generic Anthropic Batch API Toolkit | Batch audit lessons learned | 2026-03-29 | [IDEA] | TBD | Capture batch submit/retrieve/poll patterns as reusable infrastructure |
