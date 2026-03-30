@@ -1,13 +1,16 @@
 ---
 id: IDEA-012B
 title: Ideation-to-Release — PHASE-B Core Logic
-status: ACCEPTED
+status: IMPLEMENTED
 target_release: v2.4
 source: Architect mode 2026-03-30
 source_files: [plans/governance/PLAN-ideation-to-release-full-process.md]
 captured: 2026-03-30
 captured_by: Architect mode
-planned_start: After IDEA-012A merged
+decided: 2026-03-30
+decided_by: Human
+implemented: 2026-03-30
+implementation_commit: 3a8a963
 ---
 
 ## Description
