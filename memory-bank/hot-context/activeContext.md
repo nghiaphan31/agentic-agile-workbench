@@ -1,7 +1,7 @@
 ---
 # Active Context
 
-**Last updated:** 2026-03-30T13:35:00Z
+**Last updated:** 2026-03-30T14:50:00Z
 **Active mode:** Code
 **Active LLM backend:** MinMax M2.7 via OpenRouter (minimax/minimax-m2.7)
 **LLM Backend:** `minmax` (default via OpenRouter)
@@ -9,15 +9,14 @@
 **Fallback State:** Not triggered
 
 ## Git state
-- Branch: `master`
-- `develop`: commit b3f237c (v2.3.0 release)
-- `master`: commit a4d9696 (IDEA-012B status update)
-- Last commit: docs(governance): update IDEA-012B status to IMPLEMENTED
-- `feature/IDEA-009-batch-toolkit`: DELETED (merged via squash to develop)
-- `fix/IDEA-011-sp002-coherence`: DELETED (merged to develop)
+- Branch: `develop`
+- `develop`: commit 98c130f (GITFLOW remediation complete — 10 cherry-picks from master)
+- `master`: commit a4d9696 (ahead of develop, ADR-011 pending sync)
+- Last commit on develop: docs(memory): IDEA-012C QA verified — 19/19 tests pass, execution tracker updated
+- GITFLOW violation: Option A cherry-pick remediation complete (ADR-011)
 
 ## Current task
-**Ideation-to-Release Process — ALL PHASES IMPLEMENTED ✅**
+**GITFLOW violation remediated — Option A cherry-pick (10 commits to develop)**
 
 Session objective: Implement the complete ad-hoc idea governance model.
 
@@ -30,25 +29,15 @@ Completed across sessions:
 All IDEA-012A/B/C now [IMPLEMENTED] + QA complete
 
 ## Last result
-- Commit `2f3a108`: feat(governance): Ideation-to-Release PHASE-C full features
-- Commit `3a8a963`: feat(governance): Ideation-to-Release PHASE-B core logic
-- Commit `a4d9696`: docs(governance): update IDEA-012B status to IMPLEMENTED
-- Session 2026-03-30: IDEA-012C QA complete (19/19 tests PASS)
-  - Bug fixed: BranchTracker.is_release_in_progress() added at branch_tracker.py:266
-  - Bug fixed: test_tracker_initialization str() comparison at test_ideation_pipeline.py:94
-- SP-002 coherence check: **6 PASS | 0 FAIL | 1 WARN**
+All 10 commits now on develop. ADR-011 created. DOC-3-CURRENT.md updated with AD-HOC WORK section.
 
 ## Next step(s)
-- [x] IDEA-012A marked as [IMPLEMENTED]
-- [x] IDEA-012B marked as [IMPLEMENTED]
-- [x] IDEA-012C QA verified (19/19 tests PASS)
-- [ ] Push master to origin
-- [ ] Begin using the governance process to govern itself
+- [x] GITFLOW violation remediated (ADR-011)
+- [x] AD-HOC WORK section added to DOC-3-CURRENT.md
+- [ ] Push develop to origin
 
 ## Blockers / Open questions
 - SP-007 Gem Gemini requires manual deployment at https://gemini.google.com > Gems
-- COHERENCE-AUDIT-v2.3.md still pending (P0 issues)
-- PHASE-B implementation requires Calypso orchestrator knowledge
 
 ## Coherence Status (SP-002 v2.7.0)
 - SP-001 (Modelfile): PASS
@@ -70,4 +59,4 @@ All IDEA-012A/B/C now [IMPLEMENTED] + QA complete
 | Tracking method | Option B: One IDEA per phase (live-test process) |
 
 ## Last Git commit
-`93679fa` chore(prompts): update SP-002 to v2.7.0 with RULE 11-14
+`98c130f` docs(memory): IDEA-012C QA verified — 19/19 tests pass, execution tracker updated

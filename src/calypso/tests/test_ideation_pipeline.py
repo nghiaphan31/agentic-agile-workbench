@@ -91,7 +91,7 @@ class TestBranchTracker:
     def test_tracker_initialization(self):
         """Test tracker can be initialized"""
         tracker = BranchTracker()
-        assert tracker.repo_path == Path(".")
+        assert str(tracker.repo_path) == "."
     
     def test_tracker_scan(self):
         """Test branch scanning"""
