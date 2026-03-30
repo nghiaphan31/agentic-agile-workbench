@@ -1,13 +1,15 @@
 ---
 id: IDEA-012C
 title: Ideation-to-Release — PHASE-C Full Features
-status: ACCEPTED
+status: IMPLEMENTED
 target_release: v2.5
 source: Architect mode 2026-03-30
 source_files: [plans/governance/PLAN-ideation-to-release-full-process.md]
 captured: 2026-03-30
 captured_by: Architect mode
 planned_start: After IDEA-012B merged
+implementation_commit: a4d9696
+implementation_date: 2026-03-30
 ---
 
 ## Description

@@ -10,7 +10,7 @@ captured_by: Architect mode
 decided: 2026-03-30
 decided_by: Human
 implemented: 2026-03-30
-implementation_commit: pending
+implementation_commit: 76430e6, 93679fa, a27dbf4
 ---
 
 ## Description

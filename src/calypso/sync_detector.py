@@ -392,6 +392,89 @@ class SyncDetector:
         
         return results
 
+    def get_git_diff_files(self, branch_a: str, branch_b: str = "develop") -> list[str]:
+        """
+        Get list of files that differ between two branches.
+        
+        This enables file-based overlap detection by comparing what
+        files each branch modifies.
+        
+        Args:
+            branch_a: First branch to compare
+            branch_b: Second branch (default: develop)
+            
+        Returns:
+            List of file paths that differ
+        """
+        import subprocess
+        
+        try:
+            result = subprocess.run(
+                ["git", "diff", "--name-only", branch_a, branch_b],
+                capture_output=True,
+                text=True,
+                timeout=30,
+            )
+            if result.returncode == 0:
+                return [f.strip() for f in result.stdout.strip().split("\n") if f.strip()]
+        except Exception:
+            pass
+        return []
+
+    def detect_file_overlap_from_git(self, idea_a_id: str, idea_b_id: str) -> Optional[OverlapType]:
+        """
+        Detect file-level overlap between two ideas using git diff.
+        
+        Compares the branches for each idea and checks for file conflicts.
+        """
+        import subprocess
+        
+        # Get branch names for each idea
+        branch_a = self._get_branch_for_idea(idea_a_id)
+        branch_b = self._get_branch_for_idea(idea_b_id)
+        
+        if not branch_a or not branch_b:
+            return None
+        
+        try:
+            # Get files changed in each branch relative to develop
+            files_a = set(self.get_git_diff_files(branch_a, "develop"))
+            files_b = set(self.get_git_diff_files(branch_b, "develop"))
+            
+            # Find intersection
+            common_files = files_a & files_b
+            
+            if not common_files:
+                return OverlapType.NO_OVERLAP
+            
+            # Check for conflicts (same file modified in incompatible ways)
+            # This is a simplified check - real conflict detection would need content diff
+            if len(common_files) > 0:
+                return OverlapType.SHARED_LAYER
+                
+        except Exception:
+            pass
+        
+        return None
+
+    def _get_branch_for_idea(self, idea_id: str) -> Optional[str]:
+        """Get the branch name associated with an IDEA"""
+        import subprocess
+        
+        try:
+            result = subprocess.run(
+                ["git", "branch", "--list", f"*/*/{idea_id}*"],
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                # Return first matching branch
+                return result.stdout.strip().split("\n")[0].strip("* ").split()[0]
+        except Exception:
+            pass
+        return None
+
 
 # CLI interface for testing
 if __name__ == "__main__":
