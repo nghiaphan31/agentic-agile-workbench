@@ -59,4 +59,9 @@ All 10 commits now on develop. ADR-011 created. DOC-3-CURRENT.md updated with AD
 | Tracking method | Option B: One IDEA per phase (live-test process) |
 
 ## Last Git commit
-`98c130f` docs(memory): IDEA-012C QA verified — 19/19 tests pass, execution tracker updated
+`31a6bb6` chore(prompts): rebuild SP-002 code block from .clinerules — perfect sync
+
+## Recent commits (this session)
+- `4a3828c` chore(gitflow): RULE 10 — keep branches after merge, add develop ff step, fix 5.1 folders
+- `2ec1fc1` chore(prompts): sync SP-002 with RULE 10 gitflow update — keep branches, develop ff, folders list
+- `31a6bb6` chore(prompts): rebuild SP-002 code block from .clinerules — perfect sync
