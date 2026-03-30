@@ -59,9 +59,12 @@ All 10 commits now on develop. ADR-011 created. DOC-3-CURRENT.md updated with AD
 | Tracking method | Option B: One IDEA per phase (live-test process) |
 
 ## Last Git commit
-`31a6bb6` chore(prompts): rebuild SP-002 code block from .clinerules — perfect sync
+`ca29b7e` docs: update DOC-4-CURRENT pointer to v2.4
 
 ## Recent commits (this session)
 - `4a3828c` chore(gitflow): RULE 10 — keep branches after merge, add develop ff step, fix 5.1 folders
 - `2ec1fc1` chore(prompts): sync SP-002 with RULE 10 gitflow update — keep branches, develop ff, folders list
 - `31a6bb6` chore(prompts): rebuild SP-002 code block from .clinerules — perfect sync
+- `ffa35a0` docs(memory): update activeContext after gitflow RULE 10 update
+- `340fc06` docs(v2.4): add DOC-4-Operations-Guide with comprehensive GitFlow reference chapter
+- `ca29b7e` docs: update DOC-4-CURRENT pointer to v2.4
