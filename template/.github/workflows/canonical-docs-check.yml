@@ -1,0 +1,87 @@
+name: Canonical Docs Coherence Check
+
+on:
+  pull_request:
+    paths:
+      - 'docs/DOC-*-CURRENT.md'
+      - 'docs/releases/**'
+  push:
+    branches:
+      - 'develop'
+      - 'develop-v*'
+      - 'main'
+    paths:
+      - 'docs/DOC-*-CURRENT.md'
+      - 'docs/releases/**'
+
+jobs:
+  coherence-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Check DOC pointer consistency
+        run: |
+          # Extract versions from each DOC-*-CURRENT.md
+          DOC1_VER=$(grep -oP 'Current release:\s*v\K[0-9]+\.[0-9]+' docs/DOC-1-CURRENT.md)
+          DOC2_VER=$(grep -oP 'Current release:\s*v\K[0-9]+\.[0-9]+' docs/DOC-2-CURRENT.md)
+          DOC3_VER=$(grep -oP 'Current release:\s*v\K[0-9]+\.[0-9]+' docs/DOC-3-CURRENT.md)
+          DOC4_VER=$(grep -oP 'Current release:\s*v\K[0-9]+\.[0-9]+' docs/DOC-4-CURRENT.md)
+          DOC5_VER=$(grep -oP 'Current release:\s*v\K[0-9]+\.[0-9]+' docs/DOC-5-CURRENT.md)
+          
+          echo "DOC-1: v$DOC1_VER"
+          echo "DOC-2: v$DOC2_VER"
+          echo "DOC-3: v$DOC3_VER"
+          echo "DOC-4: v$DOC4_VER"
+          echo "DOC-5: v$DOC5_VER"
+          
+          # All must match
+          if [[ "$DOC1_VER" != "$DOC2_VER" ]] || [[ "$DOC2_VER" != "$DOC3_VER" ]] || \
+             [[ "$DOC3_VER" != "$DOC4_VER" ]] || [[ "$DOC4_VER" != "$DOC5_VER" ]]; then
+            echo "::error::DOC pointers are inconsistent across files"
+            exit 1
+          fi
+      
+      - name: Check cumulative nature of docs
+        run: |
+          # Minimum line counts for cumulative docs
+          declare -A MIN_LINES=(
+            ["DOC-1"]=500
+            ["DOC-2"]=500
+            ["DOC-3"]=300
+            ["DOC-4"]=300
+            ["DOC-5"]=200
+          )
+          
+          # Get current version from DOC-1-CURRENT.md
+          CURRENT_VER=$(grep -oP 'Current release:\s*v\K[0-9]+\.[0-9]+' docs/DOC-1-CURRENT.md)
+          
+          for doc in DOC-1 DOC-2 DOC-3 DOC-4 DOC-5; do
+            DOC_FILE="docs/releases/v${CURRENT_VER}/${doc}-v${CURRENT_VER}-"*.md
+            if [[ -f "$DOC_FILE" ]]; then
+              LINE_COUNT=$(wc -l < "$DOC_FILE")
+              MIN=${MIN_LINES[$doc]}
+              if [[ "$LINE_COUNT" -lt "$MIN" ]]; then
+                echo "::error::$DOC_FILE appears to be delta-based ($LINE_COUNT lines, expected >= $MIN for cumulative)"
+                exit 1
+              fi
+              echo "PASS: $DOC_FILE has $LINE_COUNT lines (>= $MIN)"
+            fi
+          done
+      
+      - name: Check cumulative flag in front matter
+        run: |
+          CURRENT_VER=$(grep -oP 'Current release:\s*v\K[0-9]+\.[0-9]+' docs/DOC-1-CURRENT.md)
+          
+          for doc in DOC-1 DOC-2 DOC-3 DOC-4 DOC-5; do
+            DOC_FILE="docs/releases/v${CURRENT_VER}/${doc}-v${CURRENT_VER}-"*.md
+            if [[ -f "$DOC_FILE" ]]; then
+              if ! grep -q "cumulative: true" "$DOC_FILE"; then
+                echo "::error::$DOC_FILE missing 'cumulative: true' in front matter"
+                exit 1
+              fi
+              echo "PASS: $DOC_FILE has cumulative: true flag"
+            fi
+          done
