@@ -56,6 +56,10 @@ Completed:
 
 ## Next step(s)
 - [ ] Fast-forward develop to main after release freeze (per RULE 10.4)
+
+## ADR-013: Squash Merge Prohibition
+- [x] RULE 10.3 updated: forbid squash merge and --delete-branch for traceability
+- [x] Committed as `6856e66` and pushed to origin
 - [ ] Consider closing orphaned VSCode tabs (_temp_chunk_*, _rebuild_*)
 
 ## Blockers / Open questions
