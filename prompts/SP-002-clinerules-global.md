@@ -313,11 +313,9 @@ you MUST check whether the change impacts a system prompt in prompts/.
 
 5. Include the modified prompts/ files in the same commit as the target files
 
-   **Special case for SP-002 (.clinerules sync):** When SP-002 must match `.clinerules`, use the dedicated utility instead of manual editing:
-   ```
-   python scripts/rebuild_sp002.py
-   ```
-   This avoids cross-platform shell concatenation issues (e.g., PowerShell `+=` pipeline pitfalls) and guarantees a correct rebuild every time. Always run `git diff prompts/SP-002-clinerules-global.md` to verify the result before committing.
+   **File concatenation:** Never use PowerShell for file concatenation. The pattern `(Get-Content a) + (Get-Content b) | Set-Content out` silently produces a 1-line file with exit code 0 — no error is raised. Use Python instead (see `scripts/rebuild_sp002.py` for the canonical implementation).
+
+   **SP-002 (.clinerules sync):** Use `python scripts/rebuild_sp002.py` — the SP-002 code block must always match `.clinerules` byte-for-byte. Always verify with `git diff prompts/SP-002-clinerules-global.md` before committing.
 
 
 
