@@ -56,14 +56,19 @@
 `4beae0f` docs(memory): update activeContext after RULE 5.1 docs/folders fix
 
 ## Recent commits (this session)
+- `575b9fc` feat(scripts): add rebuild_sp002.py — cross-platform SP-002 sync utility
+- `5f60df2` docs(memory): sync activeContext and progress after session wrap-up
 - `4beae0f` docs(memory): update activeContext after RULE 5.1 docs/folders fix
 - `4f0ba2a` chore(gitflow): add docs/ and plans/ to RULE 5.1 versioned list, update DOC-4 gitflow chapter
-- `65764a8` docs(memory): update activeContext after DOC-4 gitflow chapter and pointer
-- `ca29b7e` docs: update DOC-4-CURRENT pointer to v2.4
 - `340fc06` docs(v2.4): add DOC-4-Operations-Guide with comprehensive GitFlow reference chapter
+- `ca29b7e` docs: update DOC-4-CURRENT pointer to v2.4
 - `ffa35a0` docs(memory): update activeContext after gitflow RULE 10 update
 - `31a6bb6` chore(prompts): rebuild SP-002 code block from .clinerules — perfect sync
 - `2ec1fc1` chore(prompts): sync SP-002 with RULE 10 gitflow update — keep branches, develop ff, folders list
 - `4a3828c` chore(gitflow): RULE 10 — keep branches after merge, add develop ff step, fix 5.1 folders
+
+## Next step(s)
+- [ ] Push develop to origin (if not already pushed)
+- [x] scripts/rebuild_sp002.py committed — cross-platform SP-002 sync utility
 
 ---
