@@ -536,8 +536,10 @@ All new development (features, bug fixes, refactors) MUST follow this path:
 1. Branch from develop (ad-hoc) or develop-vX.Y (scoped) -> feature/{IDEA-NNN}-{slug} or fix/{description}
 2. Develop and test on the feature branch
 3. Commit results to the feature branch
-4. Merge via PR to the source branch (fast-forward or squash)
+4. Merge via PR to the source branch (fast-forward merge preferred, NO squash merge)
 5. **Keep** the feature branch after merge — never delete it (traceability requirement)
+6. **NEVER** use `--delete-branch` when merging PRs — the branch MUST be kept for traceability
+7. **Prefer fast-forward or regular merge** over squash merge to preserve full commit history on the feature branch
 
 > **Exception:** Governance-only commits (ADRs, RULE additions, docs fixes) that do not change application code MAY be committed directly on develop.
 
