@@ -1,5 +1,26 @@
 ---
 doc_id: DOC-2
+release: v2.4
+status: Draft
+title: Architecture Document
+version: 1.0
+date_created: 2026-03-30
+authors: [Architect mode, Human]
+previous_release: none
+cumulative: true
+---
+
+# DOC-2 -- Architecture Document (v2.4)
+
+> **Status: DRAFT** -- This document is in draft for v2.4.0 release. It will be frozen upon QA approval.
+> **Cumulative: YES** -- This document contains all architecture from v1.0 through v2.4.
+> To understand the full project architecture, read this document from top to bottom.
+> Do not rely on previous release documents -- they are delta-based and incomplete.
+
+---
+
+---
+doc_id: DOC-2
 release: v2.3
 status: Frozen
 title: Architecture Document
@@ -30,6 +51,7 @@ cumulative: true
 6. [Architecture / Feature / Requirement Traceability Matrix](#6-architecture-feature--requirement-traceability-matrix)
 7. [v2.1 Architecture Additions](#7-v21-architecture-additions)
 8. [v2.3 Architecture Additions](#8-v23-architecture-additions)
+9. [v2.4 Architecture Additions](#9-v24-architecture-additions)
 9. [Appendices](#9-appendices)
 
 ---
@@ -934,4 +956,193 @@ batch.yaml
 
 ---
 
-*End of DOC-2 v2.3 — Cumulative (v1.0 through v2.3)*
+---
+
+## 9. v2.4 Architecture Additions
+
+### 9.1 Calypso Orchestration v1 — Ideation-to-Release Pipeline
+
+v2.4 introduces a full ideation-to-release governance pipeline called **Calypso Orchestration v1**.
+
+#### Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    IDEATION-TO-RELEASE PIPELINE                  │
+│                    (Calypso Orchestration v1)                    │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  ┌──────────┐    ┌────────────┐    ┌───────────┐    ┌─────────┐ │
+│  │  Human   │───▶│ IntakeAgent│───▶│SyncDetector│───▶│Backlogs │ │
+│  │  Input   │    │ (classify/ │    │(5-category │    │ (IDEAS/ │ │
+│  │          │    │  route)    │    │  overlap)  │    │  TECH)  │ │
+│  └──────────┘    └────────────┘    └───────────┘    └─────────┘ │
+│                                                                  │
+│  ┌──────────┐    ┌───────────┐    ┌──────────────────────────┐  │
+│  │ GitHub   │───▶│BranchTracker│──▶│ ExecutionTracker         │  │
+│  │ (branches)│    │(ADR-006)  │    │ (live progress tracking) │  │
+│  └──────────┘    └───────────┘    └──────────────────────────────┘  │
+│                                                                  │
+│  ┌──────────────────────────────────────────────────────────────┐ │
+│  │              IdeasDashboard                                 │ │
+│  │         (triage status, refinement tracking)                │ │
+│  └──────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+#### 9.1.1 Component Architecture
+
+| Component | Responsibility | Language | Dependencies |
+|-----------|---------------|----------|--------------|
+| **IntakeAgent** | Idea intake, classification (BUSINESS/TECHNICAL), routing | Python 3.11+ | `jsonschema>=4.23.0` |
+| **SyncDetector** | Parallel work detection, 5-category sync analysis | Python 3.11+ | None |
+| **BranchTracker** | GitFlow ADR-006 enforcement, release tracking | Python 3.11+ | `GitPython>=3.1.40` |
+| **ExecutionTracker** | Live progress tracking across all active work | Python 3.11+ | None |
+| **IdeasDashboard** | Centralized backlog management | Python 3.11+ | None |
+
+#### 9.1.2 Data Flow
+
+**Idea Intake Flow:**
+
+```
+Human Input
+    │
+    ▼
+IntakeAgent.analyze(raw_text, agent_context)
+    │
+    ├──▶ Classify: BUSINESS (WHAT) or TECHNICAL (HOW)
+    │
+    ├──▶ Route: IDEAS-BACKLOG.md or TECH-SUGGESTIONS-BACKLOG.md
+    │
+    └──▶ SyncDetector.detect(idea_id)
+              │
+              ├──▶ Read active branch list
+              ├──▶ Check for file overlap
+              └──▶ Return sync category
+```
+
+**Execution Tracking Flow:**
+
+```
+Session Start
+    │
+    ▼
+ExecutionTracker.sync()
+    │
+    ├──▶ Read DOC-3 execution chapter
+    ├──▶ Read memory-bank/progress.md
+    ├──▶ Read EXECUTION-TRACKER-vX.Y.md
+    │
+    └──▶ Ensure consistency across all three
+```
+
+#### 9.1.3 Storage Architecture
+
+| Data Store | Location | Purpose |
+|-----------|----------|---------|
+| **IDEAS-BACKLOG** | `docs/ideas/IDEAS-BACKLOG.md` | Business idea backlog (triage status) |
+| **TECH-SUGGESTIONS** | `docs/ideas/TECH-SUGGESTIONS-BACKLOG.md` | Technical suggestion backlog |
+| **Decision Log** | `memory-bank/hot-context/decisionLog.md` | Architectural decisions |
+| **Execution State** | `memory-bank/progress.md` | Current session progress |
+| **DOC-3** | `docs/releases/vX.Y/DOC-3-vX.Y-Implementation-Plan.md` | Release execution tracking |
+
+#### 9.1.4 CLI Tool Architecture
+
+All Calypso components are executable as CLI tools via Python module invocation:
+
+| Command | Module |
+|---------|--------|
+| `python -m src.calypso.intake_agent "text"` | IntakeAgent |
+| `python -m src.calypso.sync_detector` | SyncDetector |
+| `python -m src.calypso.branch_tracker` | BranchTracker |
+| `python -m src.calypso.execution_tracker` | ExecutionTracker |
+| `python -m src.calypso.ideas_dashboard` | IdeasDashboard |
+
+#### 9.1.5 ADR-006 GitFlow Enforcement in BranchTracker
+
+The BranchTracker enforces the GitFlow branching model (ADR-006):
+
+| Branch | Purpose | Enforcement |
+|--------|---------|-------------|
+| `main` | Production state. Frozen. | Cannot commit directly |
+| `develop` | Wild mainline. Ad-hoc work. | Long-lived, always ahead of main |
+| `develop-vX.Y` | Scoped backlog for vX.Y. | Created at release planning |
+| `feature/{IDEA-NNN}-{slug}` | Single feature or fix. | Branch from develop or develop-vX.Y |
+
+**Forbidden actions detected by BranchTracker:**
+- Direct commits to `main` after release tag
+- Commits on merged branches
+- Feature work on release branches (not develop or develop-vX.Y)
+
+#### 9.1.6 Sync Detection Categories
+
+SyncDetector implements 5-category overlap detection:
+
+| Category | Symbol | Meaning | Action |
+|----------|--------|---------|--------|
+| **CONFLICT** | 🔴 | Mutually exclusive changes | Human must arbitrate |
+| **REDUNDANCY** | 🟡 | Same problem solved twice | Merge into single idea |
+| **DEPENDENCY** | 🔵 | Idea B needs Idea A first | Reorder, communicate |
+| **SHARED_LAYER** | 🟠 | Multiple ideas touch same component | Coordinate timing |
+| **NO_OVERLAP** | 🟢 | No conflicts detected | Proceed normally |
+
+---
+
+## 10. v2.4 Functional Layer Additions
+
+### 10.1 New Layer: Orchestration (Layer 7)
+
+v2.4 adds a new **Orchestration Layer** above the existing 6 functional layers:
+
+| Layer | Name | Components |
+|-------|------|------------|
+| Layer 1 | Infrastructure | Tailscale, calypso server, pc laptop |
+| Layer 2 | LLM Inference | Ollama, qwen3-14b, qwen3-8b |
+| Layer 3 | Agentic Engine | Roo Code (VS Code extension) |
+| Layer 4 | Memory Bank | Hot-context (7 files), Cold archive |
+| Layer 5 | Prompt Registry | prompts/SP-001 to SP-010 |
+| Layer 6 | Developer Tools | Anthropic Batch API Toolkit, scripts/batch/ |
+| **Layer 7** | **Orchestration** | **Calypso: IntakeAgent, SyncDetector, BranchTracker, ExecutionTracker, IdeasDashboard** |
+
+### 10.2 Layer 7 Responsibilities
+
+1. **Intake**: Capture and classify incoming ideas
+2. **Routing**: Direct ideas to correct backlogs
+3. **Sync**: Detect and prevent conflicts
+4. **Governance**: Enforce GitFlow discipline
+5. **Tracking**: Monitor live execution progress
+6. **Dashboard**: Provide centralized visibility
+
+---
+
+## 11. v2.4 Architecture / Feature / Requirement Traceability
+
+| Feature | Requirement | Architecture Element |
+|---------|-------------|---------------------|
+| IDEA-012A: IntakeAgent | REQ-012-A1 | `src/calypso/intake_agent.py` |
+| IDEA-012A: IntakeAgent | REQ-012-A2 | BUSINESS/TECHNICAL classification |
+| IDEA-012B: SyncDetector | REQ-012-B1 | `src/calypso/sync_detector.py` |
+| IDEA-012B: SyncDetector | REQ-012-B2 | 5-category sync detection |
+| IDEA-012C: BranchTracker | REQ-012-C1 | `src/calypso/branch_tracker.py` |
+| IDEA-012C: BranchTracker | REQ-012-C2 | ADR-006 GitFlow enforcement |
+| IDEA-012C: ExecutionTracker | REQ-012-C3 | `src/calypso/execution_tracker.py` |
+| IDEA-012C: IdeasDashboard | REQ-012-C4 | `src/calypso/ideas_dashboard.py` |
+
+---
+
+## 12. v2.4 Glossary Additions
+
+| Term | Definition |
+|------|------------|
+| **Calypso Orchestration** | The v2.4 ideation-to-release governance pipeline. Named after the Calypso server. |
+| **IntakeAgent** | Component that captures and classifies incoming ideas as BUSINESS or TECHNICAL. |
+| **SyncDetector** | Component that detects parallel work overlap and sync opportunities. |
+| **BranchTracker** | Component that enforces GitFlow ADR-006 compliance. |
+| **ExecutionTracker** | Component that tracks live progress across all active ideas and releases. |
+| **IdeasDashboard** | Component that provides centralized backlog management with triage status. |
+| **Sync Category** | One of 5 overlap types detected by SyncDetector: CONFLICT, REDUNDANCY, DEPENDENCY, SHARED_LAYER, NO_OVERLAP. |
+| **Orchestration Layer** | Layer 7 of the functional stack, added in v2.4 for governance pipeline. |
+
+---
+
+*End of DOC-2 v2.4 -- Cumulative (v1.0 through v2.4)*

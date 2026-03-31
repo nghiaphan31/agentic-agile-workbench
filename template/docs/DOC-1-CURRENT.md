@@ -1,11 +1,10 @@
-# DOC-1 — Product Requirements Document (Current)
+# DOC-1 — Product Requirements (Current)
 
-> **Pointer file** — This file always points to the current active release's PRD.
-> Update this pointer when a new release is tagged.
+**Current release:** v2.4
+**File:** [docs/releases/v2.4/DOC-1-v2.4-PRD.md](../docs/releases/v2.4/DOC-1-v2.4-PRD.md)
+**Status:** Draft
+**Git tag:** (pending v2.4.0 release)
 
-**Current release:** vX.Y
-**Points to:** [`docs/releases/vX.Y/DOC-1-vX.Y-PRD.md`](releases/vX.Y/DOC-1-vX.Y-PRD.md)
+**Previous release:** [docs/releases/v2.3/DOC-1-v2.3-PRD.md](../docs/releases/v2.3/DOC-1-v2.3-PRD.md) (`v2.3.0`)
 
 ---
-
-*Replace vX.Y with the actual release version when deploying this template.*
