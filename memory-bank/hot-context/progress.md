@@ -1,6 +1,6 @@
 # Project Progress
 
-**Last updated:** 2026-03-31T18:33:00Z
+**Last updated:** 2026-03-31T21:04:00Z
 
 ## le workbench Infrastructure
 
@@ -207,6 +207,23 @@
 - [x] Bug: BranchTracker.is_release_in_progress() missing — ✅ FIXED at branch_tracker.py:266
 - [x] Bug: test_tracker_initialization string vs Path — ✅ FIXED at test_ideation_pipeline.py:94
 - [x] Integration tests (19 total) — ✅ 19/19 PASS
+
+## v2.4 Release — COMPLETE
+
+### ADR-012: Canonical Docs Cumulative + GitFlow Enforcement
+- [x] ADR-012 captured in `docs/ideas/ADR-012-canonical-docs-cumulative-gitflow-enforcement.md`
+- [x] PHASE 1B: v2.3 docs rewritten as cumulative (DOC-1, DOC-2, DOC-3, DOC-5)
+- [x] PHASE 1C: v2.4 docs rewritten as cumulative (DOC-1, DOC-2, DOC-3, DOC-5)
+- [x] PHASE 1D: All 5 DOC-*-CURRENT.md pointers aligned to v2.4
+- [x] PHASE 2: .githooks/pre-receive created with cumulative checks
+- [x] PHASE 3: .github/workflows/canonical-docs-check.yml created
+- [x] PHASE 4: Hook + CI added to template/, deploy script updated
+- [x] PHASE 5: R-CANON rules added to .clinerules (RULE 11, RULE 12), ADR-012 created
+- [x] SP-002 rebuilt and synchronized (6 PASS, 0 FAIL, 1 WARN)
+- [x] Branch renamed to follow `feature/IDEA-NNN-{slug}` pattern
+- [x] PR #2 created and CI fixed (grep → sed for portability)
+- [x] PR #2 merged to develop, pushed to origin
+- [x] Merge conflict resolved, activeContext updated
 
 ## Legend
 - [ ] To do  |  [-] In progress  |  [x] Done
