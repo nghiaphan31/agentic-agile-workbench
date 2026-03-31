@@ -1,0 +1,93 @@
+#!/usr/bin/env bash
+# pre-receive hook for canonical docs GitFlow enforcement
+# Location: .githooks/pre-receive
+# Enable by running: git config core.hooksPath .githooks
+
+set -euo pipefail
+
+CANON_PATTERNS=(
+  "docs/DOC-1-CURRENT.md"
+  "docs/DOC-2-CURRENT.md"
+  "docs/DOC-3-CURRENT.md"
+  "docs/DOC-4-CURRENT.md"
+  "docs/DOC-5-CURRENT.md"
+)
+
+MIN_LINES=(
+  500  # DOC-1
+  500  # DOC-2
+  300  # DOC-3
+  300  # DOC-4
+  200  # DOC-5
+)
+
+# Check if any canonical docs were modified
+check_canonical_docs() {
+  local old_rev="$1"
+  local new_rev="$2"
+  local ref="$3"
+  
+  # Get list of modified files
+  local modified_files
+  modified_files=$(git diff --name-only "$old_rev" "$new_rev")
+  
+  # Check each canonical doc pattern
+  local i=0
+  for pattern in "${CANON_PATTERNS[@]}"; do
+    if echo "$modified_files" | grep -q "$pattern"; then
+      check_feature_branch "$old_rev" "$new_rev" "$pattern"
+      check_cumulative "$new_rev" "$pattern" "${MIN_LINES[$i]}"
+    fi
+    ((i++))
+  done
+}
+
+check_feature_branch() {
+  local old_rev="$1"
+  local new_rev="$2"
+  local file="$3"
+  
+  # Get commits that introduced changes to this file
+  local commits
+  commits=$(git log --format=%H "$old_rev".."$new_rev" -- "$file")
+  
+  for commit in $commits; do
+    # Check if commit is on a feature branch
+    local branch
+    branch=$(git branch --contains "$commit" --format='%(refname:short)' | grep -E '^feature/|^fix/' || true)
+    
+    if [[ -z "$branch" ]]; then
+      # Check if this is a merge commit (from PR)
+      local is_merge
+      is_merge=$(git cat-file -t "$commit" 2>/dev/null)
+      
+      if [[ "$is_merge" != "commit" ]] || ! git log -1 --format=%P "$commit" | grep -q " "; then
+        echo "ERROR: Canonical doc '$file' modified without feature branch" >&2
+        echo "       Commit: $commit" >&2
+        echo "       Use: git revert $commit && git cherry-pick -x $commit on a feature branch" >&2
+        exit 1
+      fi
+    fi
+  done
+}
+
+check_cumulative() {
+  local rev="$1"
+  local file="$2"
+  local min_lines="$3"
+  
+  # Get line count of the doc at new revision
+  local line_count
+  line_count=$(git show "$rev:$file" 2>/dev/null | wc -l)
+  
+  if [[ "$line_count" -lt "$min_lines" ]]; then
+    echo "ERROR: Canonical doc '$file' appears to be delta-based ($line_count lines, expected >= $min_lines)" >&2
+    echo "       Canonical docs must be CUMULATIVE -- include all content from previous releases" >&2
+    exit 1
+  fi
+}
+
+# Main
+if [[ $# -eq 3 ]]; then
+  check_canonical_docs "$1" "$2" "$3"
+fi

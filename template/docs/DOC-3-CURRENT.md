@@ -1,11 +1,10 @@
 # DOC-3 — Implementation Plan (Current)
 
-> **Pointer file** — This file always points to the current active release's Implementation Plan.
-> Update this pointer when a new release is tagged.
+**Current release:** v2.4
+**File:** [docs/releases/v2.4/DOC-3-v2.4-Implementation-Plan.md](../docs/releases/v2.4/DOC-3-v2.4-Implementation-Plan.md)
+**Status:** Draft
+**Git tag:** (pending v2.4.0 release)
 
-**Current release:** vX.Y
-**Points to:** [`docs/releases/vX.Y/DOC-3-vX.Y-Implementation-Plan.md`](releases/vX.Y/DOC-3-vX.Y-Implementation-Plan.md)
+**Previous release:** [docs/releases/v2.3/DOC-3-v2.3-Implementation-Plan.md](../docs/releases/v2.3/DOC-3-v2.3-Implementation-Plan.md) (`v2.3.0`)
 
 ---
-
-*Replace vX.Y with the actual release version when deploying this template.*

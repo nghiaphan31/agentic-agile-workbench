@@ -72,7 +72,9 @@ $FoldersToCopy = @(
     "prompts",
     "scripts",
     "docs",
-    "memory-bank"
+    "memory-bank",
+    ".githooks",
+    ".github"
 )
 
 # --- Validation ---
@@ -176,6 +178,18 @@ $versionDst = Join-Path $ProjectPath ".workbench-version"
 Write-Host "  [VERSION] .workbench-version → $WorkbenchVersion" -ForegroundColor Cyan
 if (-not $DryRun) {
     Set-Content $versionDst $WorkbenchVersion -Encoding UTF8
+}
+
+# --- Configure Git hooks path ---
+$GitHooksDst = Join-Path $ProjectPath ".githooks"
+$GitHooksConfig = Join-Path $ProjectPath ".git\hooks"
+if (Test-Path $GitHooksDst) {
+    Write-Host "  [GIT] Configuring core.hooksPath to .githooks/" -ForegroundColor Cyan
+    if (-not $DryRun) {
+        Push-Location $ProjectPath
+        git config core.hooksPath ".githooks" 2>$null
+        Pop-Location
+    }
 }
 
 # --- Create root-level Memory Bank stubs if absent ---
