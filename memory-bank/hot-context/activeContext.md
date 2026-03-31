@@ -1,7 +1,7 @@
 ---
 # Active Context
 
-**Last updated:** 2026-03-31T19:08:00Z
+**Last updated:** 2026-03-31T20:49:00Z
 **Active mode:** Code
 **Active LLM backend:** MinMax M2.7 via OpenRouter (minimax/minimax-m2.7)
 **LLM Backend:** `minmax` (default via OpenRouter)
@@ -9,53 +9,36 @@
 **Fallback State:** Not triggered
 
 ## Git state
-- Branch: `develop`
-- Last commit: `08bf1ce` — chore(clinerules): RULE 6 — add scripts/rebuild_sp002.py as mandatory SP-002 sync tool
+- Branch: `feature/canon-cumulative-fix`
+- Last commit: `0614417` — chore(prompts): rebuild SP-002 after .clinerules RULE 11/12 additions
 
 ## Current task
-**Hotfix: RULE 6 updated to mandate `scripts/rebuild_sp002.py` for SP-002 syncs**
+**PLAN-canonical-docs-gitflow-enforcement.md — ALL 5 PHASES COMPLETE**
 
 Completed:
-1. ✅ `scripts/rebuild_sp002.py` created (commit `575b9fc`) — cross-platform Python utility
-2. ✅ RULE 6.3 added to `.clinerules` — agents MUST use the rebuild script, never manual edit
-3. ✅ SP-002 synchronized via rebuild script (0 diff, 6/6 SPs passing)
-4. ✅ `template/.clinerules` and `template/prompts/SP-002-clinerules-global.md` updated
+1. ✅ PHASE 1B: v2.3 docs rewritten as cumulative (DOC-1, DOC-2, DOC-3, DOC-5)
+2. ✅ PHASE 1C: v2.4 docs rewritten as cumulative (DOC-1, DOC-2, DOC-3, DOC-5)
+3. ✅ PHASE 1D: All 5 DOC-*-CURRENT.md pointers aligned to v2.4
+4. ✅ PHASE 1E: Committed on feature/canon-cumulative-fix (2 commits)
+5. ✅ PHASE 2: .githooks/pre-receive created with cumulative checks
+6. ✅ PHASE 3: .github/workflows/canonical-docs-check.yml created
+7. ✅ PHASE 4: Hook + CI added to template/, deploy script updated
+8. ✅ PHASE 5: R-CANON rules added to .clinerules (RULE 11, RULE 12), ADR-012 created
+9. ✅ SP-002 rebuilt and synchronized (6 PASS, 0 FAIL, 1 WARN)
 
 ## Last Git commit
-`08bf1ce` chore(clinerules): RULE 6 — add scripts/rebuild_sp002.py as mandatory SP-002 sync tool
+`0614417` chore(prompts): rebuild SP-002 after .clinerules RULE 11/12 additions
 
 ## Recent commits (this session)
-- `08bf1ce` chore(clinerules): RULE 6 — add scripts/rebuild_sp002.py as mandatory SP-002 sync tool
-- `575b9fc` feat(scripts): add rebuild_sp002.py — cross-platform SP-002 sync utility
-- `5f60df2` docs(memory): sync activeContext and progress after session wrap-up
-- `4beae0f` docs(memory): update activeContext after RULE 5.1 docs/folders fix
-- `4f0ba2a` chore(gitflow): add docs/ and plans/ to RULE 5.1 versioned list, update DOC-4 gitflow chapter
-- `340fc06` docs(v2.4): add DOC-4-Operations-Guide with comprehensive GitFlow reference chapter
-- `ca29b7e` docs: update DOC-4-CURRENT pointer to v2.4
+- `0614417` chore(prompts): rebuild SP-002 after .clinerules RULE 11/12 additions
+- `f118c8d` feat(governance): implement canonical docs cumulative + GitFlow enforcement
 
-## Next step(s)
-- [ ] Push develop to origin
-
-## Blockers / Open questions
-- SP-007 Gem Gemini requires manual deployment at https://gemini.google.com > Gems
-
-## Coherence Status (SP-002 v2.7.0)
-- SP-001 (Modelfile): PASS
-- SP-002 (.clinerules): PASS (v2.7.0 — RULE 6 mandates rebuild_sp002.py)
-- SP-003 (.roomodes product-owner): PASS
-- SP-004 (.roomodes scrum-master): PASS
-- SP-005 (.roomodes developer): PASS
-- SP-006 (.roomodes qa-engineer): PASS
-- SP-007 (Gem Gemini): WARN (manual deployment required)
-
-## Ideation-to-Release — Key Decisions
-| Decision | Choice |
-|----------|--------|
-| Intake Agent | Orchestrator (any agent can route) |
-| Refinement approach | Orchestrator decides based on complexity score |
-| Branch merge | On-demand (continuous integration) |
-| Hotfix priority | Always interrupts planned release |
-| DOC-3 tracking | Tool-assisted (AI drafts, human approves) |
-| SP-002 sync | Always use `python scripts/rebuild_sp002.py` |
-
----
+## Key files created/modified
+- .githooks/pre-receive (NEW)
+- .github/workflows/canonical-docs-check.yml (NEW)
+- deploy-workbench-to-project.ps1 (MODIFIED)
+- .clinerules / template/.clinerules (MODIFIED)
+- docs/releases/v2.3/DOC-{1,2,3,5}-v2.3-*.md (MODIFIED - cumulative)
+- docs/releases/v2.4/DOC-{1,2,3,5}-v2.4-*.md (MODIFIED/CREATED - cumulative)
+- docs/DOC-{1,2,5}-CURRENT.md (MODIFIED)
+- docs/ideas/ADR-012-canonical-docs-cumulative-gitflow-enforcement.md (NEW)
