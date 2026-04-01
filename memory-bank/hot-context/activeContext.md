@@ -59,6 +59,23 @@
 - [ ] Merge 3 fix PRs to develop
 - [ ] Address remaining P1/P2 findings in COHERENCE-AUDIT-v2.6.md
 
+## Session s2026-04-01-code-004 (P1 Triage)
+- [x] Triage all 17 P1 findings from COHERENCE-AUDIT-v2.6.md
+- [x] Categorized by: Governance (10), Tech Debt (1), Documentation (6)
+- [x] Created `docs/ideas/P1-TRIAGE-2026-04-01-001.md` with full triage
+- [x] Identified 2 items fixable via `rebuild_sp002.py`
+- [x] Identified 1 tech debt item (double subprocess in checkpoint_heartbeat.py)
+- [x] Identified 3 README maintenance items
+
+## P1 Disposition Summary
+| Category | Count | Items |
+|----------|-------|-------|
+| FIX-IN-PLACE | 2 | PowerShell contradiction, RULE 10.6 truncation |
+| TECH DEBT | 1 | Double subprocess anti-pattern |
+| DOC UPDATE | 6 | Batch API, Calypso, SESSION_MODE, SP-007, etc. |
+| GOVERNANCE | 6 | ENH artifacts, IDEA migration, TECH-SUGGESTIONS |
+| README MAINTENANCE | 3 | SP versions, DEPLOYMENT entries |
+
 ## Session s2026-04-01-architect-002
 - [x] Scanned project for obsolete files
 - [x] Deleted 6 HIGH-confidence obsolete files (commit 6ac2f80)

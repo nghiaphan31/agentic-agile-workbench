@@ -286,6 +286,16 @@
 - [x] COHERENCE-AUDIT-v2.6.md consolidated report generated
 - **Findings:** 14 P0, 17 P1, 14 P2
 
+### v2.6 Coherence Remediation
+- [x] P0 fixes completed (SP-002 sync, DOC-1 freeze, heartbeat gap)
+- [-] P1 triage completed — P1-TRIAGE-2026-04-01-001.md created
+  - 2 items: FIX-IN-PLACE via rebuild_sp002.py
+  - 1 item: TECH DEBT (double subprocess)
+  - 6 items: DOC UPDATE needed
+  - 6 items: GOVERNANCE fixes
+  - 3 items: README maintenance
+- [ ] P2 audit: Pending triage session
+
 ### P0 Fixes (2026-04-02)
 - [x] P0-1: SP-002 sync — pushed origin/fix/sp002-sync (already in sync)
 - [x] P0-2: DOC-1 frozen — pushed origin/fix/doc1-freeze (commit 5fb9040)
