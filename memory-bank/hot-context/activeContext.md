@@ -1,35 +1,49 @@
 ---
 # Active Context
 
-**Last updated:** 2026-04-02T17:30:00Z
+**Last updated:** 2026-04-01T20:54:00Z
 **Active mode:** developer
 **Active LLM backend:** MinMax M2.7 via OpenRouter (minimax/minimax-m2.7)
 **LLM Backend:** `minmax` (default via OpenRouter)
-**Session ID:** s2026-04-01-developer-001
+**Session ID:** s2026-04-01-developer-002
 **Branch:** develop
-**Plan:** N/A (ad-hoc session)
+**Plan:** P1 Triage v2.6 (ad-hoc)
 **Consecutive Errors:** `0`
 **Fallback State:** Not triggered
 
 ## Git state
-- Branch: `develop` (fast-forwarded to include v2.6 release)
-- Last commit: `feba423` — Merge pull request #5 from nghiaphan31/develop-v2.6
-- HEAD: v2.6.0 tag on master
-
-## Release Status
-- **v2.6.0 RELEASED** ✅
-- Tag: `v2.6.0` on master (origin/master)
-- PR #5 merged from `develop-v2.6` to master
-- Develop fast-forwarded to master (per GitFlow RULE 10.4)
+- Branch: `develop`
+- Last commit: See below
 
 ## Completed (This Session)
-1. ✅ Fetched origin/master (feba423 — PR #5 merged)
-2. ✅ Fast-forwarded `develop` to `origin/master` (git merge --ff-only)
-3. ✅ Pushed updated develop to origin
-4. ✅ Verified Git state: develop and origin/develop at feba423
+1. ✅ Triage of 17 P1 findings from COHERENCE-AUDIT-v2.6.md
+2. ✅ Created P1-TRIAGE-2026-04-01-001.md
+3. ✅ Fixed double subprocess anti-pattern in checkpoint_heartbeat.py
+4. ✅ rebuild_sp002.py (SP-002 already in sync)
+5. ✅ README Maintenance: version columns, critical dependencies, deployment table
+6. ✅ DOC-2 Updates: Batch API, Calypso 4-agent, batch_artifacts/
+7. ✅ ADR-011: Anthropic Batch API adoption
+8. ✅ Version metadata in .roomodes
+9. ✅ Created IDEA-013 through IDEA-019 (8 new ideas)
+10. ✅ Pushed 16 commits to origin/develop
 
 ## Last Git commit
-`feba423` Merge pull request #5 from nghiaphan31/develop-v2.6
+Multiple commits pushed - see git log
+
+## v2.6 Post-Release P1 Triage Results
+- **Total P1 Findings:** 17 (Governance: 10, Tech Debt: 1, Documentation: 6)
+- **Fixed:** 7 items
+- **Deferred to v2.7:** 10 items
+
+## New IDEAS Created (v2.7 Backlog)
+- IDEA-013: Batch toolkit reusability
+- IDEA-014: Canonical docs status governance
+- IDEA-015: Mandatory release coherence audit
+- IDEA-016: Enrich docs with mermaid diagrams
+- IDEA-017: CRITICAL - Canonical docs cumulative requirement
+- IDEA-018: CRITICAL - Rules authoritative and coherent
+- IDEA-019: Conversation logging mechanism
+- TECH-001: MinMax batch API investigation
 
 ## v2.6 Release Summary
 - Memory Bank enhancements (session-checkpoint, APPEND ONLY, heartbeat)

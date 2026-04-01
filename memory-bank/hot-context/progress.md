@@ -293,8 +293,18 @@
   - 1 item: TECH DEBT — fixed double subprocess in checkpoint_heartbeat.py (commit bad0996)
   - 6 items: DOC UPDATE needed
   - 6 items: GOVERNANCE fixes
-  - 3 items: README maintenance
-- [ ] P2 audit: Pending triage session
+  - 3 items: README maintenance (version columns, critical dependencies, deployment table)
+- [x] P2 triage: Pending (deferred to next session)
+
+### v2.7 Ideas Captured (from P1 triage session)
+- [x] IDEA-013: Batch toolkit reusability
+- [x] IDEA-014: Canonical docs status governance
+- [x] IDEA-015: Mandatory release coherence audit
+- [x] IDEA-016: Enrich docs with mermaid diagrams
+- [x] IDEA-017: CRITICAL - Canonical docs cumulative requirement
+- [x] IDEA-018: CRITICAL - Rules authoritative and coherent
+- [x] IDEA-019: Conversation logging mechanism
+- [x] TECH-001: MinMax batch API investigation
 
 ### P0 Fixes (2026-04-02)
 - [x] P0-1: SP-002 sync — pushed origin/fix/sp002-sync (already in sync)
