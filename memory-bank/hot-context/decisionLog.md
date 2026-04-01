@@ -1,5 +1,11 @@
 # Decision Log — Architecture Decision Records (ADR)
 
+> ⚠️ **APPEND ONLY** — RULE MB-3: This file is APPEND ONLY. Never overwrite, delete, or edit existing ADRs. Only append new decisions at the bottom. To update status, append a new entry with the new status.
+
+> 📋 **RULE G-0**: Every plan creates a branch. Every branch implements a plan.
+
+---
+
 ---
 
 ## ADR-010 : Ad-Hoc Idea Governance — From Discovery to Release
