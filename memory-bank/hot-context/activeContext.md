@@ -1,10 +1,13 @@
 ---
 # Active Context
 
-**Last updated:** 2026-03-31T21:03:00Z
-**Active mode:** Code
+**Last updated:** 2026-04-01T16:43:00Z
+**Active mode:** architect
 **Active LLM backend:** MinMax M2.7 via OpenRouter (minimax/minimax-m2.7)
 **LLM Backend:** `minmax` (default via OpenRouter)
+**Session ID:** s2026-04-01-architect-001
+**Branch:** governance/PLAN-2026-04-01-001-ideation-release-v2
+**Plan:** PLAN-2026-04-01-001 (v2.5)
 **Consecutive Errors:** `0`
 **Fallback State:** Not triggered
 
