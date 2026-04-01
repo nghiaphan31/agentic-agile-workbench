@@ -58,4 +58,24 @@ Type: GOVERNANCE
 |------|--------|-------|
 | 2026-04-01 | [IDEA] | Captured from human question |
 
+## Session Mechanism Issues (Findings)
+
+From examining `memory-bank/hot-context/session-checkpoint.md`:
+
+| Issue | Finding |
+|-------|---------|
+| Session ID | Shows `s2026-04-01-architect-001` (yesterday's session) — no fresh session ID generated |
+| Mode | `unknown` — `SESSION_MODE` env var NOT set by the tool |
+| Heartbeat | Last heartbeat `2026-04-01T16:53:47` — from yesterday, not today |
+| Conversation logging | Not auto-triggered at session end |
+| Crash recovery | Session checkpoint mechanism exists but not started for today's session |
+
+## Required Actions (Refined)
+
+1. **Fix SESSION_MODE env var** — Tool must set this when starting a session
+2. **Fix session ID generation** — Generate fresh ID `sYYYY-MM-DD-{mode}-{NNN}` per session start
+3. **Start heartbeat automatically** — Or provide clear CLI instructions
+4. **Auto-trigger conversation logging** — At session end (attempt_completion), log conversation
+5. **CI check** — Verify session checkpoint updated within last 24h
+
 ---
