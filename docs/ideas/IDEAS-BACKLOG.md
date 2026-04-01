@@ -64,6 +64,7 @@
 | [IDEA-013](IDEA-013-batch-toolkit-usability.md) | Improve Batch Toolkit Reusability | Human 2026-04-01 | 2026-04-01 | [IDEA] | dev-tooling | Minor | v2.7 | Fix batch scripts usability |
 | [IDEA-014](IDEA-014-canonical-docs-status-governance.md) | Fix Canonical Docs Status Governance | Human 2026-04-01 | 2026-04-01 | [IDEA] | governance | Minor | v2.7 | Draft/Frozen status inconsistencies |
 | [IDEA-015](IDEA-015-mandatory-release-coherence-audit.md) | Mandatory Coherence Audit Before Release | Human 2026-04-01 | 2026-04-01 | [IDEA] | governance | Minor | v2.7 | Pre-release coherence audit gate |
+| [IDEA-016](IDEA-016-enrich-docs-with-diagrams.md) | Enrich Canonical Docs with Mermaid Diagrams | Human 2026-04-01 | 2026-04-01 | [IDEA] | governance | Minor | v2.7 | Add visual documentation |
 
 ---
 
