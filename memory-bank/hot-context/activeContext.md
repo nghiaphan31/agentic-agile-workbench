@@ -54,15 +54,15 @@
 - [x] Deleted 6 HIGH-confidence obsolete files (commit 6ac2f80)
 
 ## Session s2026-04-01-architect-003
-- [x] Deleted 7 more obsolete files:
-  - plans/REVIEW-Gemini-Proxy-Path-Robustness.md (orphan)
-  - plans/REVIEW-Gemini-Proxy-Path-Robustness-Part2.md (orphan)
-  - plans/REVIEW2-Gemini-Proxy-Path-Robustness-After-Fixes.md (orphan)
-  - plans/REVIEW3-Gemini-Proxy-Path-Robustness-After-Review2-Fixes.md (orphan)
-  - scripts/fix_sp002_encoding.py (one-off fix script)
-  - src/hello.py (test file)
-  - src/test_hello.py (test file)
+- [x] Deleted 7 more obsolete files (commit d292b53)
 - [x] 4 untracked plans/governance/ files auto-removed
+
+## Session s2026-04-01-code-001
+- [x] Created v2.6 coherence audit infrastructure (commit c6a2892)
+  - docs/qa/v2.6/AUDIT-PLAN-v2.6.md (4 audit dimensions)
+  - docs/qa/v2.6/submit_batch{1,2,3}.py (3 batch submission scripts)
+  - docs/qa/v2.6/retrieve_batch{1,2,3}.py (3 retrieval scripts)
+  - docs/qa/v2.6/BATCHES/ directory structure
 
 ## Blockers / Open questions
 - None
