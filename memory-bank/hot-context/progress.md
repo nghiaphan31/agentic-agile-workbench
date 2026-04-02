@@ -352,5 +352,47 @@
 - [ ] Merge 3 fix PRs to develop
 - [ ] Address remaining P1/P2 findings
 
+## v2.7 Release — COMPLETE
+
+### Canonical Docs Cumulative Requirement (IDEA-017)
+- [x] ADR-012 created: Canonical docs cumulative + GitFlow enforcement
+- [x] v2.7 canonical docs built (DOC-1 through DOC-5)
+- [x] All docs exceed minimum line counts (500/500/300/300/200)
+- [x] GitHub Actions CI validation passed (5/5 PASS)
+
+## v2.8 Release — COMPLETE
+
+### IDEA-020: Deterministic Docs from Sources
+- [x] Branch: develop-v2.8 created from develop
+- [x] Built DOC-1-v2.8-PRD.md (503 lines, cumulative: true)
+- [x] Built DOC-2-v2.8-Architecture.md (752 lines, cumulative: true)
+- [x] Built DOC-4-v2.8-Operations-Guide.md (381 lines, cumulative: true)
+- [x] Source attribution: All sections cite source files with line references
+- [x] Mermaid diagrams: 5 architecture diagrams in DOC-2
+- [x] Fast-forward merge to develop
+- [x] Updated DOC-*-CURRENT.md pointers to v2.8
+
+## v2.9 Release — IN PROGRESS
+
+### Enriched Canonical Docs (v2.9)
+- [x] Branch: develop-v2.9 created from develop
+- [x] Built DOC-1-v2.9-PRD.md (enriched from v2.8, gap-filled from v2.7)
+- [x] Built DOC-2-v2.9-Architecture.md (enriched from v2.8, gap-filled from v2.7)
+- [x] Built DOC-4-v2.9-Operations-Guide.md (enriched from v2.8, gap-filled from v2.7)
+- [x] Updated DOC-1-CURRENT.md pointer to v2.9
+- [x] Updated DOC-2-CURRENT.md pointer to v2.9
+- [x] Updated DOC-4-CURRENT.md pointer to v2.9
+- [x] Memory Bank updated
+- [ ] Git commit with conventional message
+- [ ] Verify GitHub Actions CI passes
+- [ ] Merge develop-v2.9 to main
+- [ ] Tag v2.9.0
+
+### v2.9 Enrichment Strategy
+- **Approach:** v2.8 is authoritative base, v2.7 used only for gap-filling
+- **Rule:** When both v2.8 and v2.7 cover the same topic, v2.8 wins
+- **Gaps filled:** Memory Bank directory structure (from v2.7)
+- **No new features:** v2.9 contains only documentation maintenance
+
 ## Legend
 - [ ] To do  |  [-] In progress  |  [x] Done

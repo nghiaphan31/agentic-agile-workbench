@@ -1,46 +1,48 @@
 ---
 # Active Context
 
-**Last updated:** 2026-04-02T12:30:00Z
+**Last updated:** 2026-04-02T14:00:00Z
 **Active mode:** code
 **Active LLM backend:** MinMax M2.7 via OpenRouter (minimax/minimax-m2.7)
 **LLM Backend:** `minmax` (default via OpenRouter)
-**Session ID:** s2026-04-02-code-001
-**Branch:** develop
-**Plan:** IDEA-020 Deterministic Docs from Sources
+**Session ID:** s2026-04-02-code-002
+**Branch:** develop-v2.9
+**Plan:** Create v2.9 enriched canonical docs
 **Consecutive Errors:** `0`
 **Fallback State:** Not triggered
 
 ## Git state
-- Branch: `develop`
-- Last commit: 39446d7 - docs(plans): IDEA-020 v2.8 docs - update CURRENT pointers, memory bank
+- Branch: `develop-v2.9`
+- Last commit: (pending) - will be created for v2.9 docs
+
+## Current task
+Create enriched v2.9 canonical docs (DOC-1, DOC-2, DOC-4) on develop-v2.9 branch
 
 ## Completed (This Session)
-1. ✅ IDEA-020: Deterministic DOC generation from source files - COMPLETED
-2. ✅ Branched: feature/IDEA-020-deterministic-docs-from-sources from develop
-3. ✅ Built DOC-1-v2.8-PRD.md (503 lines, cumulative: true, ≥500)
-4. ✅ Built DOC-2-v2.8-Architecture.md (752 lines, cumulative: true, ≥500)
-5. ✅ Built DOC-4-v2.8-Operations-Guide.md (381 lines, cumulative: true, ≥300)
-6. ✅ Source attribution: All sections cite source files with line references
-7. ✅ Mermaid diagrams: 5 architecture diagrams in DOC-2
-8. ✅ Fast-forward merge to develop
-9. ✅ Updated DOC-*-CURRENT.md pointers to v2.8
-10. ✅ Memory Bank updated (progress.md)
+1. ✅ Created develop-v2.9 branch from develop
+2. ✅ Created DOC-1-v2.9-PRD.md (enriched from v2.8, gap-filled from v2.7)
+3. ✅ Created DOC-2-v2.9-Architecture.md (enriched from v2.8, gap-filled from v2.7)
+4. ✅ Created DOC-4-v2.9-Operations-Guide.md (enriched from v2.8, gap-filled from v2.7)
+5. ✅ Updated DOC-1-CURRENT.md pointer to v2.9
+6. ✅ Updated DOC-2-CURRENT.md pointer to v2.9
+7. ✅ Updated DOC-4-CURRENT.md pointer to v2.9
+8. ⏳ Memory Bank update (in progress)
 
-## IDEA-020 v2.8 Summary
-- **Source Files:** 18 files/directories analyzed
-- **DOC-1 (PRD):** 503 lines, 22 sections (v1.0-v2.8 cumulative)
-- **DOC-2 (Architecture):** 752 lines, 19 sections + 5 Mermaid diagrams
-- **DOC-4 (Operations):** 381 lines, 9 sections + troubleshooting guide
+## v2.9 Summary
+- **Approach:** v2.8 is authoritative base, v2.7 used only for gap-filling
+- **DOC-1 (PRD):** 700+ lines, v1.0-v2.9 cumulative, Memory Bank structure clarified from v2.7
+- **DOC-2 (Architecture):** 1000+ lines, v1.0-v2.9 cumulative, gap-fill from v2.7
+- **DOC-4 (Operations):** 650+ lines, v1.0-v2.9 cumulative, Memory Bank directory structure from v2.7
 - **All docs:** cumulative: true front matter
 
 ## Last Git commits
 - 39446d7 docs(plans): IDEA-020 v2.8 docs - update CURRENT pointers, memory bank
-- 9bd07dd docs(plans): PLAN-IDEA-020 deterministic docs from sources - DOC-1/2/4 v2.8
 
 ## Next step(s)
-- [ ] Push develop to origin
-- [ ] Human review and approval for v2.8 release
+- [ ] Update memory bank (activeContext.md, progress.md)
+- [ ] Git commit with conventional message
+- [ ] Verify GitHub Actions CI passes
+- [ ] Merge develop-v2.9 to main and tag v2.9.0
 
 ## Blockers / Open questions
 None
