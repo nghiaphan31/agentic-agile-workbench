@@ -21,6 +21,34 @@
 - [x] Phase 11: prompts/ registry synchronized (SP-001..006 PASS, SP-007 WARN manual)
 - [x] Phase 12: check-prompts-sync.ps1 v2 + pre-commit hook operational
 
+## Epic 2: Documentation Governance (IDEA-014, IDEA-015, IDEA-017)
+
+### IDEA-017: Canonical Docs Cumulative Requirement [P0 - COMPLETED]
+- [x] Identified P0 issue: v2.6 docs fail RULE 12 cumulative requirement
+- [x] Audited v1.0-v2.6 docs: found 120-166 line counts (needed 500+)
+- [x] Designed remediation: build cumulative v2.7 docs from all sources
+- [x] Built DOC-1-v2.7-PRD.md (801 lines, 10 sections v1.0-v2.7)
+- [x] Built DOC-2-v2.7-Architecture.md (903 lines, exceeds 500 minimum)
+- [x] Built DOC-3-v2.7-Implementation-Plan.md (536 lines, exceeds 300 minimum)
+- [x] Built DOC-4-v2.7-Operations-Guide.md (321 lines, exceeds 300 minimum)
+- [x] Built DOC-5-v2.7-Release-Notes.md (270 lines, exceeds 200 minimum)
+- [x] Verified all docs cumulative: true front matter
+- [x] GitHub Actions CI validation passed (5/5 PASS)
+- [x] Memory bank updated
+- [ ] Commit pending
+
+### IDEA-014: Canonical Docs Status Governance
+- [x] RULE 8: Documentation Discipline implemented
+- [x] The Two Spaces (Frozen vs Draft) established
+- [x] Idea Capture Mandate implemented
+- [x] Conversation Log Mandate implemented
+
+### IDEA-015: Mandatory Release Coherence Audit
+- [ ] Pre-release audit checklist (5 days before target)
+- [ ] Scope freeze verification
+- [ ] Documentation coherence check
+- [ ] Code coherence verification
+
 ## Product Features
 
 ### Epic 0: Release Governance Model
