@@ -83,6 +83,14 @@ Multiple commits pushed - see git log
 - [ ] Merge 3 fix PRs to develop
 - [ ] Address remaining P1/P2 findings in COHERENCE-AUDIT-v2.6.md
 
+## New Idea Captured (RULE 13 - Ideation Intake)
+- **IDEA-020:** Authoritative Orchestrator as Default Mode
+- **Source:** Human direct remark (2026-04-02)
+- **Problem:** Human had to manually prompt mode switches (e.g., "switch to QA Engineer"); no automatic handoff protocol; Orchestrator not default mode
+- **Solution:** Orchestrator as default mode + mandatory handoff protocol + orchestrator-driven mode switching
+- **File:** docs/ideas/IDEA-020-orchestrator-authoritative-default.md
+- **Refinement options pending:** [A] Refine now, [B] Park for later, [C] Sync first
+
 ## Session s2026-04-01-code-004 (P1 Triage)
 - [x] Triage all 17 P1 findings from COHERENCE-AUDIT-v2.6.md
 - [x] Categorized by: Governance (10), Tech Debt (1), Documentation (6)

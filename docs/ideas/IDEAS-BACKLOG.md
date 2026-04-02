@@ -68,6 +68,7 @@
 | [IDEA-017](IDEA-017-docs-must-be-cumulative-self-contained.md) | **CRITICAL: Fix Canonical Docs Cumulative Requirement** | Human 2026-04-01 | 2026-04-01 | [IDEA] | governance | Major | v2.7 | Docs NOT self-contained - P0 issue |
 | [IDEA-018](IDEA-018-rules-authoritative-coherent.md) | **CRITICAL: Make Rules Authoritative and Ensure Rule Coherence** | Human 2026-04-01 | 2026-04-01 | [IDEA] | governance | Major | v2.7 | Rules not authoritative, contradictions exist |
 | [IDEA-019](IDEA-019-conversation-logging-mechanism.md) | Implement Conversation Logging Mechanism | Human 2026-04-01 | 2026-04-01 | [IDEA] | governance | Minor | v2.7 | Conversation logging not triggering |
+| [IDEA-020](IDEA-020-orchestrator-authoritative-default.md) | Authoritative Orchestrator as Default Mode | Human 2026-04-02 | 2026-04-02 | [IDEA] | governance | Major | v2.8 | Orchestrator must drive all mode switches |
 
 ---
 
