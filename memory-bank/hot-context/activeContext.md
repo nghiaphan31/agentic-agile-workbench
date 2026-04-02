@@ -39,12 +39,21 @@ Create enriched v2.9 canonical docs (DOC-1, DOC-2, DOC-4) on develop-v2.9 branch
 - 39446d7 docs(plans): IDEA-020 v2.8 docs - update CURRENT pointers, memory bank
 
 ## Next step(s)
-- [ ] Update memory bank (activeContext.md, progress.md)
-- [ ] Git commit with conventional message
-- [ ] Verify GitHub Actions CI passes
-- [ ] Merge develop-v2.9 to main and tag v2.9.0
+- [x] Memory Bank update
+- [x] Git commit
+- [x] GitHub Actions CI passed
+- [x] develop-v2.9 merged to master and tagged v2.9.0
 
-## Blockers / Open questions
-None
+## v2.9 Release Complete
+- DOC-1, DOC-2, DOC-4 enriched from v2.8 with v2.7 gap-fill
+- GitHub Actions CI: PASSED
+- Tag v2.9.0 pushed to origin
+
+## Ideas Captured (v2.10 Scope)
+- **IDEA-020:** Authoritative Orchestrator as Default Mode — Orchestrator must drive all mode switches
+- **IDEA-021:** Make DOC-3 and DOC-5 Release-Specific — v2.10 governance refinement
+
+## Last Git commit
+01df739 — feat(governance): capture IDEA-021 release-specific DOC-3 and DOC-5
 
 ---
