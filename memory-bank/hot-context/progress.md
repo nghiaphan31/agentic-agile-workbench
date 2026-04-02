@@ -1,8 +1,8 @@
 # Project Progress
 
-**Last updated:** 2026-04-02T17:30:00Z
-**Session:** s2026-04-01-architect-001
-**Plan:** PLAN-2026-04-01-001
+**Last updated:** 2026-04-02T12:28:00Z
+**Session:** s2026-04-02-code-001
+**Plan:** PLAN-IDEA-020
 
 ## le workbench Infrastructure
 
@@ -35,7 +35,18 @@
 - [x] Verified all docs cumulative: true front matter
 - [x] GitHub Actions CI validation passed (5/5 PASS)
 - [x] Memory bank updated
-- [ ] Commit pending
+- [x] Commit pending
+
+### IDEA-020: Deterministic Docs from Sources [COMPLETED]
+- [x] Branched: feature/IDEA-020-deterministic-docs-from-sources from develop
+- [x] Built DOC-1-v2.8-PRD.md (503 lines, cumulative: true)
+- [x] Built DOC-2-v2.8-Architecture.md (752 lines, cumulative: true)
+- [x] Built DOC-4-v2.8-Operations-Guide.md (381 lines, cumulative: true)
+- [x] Source attribution: All sections cite source files
+- [x] Mermaid diagrams: 5 architecture diagrams in DOC-2
+- [x] Fast-forward merge to develop
+- [x] Updated DOC-*-CURRENT.md pointers to v2.8
+- [x] Memory Bank updated
 
 ### IDEA-014: Canonical Docs Status Governance
 - [x] RULE 8: Documentation Discipline implemented
